@@ -11,13 +11,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Meu primeiro App',
+      title: 'arroz',
       // A rota inicial quando o aplicativo é iniciado.
       initialRoute: '/login',
       // O mapeamento das rotas nomeadas para os widgets de tela.
       routes: {
         '/login': (context) => LoginScreen(),
-        '/profile': (context) => ProfileScreen(), // Substitua pelo seu ProfileScreen Widget.
+        '/profile': (context) =>
+            ProfileScreen(), // Substitua pelo seu ProfileScreen Widget.
         // Adicione mais rotas conforme necessário.
       },
     );
