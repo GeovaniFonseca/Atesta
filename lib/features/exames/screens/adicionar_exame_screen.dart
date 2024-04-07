@@ -1,24 +1,44 @@
 // ignore_for_file: file_names, use_build_context_synchronously, library_private_types_in_public_api
 
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hello_world/features/exames/widgets/exame.dart';
 
+import '../../../services/storage_service.dart';
+
 class AdicionarExameScreen extends StatefulWidget {
-  const AdicionarExameScreen({super.key});
+  final Exame? exameParaEditar;
+
+  const AdicionarExameScreen({super.key, this.exameParaEditar});
 
   @override
   _AdicionarExameScreenState createState() => _AdicionarExameScreenState();
 }
 
 class _AdicionarExameScreenState extends State<AdicionarExameScreen> {
-  TextEditingController dataController = TextEditingController();
+  TextEditingController dateController = TextEditingController();
+  TextEditingController laudoController = TextEditingController();
   String? tipoExameSelecionado;
+  String? fileUrl;
+  File? selectedFile;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.exameParaEditar != null) {
+      dateController.text = widget.exameParaEditar!.date;
+      tipoExameSelecionado = widget.exameParaEditar!.tipo;
+      laudoController.text = widget.exameParaEditar!.laudo;
+      // Aqui, você precisará ajustar para lidar com o arquivo do exame, se necessário
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    // A UI permanece a mesma
     return Scaffold(
       appBar: AppBar(
         title: const Text('Inserir as informações do exame médico'),
@@ -28,22 +48,21 @@ class _AdicionarExameScreenState extends State<AdicionarExameScreen> {
         child: ListView(
           children: <Widget>[
             TextField(
-              controller: dataController,
+              controller: dateController,
               decoration: const InputDecoration(
                 labelText: 'Data',
                 suffixIcon: Icon(Icons.calendar_today),
               ),
               onTap: () async {
-                DateTime? data = await showDatePicker(
+                DateTime? date = await showDatePicker(
                   context: context,
                   initialDate: DateTime.now(),
                   firstDate: DateTime(2000),
                   lastDate: DateTime(2100),
                 );
-                if (data != null) {
-                  // Formatando a data para uma string no formato dd/MM/yyyy
-                  dataController.text =
-                      "${data.day}/${data.month}/${data.year}";
+                if (date != null) {
+                  dateController.text =
+                      "${date.day}/${date.month}/${date.year}";
                 }
               },
             ),
@@ -69,35 +88,69 @@ class _AdicionarExameScreenState extends State<AdicionarExameScreen> {
               }).toList(),
               validator: (value) => value == null ? 'Campo obrigatório' : null,
             ),
+            TextFormField(
+              controller: laudoController,
+              decoration: InputDecoration(label: Text('Laudo')),
+              keyboardType: TextInputType.multiline,
+              maxLines: null,
+            ),
+            ElevatedButton(
+              child: Text('Selecionar Imagem/Documento'),
+              onPressed: () async {
+                FilePickerResult? result =
+                    await FilePicker.platform.pickFiles();
+                if (result != null) {
+                  setState(() {
+                    selectedFile = File(result.files.single.path!);
+                  });
+                } else {
+                  // Optionally handle the case when the user doesn't select a file
+                }
+              },
+            ),
             ElevatedButton(
               child: const Text('Adicionar Exame'),
               onPressed: () async {
                 String? userId = FirebaseAuth.instance.currentUser?.uid;
-                if (userId != null &&
-                    dataController.text.isNotEmpty &&
-                    tipoExameSelecionado != null) {
-                  // Se userId não for nulo e os campos estiverem preenchidos, proceda para criar o exame
-                  final Exame novoExame = Exame(
-                      id:
-                          "", // Geralmente o ID é gerado automaticamente pelo Firestore, então isso pode ser deixado em branco ou removido
-                      data: dataController.text,
-                      tipo:
-                          tipoExameSelecionado!, // O '!' é usado para afirmar que o valor não é nulo
-                      userId: userId // Já verificamos que isso não é nulo
-                      );
-                  // Adiciona o novo exame ao Firestore
-                  await FirebaseFirestore.instance
-                      .collection('exames')
-                      .add(novoExame.toMap());
+                String errorMessage = '';
 
-                  // Fecha a tela e retorna 'true' para indicar sucesso
-                  Navigator.pop(context, true);
+                if (userId == null) {
+                  errorMessage =
+                      'Você precisa estar logado para adicionar um exame.';
+                } else if (dateController.text.isEmpty) {
+                  errorMessage = 'Por favor, preencha a data do exame.';
+                } else if (tipoExameSelecionado == null) {
+                  errorMessage = 'Por favor, selecione o tipo de exame.';
+                } else if (selectedFile == null) {
+                  errorMessage =
+                      'Por favor, selecione um arquivo para o exame.';
                 } else {
-                  // Caso contrário, mostre uma mensagem de erro
+                  String? uploadedFileUrl =
+                      await StorageService().uploadFile(selectedFile!);
+                  if (uploadedFileUrl == null) {
+                    errorMessage = 'Falha no upload do arquivo.';
+                  } else {
+                    final Exame novoExame = Exame(
+                      id: "",
+                      date: dateController.text,
+                      tipo: tipoExameSelecionado!,
+                      laudo: laudoController.text,
+                      arquivoUrl: uploadedFileUrl,
+                      userId: userId,
+                    );
+
+                    await FirebaseFirestore.instance
+                        .collection('Exames')
+                        .add(novoExame.toMap());
+
+                    Navigator.pop(context, true);
+                  }
+                }
+
+                if (errorMessage.isNotEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text(
-                          'Todos os campos são obrigatórios e você deve estar logado.'),
+                    SnackBar(
+                      content: Text(errorMessage),
                       backgroundColor: Colors.red,
                     ),
                   );
