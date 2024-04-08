@@ -1,6 +1,5 @@
 // ignore_for_file: file_names, avoid_print
 
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -8,7 +7,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import '../firebase_options.dart';
-
 
 class DatabaseService {
   final String _baseUrl =
@@ -42,8 +40,6 @@ login(email, password) async {
   } catch (e) {
     return false;
   }
-
-  
 }
 
 // Realizar logout
@@ -80,4 +76,3 @@ Future<void> registerInfo(
     'age': age,
   });
 }
-

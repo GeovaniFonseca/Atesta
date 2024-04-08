@@ -6,7 +6,6 @@ import '../../../services/DatabaseService.dart';
 import '../../core/start_screen.dart';
 import 'signup_screen.dart';
 
-
 class LoginScreen extends StatefulWidget {
   @override
   _LoginScreenState createState() => _LoginScreenState();
@@ -116,7 +115,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           Container(
             margin: EdgeInsets.symmetric(vertical: 8),
-            width: 250,
+            width: 200,
             height: 50,
             child: ElevatedButton(
               onPressed: () async {

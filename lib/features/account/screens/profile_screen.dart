@@ -12,6 +12,7 @@ class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _ProfileScreenState createState() => _ProfileScreenState();
 }
 
@@ -58,6 +59,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         profileImageUrl = imageUrl;
       });
     } catch (e) {
+      // ignore: avoid_print
       print(e);
     }
   }
@@ -67,14 +69,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final source = await showDialog<ImageSource>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text("Escolha a origem da imagem"),
+        title: const Text("Escolha a origem da imagem"),
         actions: <Widget>[
           TextButton(
-            child: Text("Câmera"),
+            child: const Text("Câmera"),
             onPressed: () => Navigator.pop(context, ImageSource.camera),
           ),
           TextButton(
-            child: Text("Galeria"),
+            child: const Text("Galeria"),
             onPressed: () => Navigator.pop(context, ImageSource.gallery),
           ),
         ],
@@ -119,14 +121,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
           TextButton(
             onPressed: () async {
               await logout();
-              // Substitua abaixo com a sua lógica de navegação, como por exemplo:
+
               if (mounted) {
-                // Checa se o widget ainda está no tree de widgets
-                Navigator.of(context).pushReplacementNamed(
-                    '/login'); // Substitua '/login' pela rota da sua tela de login.
+                // ignore: use_build_context_synchronously
+                Navigator.of(context).pushReplacementNamed('/login');
               }
             },
-            child: const Text('Sair', style: TextStyle(color: Colors.red)),
+            child: const Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.exit_to_app_rounded,
+                  color: Color.fromARGB(255, 38, 87, 151),
+                ),
+                SizedBox(width: 4),
+                Text(
+                  'Sair',
+                  style: TextStyle(color: Color.fromARGB(255, 38, 87, 151)),
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -167,7 +181,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           radius: 64,
                           backgroundImage: profileImageUrl != null
                               ? NetworkImage(profileImageUrl!)
-                              : AssetImage(
+                              : const AssetImage(
                                       'lib/assets/images/DefaultProfile.png')
                                   as ImageProvider,
                         ),
@@ -175,7 +189,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           bottom: -10,
                           left: 80,
                           child: IconButton(
-                            icon: Icon(Icons.add_a_photo),
+                            icon: const Icon(Icons.add_a_photo),
                             onPressed: () => _updateProfilePicture(context),
                           ),
                         )

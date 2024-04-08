@@ -16,6 +16,7 @@ class StorageService {
       // Retorna a URL do arquivo após o upload
       return await uploadTask.ref.getDownloadURL();
     } catch (e) {
+      // ignore: avoid_print
       print(e);
       return null;
     }

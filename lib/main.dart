@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hello_world/features/account/screens/login_screen.dart';
+import 'package:hello_world/features/exames/screens/exame_screen.dart';
 
 import 'features/account/screens/profile_screen.dart';
 
@@ -17,9 +18,8 @@ class MyApp extends StatelessWidget {
       // O mapeamento das rotas nomeadas para os widgets de tela.
       routes: {
         '/login': (context) => LoginScreen(),
-        '/profile': (context) =>
-            ProfileScreen(), // Substitua pelo seu ProfileScreen Widget.
-        // Adicione mais rotas conforme necessário.
+        '/profile': (context) => const ProfileScreen(),
+        '/exameScreen': (context) => const ExameScreen(),
       },
     );
   }
