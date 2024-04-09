@@ -214,7 +214,7 @@ class _AdicionarExameScreenState extends State<AdicionarExameScreen> {
                 padding: MaterialStateProperty.all(const EdgeInsets.all(15)),
               ),
               child: const Text(
-                'Adicionar Exame',
+                'Adicionar Exane',
                 style: TextStyle(color: Colors.white),
               ),
               onPressed: () async {
