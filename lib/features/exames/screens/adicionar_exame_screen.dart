@@ -7,6 +7,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hello_world/features/exames/widgets/exame.dart';
+import 'package:hello_world/services/DatabaseService.dart';
 
 import '../../../services/storage_service.dart';
 
@@ -20,6 +21,7 @@ class AdicionarExameScreen extends StatefulWidget {
 }
 
 class _AdicionarExameScreenState extends State<AdicionarExameScreen> {
+  DatabaseService databaseService = DatabaseService();
   TextEditingController dateController = TextEditingController();
   TextEditingController laudoController = TextEditingController();
   FocusNode dataFocusnode = FocusNode();
@@ -28,6 +30,8 @@ class _AdicionarExameScreenState extends State<AdicionarExameScreen> {
   String? tipoExameSelecionado;
   String? fileUrl;
   File? selectedFile;
+  String? selectedDependent;
+  List<String> dependents = ['Sem dependente'];
 
   @override
   void initState() {
@@ -37,15 +41,23 @@ class _AdicionarExameScreenState extends State<AdicionarExameScreen> {
       dateController.text = widget.exameParaEditar!.date;
       tipoExameSelecionado = widget.exameParaEditar!.tipo;
       laudoController.text = widget.exameParaEditar!.laudo;
-      // Aqui, você precisará ajustar para lidar com o arquivo do exame, se necessário
+      selectedDependent =
+          widget.exameParaEditar!.dependentId ?? 'Sem dependente';
     }
+    _loadDependents();
   }
 
   void _handleFocusChange() {
     if (laudoFocusnode.hasFocus || dataFocusnode.hasFocus) {
-      // Se algum campo tem foco, atualiza o estado para refletir a cor nova
       setState(() {});
     }
+  }
+
+  Future<void> _loadDependents() async {
+    var dependentList = await databaseService.loadDependents();
+    setState(() {
+      dependents.addAll(dependentList);
+    });
   }
 
   @override
@@ -125,7 +137,37 @@ class _AdicionarExameScreenState extends State<AdicionarExameScreen> {
               }).toList(),
               validator: (value) => value == null ? 'Campo obrigatório' : null,
               decoration: InputDecoration(
-                fillColor: Colors.white, // Cor de fundo do campo
+                fillColor: Colors.white,
+                filled: true,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                    color: Color.fromARGB(255, 38, 87, 151),
+                    width: 2,
+                  ),
+                  borderRadius: BorderRadius.circular(15),
+                ),
+              ),
+            ),
+            const Padding(padding: EdgeInsets.all(8)),
+            DropdownButtonFormField<String>(
+              value: selectedDependent,
+              hint: const Text('Selecione o dependente (opcional)'),
+              onChanged: (String? newValue) {
+                setState(() {
+                  selectedDependent = newValue;
+                });
+              },
+              items: dependents.map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+              decoration: InputDecoration(
+                fillColor: Colors.white,
                 filled: true,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -169,12 +211,10 @@ class _AdicionarExameScreenState extends State<AdicionarExameScreen> {
               child: ElevatedButton(
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(
-                      const Color.fromARGB(
-                          255, 38, 87, 151)), // Cor de fundo do botão
+                      const Color.fromARGB(255, 38, 87, 151)),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                          25.0), // Raio do canto arredondado
+                      borderRadius: BorderRadius.circular(25.0),
                     ),
                   ),
                   padding: MaterialStateProperty.all(const EdgeInsets.all(15)),
@@ -194,27 +234,26 @@ class _AdicionarExameScreenState extends State<AdicionarExameScreen> {
                   'Selecionar Imagem/Documento',
                   style: TextStyle(
                     backgroundColor: Color.fromARGB(255, 38, 87, 151),
-                    color: Color.fromARGB(255, 255, 255, 255), // Cor do texto
-                    fontWeight: FontWeight.bold, // Negrito
-                    fontSize: 16, // Tamanho do texto
+                    color: Color.fromARGB(255, 255, 255, 255),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
                   ),
                 ),
               ),
             ),
             ElevatedButton(
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(const Color.fromARGB(
-                    255, 38, 87, 151)), // Cor de fundo do botão
+                backgroundColor: MaterialStateProperty.all(
+                    const Color.fromARGB(255, 38, 87, 151)),
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                        25.0), // Raio do canto arredondado
+                    borderRadius: BorderRadius.circular(25.0),
                   ),
                 ),
                 padding: MaterialStateProperty.all(const EdgeInsets.all(15)),
               ),
               child: const Text(
-                'Adicionar Exane',
+                'Adicionar Exame',
                 style: TextStyle(color: Colors.white),
               ),
               onPressed: () async {
@@ -251,6 +290,9 @@ class _AdicionarExameScreenState extends State<AdicionarExameScreen> {
                       laudo: laudoController.text,
                       arquivoUrl: uploadedFileUrl ?? '',
                       userId: userId,
+                      dependentId: selectedDependent == 'Sem dependente'
+                          ? null
+                          : selectedDependent,
                     );
 
                     if (widget.exameParaEditar == null) {
@@ -265,6 +307,10 @@ class _AdicionarExameScreenState extends State<AdicionarExameScreen> {
                           .doc(widget.exameParaEditar!.id)
                           .update(novoExame.toMap());
                     }
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text('Exame adicionado com sucesso!'),
+                      backgroundColor: Colors.green,
+                    ));
 
                     Navigator.popUntil(context, (route) => route.isFirst);
                   }

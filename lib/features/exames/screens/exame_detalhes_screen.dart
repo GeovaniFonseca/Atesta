@@ -79,6 +79,16 @@ class ExameDetalhesScreen extends StatelessWidget {
                   ),
                 ),
               ),
+              Card(
+                child: ListTile(
+                  title: const Text('Dependente'),
+                  subtitle: Text(exame.dependentId ?? 'Não selecionado'),
+                  leading: const Icon(
+                    Icons.description,
+                    color: Color.fromARGB(255, 38, 87, 151),
+                  ),
+                ),
+              ),
               const SizedBox(
                 height: 20,
               ),

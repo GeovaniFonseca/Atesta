@@ -49,17 +49,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _loadProfileData();
-  }
-
   Future<void> _loadProfileData() async {
     var profileData = await databaseService.loadProfileData();
     setState(() {
       profileImageUrl = profileData['profileImageUrl'];
-      dependents = profileData['dependents'];
+      dependents = List<String>.from(profileData['dependents']);
       selectedDependent = profileData['selectedDependent'];
     });
   }
@@ -96,6 +90,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
         );
       },
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadProfileData();
   }
 
   @override
@@ -190,31 +190,76 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    DropdownButton<String>(
-                      value: selectedDependent,
-                      hint: const Text("Selecione um dependente"),
-                      items: [
-                        ...dependents.map((String dependent) {
-                          return DropdownMenuItem<String>(
-                            value: dependent,
-                            child: Text(dependent),
-                          );
-                        }).toList(),
-                        DropdownMenuItem<String>(
-                          value: "add_new",
-                          child: const Text("Adicionar novo dependente"),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: Colors.grey,
+                          width: 2,
                         ),
-                      ],
-                      onChanged: (String? newValue) {
-                        if (newValue == "add_new") {
-                          _showAddDependentDialog();
-                        } else {
-                          databaseService.updateSelectedDependent(newValue);
-                          setState(() {
-                            selectedDependent = newValue;
-                          });
-                        }
-                      },
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 4),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          value: selectedDependent,
+                          hint: const Text(
+                            "Selecione um dependente",
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          items: [
+                            ...dependents.map((String dependent) {
+                              return DropdownMenuItem<String>(
+                                value: dependent,
+                                child: Text(
+                                  dependent,
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              );
+                            }),
+                            const DropdownMenuItem<String>(
+                              value: "add_new",
+                              child: Text(
+                                "Adicionar novo dependente",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ),
+                          ],
+                          onChanged: (String? newValue) {
+                            if (newValue == "add_new") {
+                              _showAddDependentDialog();
+                            } else {
+                              databaseService.updateSelectedDependent(newValue);
+                              setState(() {
+                                selectedDependent = newValue;
+                              });
+                            }
+                          },
+                          dropdownColor: Colors.white,
+                          style: const TextStyle(
+                            color: Colors.blue,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          icon: const Icon(
+                            Icons.arrow_drop_down,
+                            color: Color.fromARGB(255, 187, 187, 187),
+                          ),
+                          iconEnabledColor: Colors.blue,
+                          iconDisabledColor: Colors.grey,
+                        ),
+                      ),
                     ),
                     const SizedBox(height: 10),
                   ],

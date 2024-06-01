@@ -1,7 +1,6 @@
 // ignore_for_file: use_build_context_synchronously, prefer_const_constructors, file_names, use_key_in_widget_constructors, must_be_immutable, library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
-
 import '../../../services/DatabaseService.dart';
 import '../../core/start_screen.dart';
 import 'signup_screen.dart';
@@ -121,6 +120,10 @@ class _LoginScreenState extends State<LoginScreen> {
               onPressed: () async {
                 var checklogin = await login(email.text, password.text);
                 if (checklogin == true) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text('Login efetuado com sucessso'),
+                    backgroundColor: Colors.green,
+                  ));
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(

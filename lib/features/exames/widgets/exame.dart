@@ -4,7 +4,8 @@ class Exame {
   final String tipo;
   final String userId;
   final String laudo;
-  final String? arquivoUrl; // Adicionado campo para URL do arquivo
+  final String? arquivoUrl;
+  final String? dependentId;
 
   Exame({
     required this.id,
@@ -12,7 +13,8 @@ class Exame {
     required this.tipo,
     required this.laudo,
     required this.userId,
-    this.arquivoUrl, // Campo pode ser nulo se nenhum arquivo for enviado
+    this.arquivoUrl,
+    required this.dependentId,
   });
 
   factory Exame.fromMap(Map<String, dynamic> map, String documentId) {
@@ -22,7 +24,8 @@ class Exame {
       tipo: map['tipo'] ?? '',
       laudo: map['laudo'] ?? '',
       userId: map['userId'] ?? '',
-      arquivoUrl: map['arquivoUrl'], // Pode ser nulo
+      arquivoUrl: map['arquivoUrl'],
+      dependentId: map['dependentId'],
     );
   }
 
@@ -32,6 +35,7 @@ class Exame {
       'laudo': laudo,
       'data': date,
       'userId': userId,
+      'dependentId': dependentId,
     };
 
     if (arquivoUrl != null) {

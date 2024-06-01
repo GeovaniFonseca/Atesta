@@ -6,7 +6,8 @@ class CardItem extends StatelessWidget {
   final String subtitle;
   final Color iconColor;
   final Color backgroundColor;
-  final VoidCallback? onTap; // Adicionado a capacidade de passar uma função onTap
+  final VoidCallback?
+      onTap; // Adicionado a capacidade de passar uma função onTap
 
   const CardItem({
     super.key,
@@ -20,9 +21,11 @@ class CardItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell( // Utilizei InkWell para feedback visual no toque
+    return InkWell(
+      // Utilizei InkWell para feedback visual no toque
       onTap: onTap,
-      borderRadius: BorderRadius.circular(9.0), // Bordas arredondadas para o efeito do toque corresponder ao do card
+      borderRadius: BorderRadius.circular(
+          9.0), // Bordas arredondadas para o efeito do toque corresponder ao do card
       child: SizedBox(
         height: 120.0,
         child: Card(
@@ -32,14 +35,18 @@ class CardItem extends StatelessWidget {
           ),
           elevation: 6.0,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: Row(
               children: <Widget>[
                 Icon(icon, color: iconColor),
-                const SizedBox(width: 16.0), // Ajustado para dar mais espaço entre o ícone e o texto
+                const SizedBox(
+                    width:
+                        16.0), // Ajustado para dar mais espaço entre o ícone e o texto
                 Expanded(
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center, // Centraliza verticalmente o conteúdo do card
+                    mainAxisAlignment: MainAxisAlignment
+                        .center, // Centraliza verticalmente o conteúdo do card
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(

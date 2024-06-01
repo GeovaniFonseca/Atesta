@@ -63,6 +63,10 @@ class AtestadoScreen extends StatelessWidget {
                         ),
                         subtitle: Text('Emitido em ${atestado.dataEmissao}'),
                         trailing: const Icon(Icons.arrow_forward_ios, size: 14),
+                        leading: const Icon(
+                          Icons.medical_services_outlined,
+                          color: Color.fromARGB(255, 38, 87, 151),
+                        ),
                         onTap: () {
                           Navigator.push(
                               context,

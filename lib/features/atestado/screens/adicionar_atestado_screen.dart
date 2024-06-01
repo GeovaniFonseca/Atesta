@@ -129,7 +129,7 @@ class _AdicionarAtestadoScreenState extends State<AdicionarAtestadoScreen> {
                 }
               },
             ),
-            Padding(padding: EdgeInsets.all(9)),
+            const Padding(padding: EdgeInsets.all(9)),
             TextField(
               controller: _quantidadeDiasController,
               focusNode: quantDiasFocusnode,
@@ -262,11 +262,19 @@ class _AdicionarAtestadoScreenState extends State<AdicionarAtestadoScreen> {
                         .update(novoAtestado.toMap());
                   }
 
+                  // ignore: use_build_context_synchronously
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text('Exame adicionado com sucesso!'),
+                    backgroundColor: Colors.green,
+                  ));
+
+                  // ignore: use_build_context_synchronously
                   Navigator.popUntil(context,
                       (route) => route.isFirst); // Volta para a tela anterior
                 }
 
                 if (errorMessage.isNotEmpty) {
+                  // ignore: use_build_context_synchronously
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(errorMessage),
