@@ -69,9 +69,9 @@ class _AdicionarAtestadoScreenState extends State<AdicionarAtestadoScreen> {
       appBar: AppBar(
         title: const Text('Adicionar Atestado'),
       ),
-      body: SingleChildScrollView(
+      body: Padding(
         padding: const EdgeInsets.all(16),
-        child: Column(
+        child: ListView(
           children: <Widget>[
             TextFormField(
               controller: _nomeMedicoController,
@@ -210,7 +210,21 @@ class _AdicionarAtestadoScreenState extends State<AdicionarAtestadoScreen> {
                 String? userId = FirebaseAuth.instance.currentUser?.uid;
                 String errorMessage = '';
 
-                // Validação dos campos...
+                if (userId == null) {
+                  errorMessage =
+                      "Você precisa estar logado para adicionar um exame.";
+                } else if (_nomeMedicoController.text.isEmpty) {
+                  errorMessage = "Por favor, preencha o nome do médico.";
+                } else if (_dataEmissaoController.text.isEmpty) {
+                  errorMessage =
+                      "Por favor, preencha a data de emissão do atestado";
+                } else if (_quantidadeDiasController.text.isEmpty) {
+                  errorMessage =
+                      "Por facor, preencha a quantidade de dias do atestado";
+                } else if (_selectedFile == null) {
+                  errorMessage =
+                      'Por favor, selecione um arquivo para o atestado.';
+                }
 
                 if (errorMessage.isEmpty) {
                   String? uploadedFileUrl =

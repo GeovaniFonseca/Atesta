@@ -1,10 +1,6 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import '../../../services/DatabaseService.dart';
 import '../widgets/user_info_card.dart';
 
@@ -12,13 +8,15 @@ class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _ProfileScreenState createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  final FirebaseAuth auth = FirebaseAuth.instance;
-  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final DatabaseService databaseService = DatabaseService();
+  String? profileImageUrl;
+  String? selectedDependent;
+  List<String> dependents = [];
+  TextEditingController dependentController = TextEditingController();
 
   IconData getIconForKey(String key) {
     switch (key) {
@@ -42,73 +40,63 @@ class _ProfileScreenState extends State<ProfileScreen> {
     'email': const Color.fromARGB(255, 255, 242, 216),
   };
 
-  Future<void> _uploadImage(File image) async {
-    try {
-      final ref = firebase_storage.FirebaseStorage.instance
-          .ref('profile_pictures/${auth.currentUser?.uid}.jpg');
-
-      await ref.putFile(image);
-
-      final imageUrl = await ref.getDownloadURL();
-
-      await firestore.collection('Users').doc(auth.currentUser?.uid).update({
-        'profile_picture': imageUrl,
-      });
-
+  Future<void> _updateProfilePicture(BuildContext context) async {
+    var imageUrl = await databaseService.updateProfilePicture(context);
+    if (imageUrl != null) {
       setState(() {
         profileImageUrl = imageUrl;
       });
-    } catch (e) {
-      // ignore: avoid_print
-      print(e);
-    }
-  }
-
-  Future<void> _updateProfilePicture(BuildContext context) async {
-    final picker = ImagePicker();
-    final source = await showDialog<ImageSource>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text("Escolha a origem da imagem"),
-        actions: <Widget>[
-          TextButton(
-            child: const Text("Câmera"),
-            onPressed: () => Navigator.pop(context, ImageSource.camera),
-          ),
-          TextButton(
-            child: const Text("Galeria"),
-            onPressed: () => Navigator.pop(context, ImageSource.gallery),
-          ),
-        ],
-      ),
-    );
-
-    if (source == null) return;
-
-    final pickedFile = await picker.pickImage(source: source);
-    if (pickedFile != null) {
-      _uploadImage(File(pickedFile.path));
     }
   }
 
   @override
   void initState() {
     super.initState();
-    _loadInitialProfileImage();
+    _loadProfileData();
   }
 
-  Future<void> _loadInitialProfileImage() async {
-    var userDoc =
-        await firestore.collection('Users').doc(auth.currentUser?.uid).get();
-    var userData = userDoc.data();
-    if (userData != null && userData['profile_picture'] != null) {
-      setState(() {
-        profileImageUrl = userData['profile_picture'];
-      });
-    }
+  Future<void> _loadProfileData() async {
+    var profileData = await databaseService.loadProfileData();
+    setState(() {
+      profileImageUrl = profileData['profileImageUrl'];
+      dependents = profileData['dependents'];
+      selectedDependent = profileData['selectedDependent'];
+    });
   }
 
-  String? profileImageUrl;
+  void _showAddDependentDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Adicionar Dependente"),
+          content: TextField(
+            controller: dependentController,
+            decoration: const InputDecoration(
+              hintText: "Nome do Dependente",
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("Cancelar"),
+            ),
+            TextButton(
+              onPressed: () async {
+                await databaseService.addDependent(dependentController.text);
+                dependentController.clear();
+                await _loadProfileData();
+                Navigator.of(context).pop();
+              },
+              child: const Text("Adicionar"),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -120,10 +108,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         actions: <Widget>[
           TextButton(
             onPressed: () async {
-              await logout();
-
+              await FirebaseAuth.instance.signOut();
               if (mounted) {
-                // ignore: use_build_context_synchronously
                 Navigator.of(context).pushReplacementNamed('/login');
               }
             },
@@ -145,9 +131,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ],
       ),
       body: StreamBuilder<DocumentSnapshot>(
-        stream: firestore
+        stream: FirebaseFirestore.instance
             .collection('Users')
-            .doc(auth.currentUser?.uid)
+            .doc(FirebaseAuth.instance.currentUser?.uid)
             .snapshots(),
         builder:
             (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
@@ -204,6 +190,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                     const SizedBox(height: 20),
+                    DropdownButton<String>(
+                      value: selectedDependent,
+                      hint: const Text("Selecione um dependente"),
+                      items: [
+                        ...dependents.map((String dependent) {
+                          return DropdownMenuItem<String>(
+                            value: dependent,
+                            child: Text(dependent),
+                          );
+                        }).toList(),
+                        DropdownMenuItem<String>(
+                          value: "add_new",
+                          child: const Text("Adicionar novo dependente"),
+                        ),
+                      ],
+                      onChanged: (String? newValue) {
+                        if (newValue == "add_new") {
+                          _showAddDependentDialog();
+                        } else {
+                          databaseService.updateSelectedDependent(newValue);
+                          setState(() {
+                            selectedDependent = newValue;
+                          });
+                        }
+                      },
+                    ),
+                    const SizedBox(height: 10),
                   ],
                 ),
               ),

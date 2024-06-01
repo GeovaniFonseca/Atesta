@@ -45,10 +45,10 @@ class AtestadoDetalheScreen extends StatelessWidget {
                 child: ListTile(
                   title: const Text('Nome do médico'),
                   subtitle: Text(atestado.nomeMedico),
-                  // leading: const Icon(
-                  //   Icons.calendar_today,
-                  //   color: Color.fromARGB(255, 38, 87, 151),
-                  // ),
+                  leading: const Icon(
+                    Icons.medical_services_outlined,
+                    color: Color.fromARGB(255, 38, 87, 151),
+                  ),
                 ),
               ),
               const SizedBox(
@@ -58,10 +58,10 @@ class AtestadoDetalheScreen extends StatelessWidget {
                 child: ListTile(
                   title: const Text('Data emissão'),
                   subtitle: Text(atestado.dataEmissao),
-                  // leading: const Icon(
-                  //   Icons.description,
-                  //   color: Color.fromARGB(255, 38, 87, 151),
-                  // ),
+                  leading: const Icon(
+                    Icons.description,
+                    color: Color.fromARGB(255, 38, 87, 151),
+                  ),
                 ),
               ),
               const SizedBox(
@@ -72,6 +72,10 @@ class AtestadoDetalheScreen extends StatelessWidget {
                   title: const Text('Quantidade de dias'),
                   subtitle: Text(
                     atestado.quantidadeDias.toString(),
+                  ),
+                  leading: const Icon(
+                    Icons.calendar_today,
+                    color: Color.fromARGB(255, 38, 87, 151),
                   ),
                 ),
               ),

@@ -55,7 +55,12 @@ class AtestadoScreen extends StatelessWidget {
                     return Card(
                       margin: const EdgeInsets.all(8.0),
                       child: ListTile(
-                        title: Text(atestado.nomeMedico),
+                        title: Text(
+                          atestado.nomeMedico,
+                          style: const TextStyle(
+                            color: Color.fromARGB(255, 38, 87, 151),
+                          ),
+                        ),
                         subtitle: Text('Emitido em ${atestado.dataEmissao}'),
                         trailing: const Icon(Icons.arrow_forward_ios, size: 14),
                         onTap: () {

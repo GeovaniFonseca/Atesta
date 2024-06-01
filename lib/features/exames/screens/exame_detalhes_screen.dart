@@ -73,6 +73,10 @@ class ExameDetalhesScreen extends StatelessWidget {
                   subtitle: Text(
                     exame.laudo,
                   ),
+                  leading: const Icon(
+                    Icons.document_scanner_outlined,
+                    color: Color.fromARGB(255, 38, 87, 151),
+                  ),
                 ),
               ),
               const SizedBox(
