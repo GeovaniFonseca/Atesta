@@ -27,10 +27,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.macOS:
         return macos;
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -44,41 +41,47 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyDgheiS9zK2rMv8rREt6Nscg3c3NNI2kQY',
-    appId: '1:1085489363675:web:03dd44f959dd658d596afe',
-    messagingSenderId: '1085489363675',
-    projectId: 'projetinho-c043f',
-    authDomain: 'projetinho-c043f.firebaseapp.com',
-    databaseURL: 'https://projetinho-c043f-default-rtdb.firebaseio.com',
-    storageBucket: 'projetinho-c043f.appspot.com',
+    apiKey: 'AIzaSyCkUldRq3rk-Ac_Fno_dtCL5P24W6VCmbQ',
+    appId: '1:581039158937:web:27aabdb75c638250122a08',
+    messagingSenderId: '581039158937',
+    projectId: 'projetoaplicado-2f74d',
+    authDomain: 'projetoaplicado-2f74d.firebaseapp.com',
+    storageBucket: 'projetoaplicado-2f74d.appspot.com',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyD9MtMTPl9jXQM8aGogzM37-Ag-Dc3i6D0',
-    appId: '1:1085489363675:android:d7cfb6048ec4c6d1596afe',
-    messagingSenderId: '1085489363675',
-    projectId: 'projetinho-c043f',
-    databaseURL: 'https://projetinho-c043f-default-rtdb.firebaseio.com',
-    storageBucket: 'projetinho-c043f.appspot.com',
+    apiKey: 'AIzaSyD3o1f21MnnDjlza5l__izhr68Ur5LYbys',
+    appId: '1:581039158937:android:6e9527f12625e2e6122a08',
+    messagingSenderId: '581039158937',
+    projectId: 'projetoaplicado-2f74d',
+    storageBucket: 'projetoaplicado-2f74d.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDWf4arDx8U2Wt-4X1BNkMUYrLEKJoRFG8',
-    appId: '1:1085489363675:ios:94b9a04d6e0f7ba2596afe',
-    messagingSenderId: '1085489363675',
-    projectId: 'projetinho-c043f',
-    databaseURL: 'https://projetinho-c043f-default-rtdb.firebaseio.com',
-    storageBucket: 'projetinho-c043f.appspot.com',
+    apiKey: 'AIzaSyAqUwh6aYvQi_9VKc1feNVKp20oJRSH-rs',
+    appId: '1:581039158937:ios:895789374ecad6b2122a08',
+    messagingSenderId: '581039158937',
+    projectId: 'projetoaplicado-2f74d',
+    storageBucket: 'projetoaplicado-2f74d.appspot.com',
     iosBundleId: 'com.example.helloWorld',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyDWf4arDx8U2Wt-4X1BNkMUYrLEKJoRFG8',
-    appId: '1:1085489363675:ios:72c6603bff05d698596afe',
-    messagingSenderId: '1085489363675',
-    projectId: 'projetinho-c043f',
-    databaseURL: 'https://projetinho-c043f-default-rtdb.firebaseio.com',
-    storageBucket: 'projetinho-c043f.appspot.com',
-    iosBundleId: 'com.example.helloWorld.RunnerTests',
+    apiKey: 'AIzaSyAqUwh6aYvQi_9VKc1feNVKp20oJRSH-rs',
+    appId: '1:581039158937:ios:895789374ecad6b2122a08',
+    messagingSenderId: '581039158937',
+    projectId: 'projetoaplicado-2f74d',
+    storageBucket: 'projetoaplicado-2f74d.appspot.com',
+    iosBundleId: 'com.example.helloWorld',
   );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyCkUldRq3rk-Ac_Fno_dtCL5P24W6VCmbQ',
+    appId: '1:581039158937:web:0111db30f3a3b86a122a08',
+    messagingSenderId: '581039158937',
+    projectId: 'projetoaplicado-2f74d',
+    authDomain: 'projetoaplicado-2f74d.firebaseapp.com',
+    storageBucket: 'projetoaplicado-2f74d.appspot.com',
+  );
+
 }

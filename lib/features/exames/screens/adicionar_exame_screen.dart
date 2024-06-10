@@ -22,6 +22,7 @@ class AdicionarExameScreen extends StatefulWidget {
 
 class _AdicionarExameScreenState extends State<AdicionarExameScreen> {
   DatabaseService databaseService = DatabaseService();
+  bool isLoading = false;
   TextEditingController dateController = TextEditingController();
   TextEditingController laudoController = TextEditingController();
   FocusNode dataFocusnode = FocusNode();
@@ -241,90 +242,119 @@ class _AdicionarExameScreenState extends State<AdicionarExameScreen> {
                 ),
               ),
             ),
-            ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(
-                    const Color.fromARGB(255, 38, 87, 151)),
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25.0),
-                  ),
-                ),
-                padding: MaterialStateProperty.all(const EdgeInsets.all(15)),
-              ),
-              child: const Text(
-                'Adicionar Exame',
-                style: TextStyle(color: Colors.white),
-              ),
-              onPressed: () async {
-                String? userId = FirebaseAuth.instance.currentUser?.uid;
-                String errorMessage = '';
-
-                if (userId == null) {
-                  errorMessage =
-                      'Você precisa estar logado para adicionar um exame.';
-                } else if (dateController.text.isEmpty) {
-                  errorMessage = 'Por favor, preencha a data do exame.';
-                } else if (tipoExameSelecionado == null) {
-                  errorMessage = 'Por favor, selecione o tipo de exame.';
-                } else if (selectedFile == null &&
-                    widget.exameParaEditar?.arquivoUrl == null) {
-                  errorMessage =
-                      'Por favor, selecione um arquivo para o exame.';
-                } else {
-                  String? uploadedFileUrl = widget.exameParaEditar?.arquivoUrl;
-
-                  if (selectedFile != null) {
-                    uploadedFileUrl =
-                        await StorageService().uploadFile(selectedFile!);
-                    if (uploadedFileUrl == null) {
-                      errorMessage = 'Falha no upload do arquivo.';
-                    }
-                  }
-
-                  if (errorMessage.isEmpty) {
-                    final Exame novoExame = Exame(
-                      id: widget.exameParaEditar?.id ?? '',
-                      date: dateController.text,
-                      tipo: tipoExameSelecionado!,
-                      laudo: laudoController.text,
-                      arquivoUrl: uploadedFileUrl ?? '',
-                      userId: userId,
-                      dependentId: selectedDependent == 'Sem dependente'
-                          ? null
-                          : selectedDependent,
-                    );
-
-                    if (widget.exameParaEditar == null) {
-                      // Adicionando um novo exame
-                      await FirebaseFirestore.instance
-                          .collection('Exames')
-                          .add(novoExame.toMap());
-                    } else {
-                      // Atualizando um exame existente
-                      await FirebaseFirestore.instance
-                          .collection('Exames')
-                          .doc(widget.exameParaEditar!.id)
-                          .update(novoExame.toMap());
-                    }
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content: Text('Exame adicionado com sucesso!'),
-                      backgroundColor: Colors.green,
-                    ));
-
-                    Navigator.popUntil(context, (route) => route.isFirst);
-                  }
-                }
-
-                if (errorMessage.isNotEmpty) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(errorMessage),
-                      backgroundColor: Colors.red,
+            Container(
+              width: 150,
+              height: 50,
+              child: ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(
+                      const Color.fromARGB(255, 38, 87, 151)),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25.0),
                     ),
-                  );
-                }
-              },
+                  ),
+                  padding: MaterialStateProperty.all(const EdgeInsets.all(15)),
+                ),
+                onPressed: isLoading
+                    ? null
+                    : () async {
+                        setState(() {
+                          isLoading = true;
+                        });
+                        String? userId = FirebaseAuth.instance.currentUser?.uid;
+                        String errorMessage = '';
+
+                        if (userId == null) {
+                          errorMessage =
+                              'Você precisa estar logado para adicionar um exame.';
+                          isLoading = false;
+                        } else if (dateController.text.isEmpty) {
+                          isLoading = false;
+                          errorMessage = 'Por favor, preencha a data do exame.';
+                        } else if (tipoExameSelecionado == null) {
+                          isLoading = false;
+                          errorMessage =
+                              'Por favor, selecione o tipo de exame.';
+                        } else if (selectedFile == null &&
+                            widget.exameParaEditar?.arquivoUrl == null) {
+                          isLoading = false;
+                          errorMessage =
+                              'Por favor, selecione um arquivo para o exame.';
+                        } else {
+                          String? uploadedFileUrl =
+                              widget.exameParaEditar?.arquivoUrl;
+
+                          if (selectedFile != null) {
+                            uploadedFileUrl = await StorageService()
+                                .uploadFile(selectedFile!);
+                            if (uploadedFileUrl == null) {
+                              errorMessage = 'Falha no upload do arquivo.';
+                              isLoading = false;
+                            }
+                          }
+
+                          if (errorMessage.isEmpty) {
+                            final Exame novoExame = Exame(
+                              id: widget.exameParaEditar?.id ?? '',
+                              date: dateController.text,
+                              tipo: tipoExameSelecionado!,
+                              laudo: laudoController.text,
+                              arquivoUrl: uploadedFileUrl ?? '',
+                              userId: userId,
+                              dependentId: selectedDependent == 'Sem dependente'
+                                  ? null
+                                  : selectedDependent,
+                            );
+
+                            if (widget.exameParaEditar == null) {
+                              // Adicionando um novo exame
+                              await FirebaseFirestore.instance
+                                  .collection('Exames')
+                                  .add(novoExame.toMap());
+                            } else {
+                              // Atualizando um exame existente
+                              await FirebaseFirestore.instance
+                                  .collection('Exames')
+                                  .doc(widget.exameParaEditar!.id)
+                                  .update(novoExame.toMap());
+                            }
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content: Text('Exame adicionado com sucesso!'),
+                              backgroundColor: Colors.green,
+                            ));
+
+                            Navigator.popUntil(
+                                context, (route) => route.isFirst);
+                          }
+                        }
+
+                        if (errorMessage.isNotEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(errorMessage),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        }
+                      },
+                child: isLoading
+                    ? const CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      )
+                    : Container(
+                        child: const Text(
+                          "Adicionar Exame",
+                          style: TextStyle(
+                            color: Colors.white,
+                            backgroundColor: Color.fromARGB(255, 38, 87, 151),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+              ),
             ),
           ],
         ),

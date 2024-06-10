@@ -1,14 +1,13 @@
 {
   "project_info": {
-    "project_number": "1085489363675",
-    "firebase_url": "https://projetinho-c043f-default-rtdb.firebaseio.com",
-    "project_id": "projetinho-c043f",
-    "storage_bucket": "projetinho-c043f.appspot.com"
+    "project_number": "581039158937",
+    "project_id": "projetoaplicado-2f74d",
+    "storage_bucket": "projetoaplicado-2f74d.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1085489363675:android:d7cfb6048ec4c6d1596afe",
+        "mobilesdk_app_id": "1:581039158937:android:6e9527f12625e2e6122a08",
         "android_client_info": {
           "package_name": "com.example.hello_world"
         }
@@ -16,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyD9MtMTPl9jXQM8aGogzM37-Ag-Dc3i6D0"
+          "current_key": "AIzaSyD3o1f21MnnDjlza5l__izhr68Ur5LYbys"
         }
       ],
       "services": {

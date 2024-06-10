@@ -11,6 +11,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final DatabaseService databaseService = DatabaseService();
+  bool isLoading = false;
   TextEditingController email =
       TextEditingController(); //controlado a entrada de dados.
   TextEditingController password = TextEditingController();
@@ -117,27 +119,60 @@ class _LoginScreenState extends State<LoginScreen> {
             width: 200,
             height: 50,
             child: ElevatedButton(
-              onPressed: () async {
-                var checklogin = await login(email.text, password.text);
-                if (checklogin == true) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text('Login efetuado com sucessso'),
-                    backgroundColor: Colors.green,
-                  ));
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Start(),
-                    ),
-                  );
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Email ou senha incorretos.'),
-                    ),
-                  );
-                }
-              },
+              onPressed: isLoading
+                  ? null
+                  : () async {
+                      setState(() {
+                        isLoading = true;
+                      });
+                      await login(email.text, password.text);
+                      try {
+                        await login(email.text, password.text);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Login efetuado com sucesso'),
+                            backgroundColor: Colors.green,
+                          ),
+                        );
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Start(),
+                          ),
+                        );
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Email ou senha incorretos.'),
+                            backgroundColor:
+                                Colors.red, // Definir a cor de fundo para falha
+                          ),
+                        );
+                      } finally {
+                        setState(() {
+                          isLoading = false;
+                        });
+                      }
+                      // var checklogin = await login(email.text, password.text);
+                      // if (checklogin == true) {
+                      //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      //     content: Text('Login efetuado com sucessso'),
+                      //     backgroundColor: Colors.green,
+                      //   ));
+                      //   Navigator.pushReplacement(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //       builder: (context) => Start(),
+                      //     ),
+                      //   );
+                      // } else {
+                      //   ScaffoldMessenger.of(context).showSnackBar(
+                      //     SnackBar(
+                      //       content: Text('Email ou senha incorretos.'),
+                      //     ),
+                      //   );
+                      // }
+                    },
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(
                     Color.fromARGB(255, 38, 87, 151)), // Cor de fundo do botão
@@ -150,14 +185,18 @@ class _LoginScreenState extends State<LoginScreen> {
                 padding: MaterialStateProperty.all(
                     EdgeInsets.all(15)), // Padding interno do botão
               ),
-              child: Text(
-                'Login',
-                style: TextStyle(
-                  color: Colors.white, // Cor do texto
-                  fontWeight: FontWeight.bold, // Negrito
-                  fontSize: 16, // Tamanho do texto
-                ),
-              ),
+              child: isLoading
+                  ? CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                    )
+                  : Text(
+                      'Login',
+                      style: TextStyle(
+                        color: Colors.white, // Cor do texto
+                        fontWeight: FontWeight.bold, // Negrito
+                        fontSize: 16, // Tamanho do texto
+                      ),
+                    ),
             ),
           ),
           TextButton(

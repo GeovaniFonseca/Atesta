@@ -68,208 +68,228 @@ class _SignupScreenState extends State<SignupScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(12.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              child: Image.asset('lib/assets/images/logo2.png', width: 100),
-            ),
-            Container(
-              margin: EdgeInsets.symmetric(vertical: 8),
-              child: TextFormField(
-                controller: name,
-                focusNode: nameFocusNode,
-                decoration: InputDecoration(
-                  label: Text(
-                    'Nome',
-                    style: TextStyle(
-                      color: getIconColor(nameFocusNode),
-                    ),
-                  ),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8)),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Color.fromARGB(255, 38, 87, 151),
-                      width: 2,
-                    ),
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                ),
-                keyboardType: TextInputType.text,
+        child: SingleChildScrollView(
+          reverse: true,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                child: Image.asset('lib/assets/images/logo2.png', width: 90),
               ),
-            ),
-            Container(
-              margin: EdgeInsets.symmetric(vertical: 8),
-              child: TextFormField(
-                controller: email,
-                focusNode: emailFocusNode,
-                decoration: InputDecoration(
-                  label: Text(
-                    'Email',
-                    style: TextStyle(
-                      color: getIconColor(emailFocusNode),
-                    ),
-                  ),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8)),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Color.fromARGB(255, 38, 87, 151),
-                      width: 2,
-                    ),
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                ),
-                keyboardType: TextInputType.emailAddress,
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.symmetric(vertical: 8),
-              child: TextFormField(
-                controller: phone,
-                focusNode: phoneFocusNode,
-                decoration: InputDecoration(
-                  label: Text(
-                    'Contato',
-                    style: TextStyle(color: getIconColor(phoneFocusNode)),
-                  ),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8)),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Color.fromARGB(255, 38, 87, 151),
-                      width: 2,
-                    ),
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                ),
-                keyboardType: TextInputType.phone,
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.symmetric(vertical: 8),
-              child: TextFormField(
-                controller: age,
-                focusNode: ageFocusNode,
-                decoration: InputDecoration(
-                  label: Text(
-                    'Idade',
-                    style: TextStyle(color: getIconColor(ageFocusNode)),
-                  ),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8)),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Color.fromARGB(255, 38, 87, 151),
-                      width: 2,
-                    ),
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                ),
-                keyboardType: TextInputType.number,
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.symmetric(vertical: 8),
-              child: TextFormField(
-                controller: password,
-                focusNode: passwordFocusNode,
-                obscureText: true,
-                decoration: InputDecoration(
-                  label: Text(
-                    'Senha',
-                    style: TextStyle(color: getIconColor(passwordFocusNode)),
-                  ),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8)),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Color.fromARGB(255, 38, 87, 151),
-                      width: 2,
-                    ),
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                ),
-                keyboardType: TextInputType.text,
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.symmetric(vertical: 8),
-              child: TextFormField(
-                controller: confirmpassword,
-                obscureText: true,
-                focusNode: confirmPasswordFocusNode,
-                decoration: InputDecoration(
-                  label: Text(
-                    'Reptira sua senha',
-                    style: TextStyle(color: getIconColor(confirmPasswordFocusNode)),
-                  ),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8)),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Color.fromARGB(255, 38, 87, 151),
-                      width: 2,
-                    ),
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                ),
-                keyboardType: TextInputType.text,
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.only(top: 8),
-              width: 150,
-              height: 50,
-              child: ElevatedButton(
-                onPressed: isLoading
-                    ? null
-                    : () async {
-                        setState(() {
-                          isLoading = true;
-                        });
-                        try {
-                          await register(email.text, password.text, name.text,
-                              phone.text, int.parse(age.text));
-
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text('Usuário cadastrado com sucesso'),
-                              backgroundColor: Colors.green,
-                            ),
-                          );
-
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => LoginScreen(),
-                            ),
-                          );
-                        } catch (e) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text('Falha ao cadastrar usuário: $e'),
-                              backgroundColor: Colors.red,
-                            ),
-                          );
-                        } finally {
-                          setState(() {
-                            isLoading = false;
-                          });
-                        }
-                      },
-                child: isLoading
-                    ? CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                      )
-                    : Text(
-                        'Cadastrar',
-                        style: TextStyle(fontSize: 20, height: 2),
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 8),
+                child: TextFormField(
+                  controller: name,
+                  focusNode: nameFocusNode,
+                  decoration: InputDecoration(
+                    label: Text(
+                      'Nome',
+                      style: TextStyle(
+                        color: getIconColor(nameFocusNode),
                       ),
+                    ),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8)),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: Color.fromARGB(255, 38, 87, 151),
+                        width: 2,
+                      ),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                  ),
+                  keyboardType: TextInputType.text,
+                ),
               ),
-            )
-          ],
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 8),
+                child: TextFormField(
+                  controller: email,
+                  focusNode: emailFocusNode,
+                  decoration: InputDecoration(
+                    label: Text(
+                      'Email',
+                      style: TextStyle(
+                        color: getIconColor(emailFocusNode),
+                      ),
+                    ),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8)),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: Color.fromARGB(255, 38, 87, 151),
+                        width: 2,
+                      ),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                  ),
+                  keyboardType: TextInputType.emailAddress,
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 8),
+                child: TextFormField(
+                  controller: phone,
+                  focusNode: phoneFocusNode,
+                  decoration: InputDecoration(
+                    label: Text(
+                      'Contato',
+                      style: TextStyle(color: getIconColor(phoneFocusNode)),
+                    ),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8)),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: Color.fromARGB(255, 38, 87, 151),
+                        width: 2,
+                      ),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                  ),
+                  keyboardType: TextInputType.phone,
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 8),
+                child: TextFormField(
+                  controller: age,
+                  focusNode: ageFocusNode,
+                  decoration: InputDecoration(
+                    label: Text(
+                      'Idade',
+                      style: TextStyle(color: getIconColor(ageFocusNode)),
+                    ),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8)),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: Color.fromARGB(255, 38, 87, 151),
+                        width: 2,
+                      ),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                  ),
+                  keyboardType: TextInputType.number,
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 8),
+                child: TextFormField(
+                  controller: password,
+                  focusNode: passwordFocusNode,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    label: Text(
+                      'Senha',
+                      style: TextStyle(color: getIconColor(passwordFocusNode)),
+                    ),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8)),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: Color.fromARGB(255, 38, 87, 151),
+                        width: 2,
+                      ),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                  ),
+                  keyboardType: TextInputType.text,
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 8),
+                child: TextFormField(
+                  controller: confirmpassword,
+                  obscureText: true,
+                  focusNode: confirmPasswordFocusNode,
+                  decoration: InputDecoration(
+                    label: Text(
+                      'Reptira sua senha',
+                      style: TextStyle(
+                          color: getIconColor(confirmPasswordFocusNode)),
+                    ),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8)),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: Color.fromARGB(255, 38, 87, 151),
+                        width: 2,
+                      ),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                  ),
+                  keyboardType: TextInputType.text,
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 8),
+                width: 150,
+                height: 50,
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(
+                        const Color.fromARGB(255, 38, 87, 151)),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+                    ),
+                    padding:
+                        MaterialStateProperty.all(const EdgeInsets.all(15)),
+                  ),
+                  onPressed: isLoading
+                      ? null
+                      : () async {
+                          setState(() {
+                            isLoading = true;
+                          });
+                          try {
+                            await register(email.text, password.text, name.text,
+                                phone.text, int.parse(age.text));
+
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Usuário cadastrado com sucesso'),
+                                backgroundColor: Colors.green,
+                              ),
+                            );
+
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LoginScreen(),
+                              ),
+                            );
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Por favor, preencha os campos'),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                          } finally {
+                            setState(() {
+                              isLoading = false;
+                            });
+                          }
+                        },
+                  child: isLoading
+                      ? CircularProgressIndicator(
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(Colors.white),
+                        )
+                      : Text(
+                          'Cadastrar',
+                          style: TextStyle(
+                            color: Colors.white, // Cor do texto
+                            fontWeight: FontWeight.bold, // Negrito
+                            fontSize: 16, // Tamanho do texto
+                          ),
+                        ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

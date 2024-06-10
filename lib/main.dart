@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:hello_world/features/account/screens/login_screen.dart';
 import 'package:hello_world/features/exames/screens/exame_screen.dart';
-
 import 'features/account/screens/profile_screen.dart';
+import 'firebase_options.dart'; // Certifique-se de que este arquivo existe e está configurado corretamente
 
-void main() => runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

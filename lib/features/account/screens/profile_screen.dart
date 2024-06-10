@@ -8,6 +8,7 @@ class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _ProfileScreenState createState() => _ProfileScreenState();
 }
 
@@ -82,6 +83,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 await databaseService.addDependent(dependentController.text);
                 dependentController.clear();
                 await _loadProfileData();
+                // ignore: use_build_context_synchronously
                 Navigator.of(context).pop();
               },
               child: const Text("Adicionar"),
@@ -110,6 +112,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             onPressed: () async {
               await FirebaseAuth.instance.signOut();
               if (mounted) {
+                // ignore: use_build_context_synchronously
                 Navigator.of(context).pushReplacementNamed('/login');
               }
             },

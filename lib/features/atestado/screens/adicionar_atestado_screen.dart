@@ -19,6 +19,7 @@ class AdicionarAtestadoScreen extends StatefulWidget {
 }
 
 class _AdicionarAtestadoScreenState extends State<AdicionarAtestadoScreen> {
+  bool isLoading = false;
   final TextEditingController _nomeMedicoController = TextEditingController();
   final TextEditingController _dataEmissaoController = TextEditingController();
   final TextEditingController _quantidadeDiasController =
@@ -190,99 +191,130 @@ class _AdicionarAtestadoScreenState extends State<AdicionarAtestadoScreen> {
                 ),
               ),
             ),
-            ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(const Color.fromARGB(
-                    255, 38, 87, 151)), // Cor de fundo do botão
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                        25.0), // Raio do canto arredondado
-                  ),
-                ),
-                padding: MaterialStateProperty.all(const EdgeInsets.all(15)),
-              ),
-              child: const Text(
-                'Adicionar Atestado',
-                style: TextStyle(color: Colors.white),
-              ),
-              onPressed: () async {
-                String? userId = FirebaseAuth.instance.currentUser?.uid;
-                String errorMessage = '';
-
-                if (userId == null) {
-                  errorMessage =
-                      "Você precisa estar logado para adicionar um exame.";
-                } else if (_nomeMedicoController.text.isEmpty) {
-                  errorMessage = "Por favor, preencha o nome do médico.";
-                } else if (_dataEmissaoController.text.isEmpty) {
-                  errorMessage =
-                      "Por favor, preencha a data de emissão do atestado";
-                } else if (_quantidadeDiasController.text.isEmpty) {
-                  errorMessage =
-                      "Por facor, preencha a quantidade de dias do atestado";
-                } else if (_selectedFile == null) {
-                  errorMessage =
-                      'Por favor, selecione um arquivo para o atestado.';
-                }
-
-                if (errorMessage.isEmpty) {
-                  String? uploadedFileUrl =
-                      widget.atestadoParaEditar?.arquivoUrl;
-
-                  if (_selectedFile != null) {
-                    uploadedFileUrl =
-                        await StorageService().uploadFile(_selectedFile!);
-                    if (uploadedFileUrl == null) {
-                      errorMessage = 'Falha no upload do arquivo.';
-                    }
-                  }
-
-                  final Atestado novoAtestado = Atestado(
-                    id: widget.atestadoParaEditar?.id ??
-                        '', // Usa o ID existente se estiver editando
-                    nomeMedico: _nomeMedicoController.text,
-                    dataEmissao: _dataEmissaoController.text,
-                    quantidadeDias:
-                        int.tryParse(_quantidadeDiasController.text) ?? 0,
-                    arquivoUrl: uploadedFileUrl ?? '',
-                    userId: userId!,
-                  );
-
-                  if (widget.atestadoParaEditar == null) {
-                    // Adicionando um novo atestado
-                    await FirebaseFirestore.instance
-                        .collection('Atestados')
-                        .add(novoAtestado.toMap());
-                  } else {
-                    // Atualizando um atestado existente
-                    await FirebaseFirestore.instance
-                        .collection('Atestados')
-                        .doc(widget.atestadoParaEditar!.id)
-                        .update(novoAtestado.toMap());
-                  }
-
-                  // ignore: use_build_context_synchronously
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    content: Text('Exame adicionado com sucesso!'),
-                    backgroundColor: Colors.green,
-                  ));
-
-                  // ignore: use_build_context_synchronously
-                  Navigator.popUntil(context,
-                      (route) => route.isFirst); // Volta para a tela anterior
-                }
-
-                if (errorMessage.isNotEmpty) {
-                  // ignore: use_build_context_synchronously
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(errorMessage),
-                      backgroundColor: Colors.red,
+            Container(
+              width: 150,
+              height: 50,
+              child: ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(
+                      const Color.fromARGB(
+                          255, 38, 87, 151)), // Cor de fundo do botão
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                          25.0), // Raio do canto arredondado
                     ),
-                  );
-                }
-              },
+                  ),
+                  padding: MaterialStateProperty.all(const EdgeInsets.all(15)),
+                ),
+                onPressed: isLoading
+                    ? null
+                    : () async {
+                        setState(() {
+                          isLoading = true;
+                        });
+                        String? userId = FirebaseAuth.instance.currentUser?.uid;
+                        String errorMessage = '';
+
+                        if (userId == null) {
+                          isLoading = false;
+                          errorMessage =
+                              "Você precisa estar logado para adicionar um exame.";
+                        } else if (_nomeMedicoController.text.isEmpty) {
+                          isLoading = false;
+                          errorMessage =
+                              "Por favor, preencha o nome do médico.";
+                        } else if (_dataEmissaoController.text.isEmpty) {
+                          isLoading = false;
+                          errorMessage =
+                              "Por favor, preencha a data de emissão do atestado";
+                        } else if (_quantidadeDiasController.text.isEmpty) {
+                          isLoading = false;
+                          errorMessage =
+                              "Por facor, preencha a quantidade de dias do atestado";
+                        } else if (_selectedFile == null) {
+                          isLoading = false;
+                          errorMessage =
+                              'Por favor, selecione um arquivo para o atestado.';
+                        }
+
+                        if (errorMessage.isEmpty) {
+                          String? uploadedFileUrl =
+                              widget.atestadoParaEditar?.arquivoUrl;
+
+                          if (_selectedFile != null) {
+                            uploadedFileUrl = await StorageService()
+                                .uploadFile(_selectedFile!);
+                            if (uploadedFileUrl == null) {
+                              errorMessage = 'Falha no upload do arquivo.';
+                            }
+                          }
+
+                          final Atestado novoAtestado = Atestado(
+                            id: widget.atestadoParaEditar?.id ??
+                                '', // Usa o ID existente se estiver editando
+                            nomeMedico: _nomeMedicoController.text,
+                            dataEmissao: _dataEmissaoController.text,
+                            quantidadeDias:
+                                int.tryParse(_quantidadeDiasController.text) ??
+                                    0,
+                            arquivoUrl: uploadedFileUrl ?? '',
+                            userId: userId!,
+                          );
+
+                          if (widget.atestadoParaEditar == null) {
+                            // Adicionando um novo atestado
+                            await FirebaseFirestore.instance
+                                .collection('Atestados')
+                                .add(novoAtestado.toMap());
+                          } else {
+                            // Atualizando um atestado existente
+                            await FirebaseFirestore.instance
+                                .collection('Atestados')
+                                .doc(widget.atestadoParaEditar!.id)
+                                .update(novoAtestado.toMap());
+                          }
+
+                          // ignore: use_build_context_synchronously
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text('Exame adicionado com sucesso!'),
+                            backgroundColor: Colors.green,
+                          ));
+
+                          // ignore: use_build_context_synchronously
+                          Navigator.popUntil(
+                              context,
+                              (route) =>
+                                  route.isFirst); // Volta para a tela anterior
+                        }
+
+                        if (errorMessage.isNotEmpty) {
+                          // ignore: use_build_context_synchronously
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(errorMessage),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        }
+                      },
+                child: isLoading
+                    ? const CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      )
+                    : Container(
+                        child: const Text(
+                          "Adicionar Exame",
+                          style: TextStyle(
+                            color: Colors.white,
+                            backgroundColor: Color.fromARGB(255, 38, 87, 151),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+              ),
             )
 
             // Implemente a lógica de adicionar atestado aqui
