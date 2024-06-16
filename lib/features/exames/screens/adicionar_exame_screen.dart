@@ -76,13 +76,21 @@ class _AdicionarExameScreenState extends State<AdicionarExameScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Inserir as informações do exame médico'),
-      ),
+      appBar: AppBar(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: <Widget>[
+            Container(
+              padding: EdgeInsets.all(10),
+              child: const Text(
+                'Inserir as informações do exame médico',
+                style: TextStyle(
+                    fontSize: 23,
+                    color: Color.fromARGB(255, 38, 87, 151),
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
             TextField(
               controller: dateController,
               focusNode: dateFocusnode,
@@ -242,7 +250,7 @@ class _AdicionarExameScreenState extends State<AdicionarExameScreen> {
                 ),
               ),
             ),
-            Container(
+            SizedBox(
               width: 150,
               height: 50,
               child: ElevatedButton(
@@ -343,15 +351,13 @@ class _AdicionarExameScreenState extends State<AdicionarExameScreen> {
                     ? const CircularProgressIndicator(
                         valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                       )
-                    : Container(
-                        child: const Text(
-                          "Adicionar Exame",
-                          style: TextStyle(
-                            color: Colors.white,
-                            backgroundColor: Color.fromARGB(255, 38, 87, 151),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
+                    : const Text(
+                        "Adicionar Exame",
+                        style: TextStyle(
+                          color: Colors.white,
+                          backgroundColor: Color.fromARGB(255, 38, 87, 151),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
                         ),
                       ),
               ),

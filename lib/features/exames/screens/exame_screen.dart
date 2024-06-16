@@ -65,8 +65,6 @@ class ExameScreen extends StatelessWidget {
                             style: const TextStyle(
                                 color: Color.fromARGB(255, 38, 87, 151))),
                         subtitle: Text(exame.dependentId ?? 'Sem dependente'),
-                        trailing: const Icon(Icons.document_scanner_outlined,
-                            size: 14),
                         leading: const Icon(
                           Icons.edit_document,
                           color: Color.fromARGB(255, 38, 87, 151),

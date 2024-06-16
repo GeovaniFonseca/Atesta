@@ -67,13 +67,21 @@ class _AdicionarAtestadoScreenState extends State<AdicionarAtestadoScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Adicionar Atestado'),
-      ),
+      appBar: AppBar(),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: ListView(
           children: <Widget>[
+            Container(
+              padding: EdgeInsets.all(10),
+              child: const Text(
+                'Insira as informações do atestado',
+                style: TextStyle(
+                    fontSize: 23,
+                    color: Color.fromARGB(255, 38, 87, 151),
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
             TextFormField(
               controller: _nomeMedicoController,
               focusNode: nomeMedicoFocusnode,
@@ -191,7 +199,7 @@ class _AdicionarAtestadoScreenState extends State<AdicionarAtestadoScreen> {
                 ),
               ),
             ),
-            Container(
+            SizedBox(
               width: 150,
               height: 50,
               child: ElevatedButton(
@@ -284,6 +292,7 @@ class _AdicionarAtestadoScreenState extends State<AdicionarAtestadoScreen> {
 
                           // ignore: use_build_context_synchronously
                           Navigator.popUntil(
+                              // ignore: use_build_context_synchronously
                               context,
                               (route) =>
                                   route.isFirst); // Volta para a tela anterior
@@ -303,15 +312,13 @@ class _AdicionarAtestadoScreenState extends State<AdicionarAtestadoScreen> {
                     ? const CircularProgressIndicator(
                         valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                       )
-                    : Container(
-                        child: const Text(
-                          "Adicionar Exame",
-                          style: TextStyle(
-                            color: Colors.white,
-                            backgroundColor: Color.fromARGB(255, 38, 87, 151),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
+                    : const Text(
+                        "Adicionar Exame",
+                        style: TextStyle(
+                          color: Colors.white,
+                          backgroundColor: Color.fromARGB(255, 38, 87, 151),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
                         ),
                       ),
               ),

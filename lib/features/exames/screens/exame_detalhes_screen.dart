@@ -90,23 +90,36 @@ class ExameDetalhesScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(
-                height: 20,
-              ),
-              const SizedBox(
                 height: 10,
               ),
-              const SizedBox(height: 20),
-              const Text('Preview do Arquivo:'),
-              exame.arquivoUrl!.isNotEmpty
-                  ? Image.network(exame.arquivoUrl!)
-                  : const Text('Nenhum arquivo enviado.'),
+              Card(
+                color: Colors.white,
+                surfaceTintColor: Colors.transparent,
+                elevation: 5,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text('Preview do Arquivo:'),
+                      exame.arquivoUrl!.isNotEmpty
+                          ? Image.network(exame.arquivoUrl!)
+                          : const Text('Nenhum arquivo enviado.'),
+                      const SizedBox(height: 10),
+                    ],
+                  ),
+                ),
+              ),
               ActionChip(
                 avatar: const Icon(Icons.delete,
-                    color: Color.fromARGB(255, 255, 255, 255)),
+                    color: Color.fromARGB(255, 38, 87, 151)),
                 label: const Text('Deletar exame'),
                 onPressed: () => deleteExame(context),
-                backgroundColor: const Color.fromARGB(255, 38, 87, 151),
-              )
+                backgroundColor: Colors.white,
+              ),
             ],
           ),
         ),
