@@ -1,25 +1,26 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:hello_world/features/exames/screens/adicionar_exame_screen.dart';
-import 'package:hello_world/features/exames/widgets/exame.dart';
 
-class ExameDetalhesScreen extends StatelessWidget {
-  final Exame exame;
+import '../widgets/vacina.dart';
+import 'adicionar_vacina_screen.dart';
 
-  const ExameDetalhesScreen({super.key, required this.exame});
+class VacinaDetalhesScreen extends StatelessWidget {
+  final Vacina vacina;
 
-  Future<void> deleteExame(BuildContext context) async {
+  const VacinaDetalhesScreen({super.key, required this.vacina});
+
+  Future<void> deleteVacina(BuildContext context) async {
     try {
       await FirebaseFirestore.instance
-          .collection('Exames')
-          .doc(exame.id)
+          .collection('Vacinas')
+          .doc(vacina.id)
           .delete();
       // ignore: use_build_context_synchronously
       Navigator.pop(context);
     } catch (e) {
       // ignore: use_build_context_synchronously
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Erro ao deletar exame')));
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Erro ao deletar vacina')));
     }
   }
 
@@ -28,7 +29,7 @@ class ExameDetalhesScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Detalhes do exame',
+          'Detalhes da vacina',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         backgroundColor:
@@ -43,55 +44,73 @@ class ExameDetalhesScreen extends StatelessWidget {
             children: [
               Card(
                 child: ListTile(
-                  title: const Text('Data'),
-                  subtitle: Text(exame.date),
+                  title: const Text('Data de Aplicação'),
+                  subtitle: Text(vacina.dateAplicacao),
                   leading: const Icon(
                     Icons.calendar_today,
                     color: Color.fromARGB(255, 38, 87, 151),
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 10,
-              ),
+              const SizedBox(height: 10),
+              if (vacina.dateReforco != null)
+                Card(
+                  child: ListTile(
+                    title: const Text('Data de Reforço'),
+                    subtitle: Text(vacina.dateReforco!),
+                    leading: const Icon(
+                      Icons.calendar_today,
+                      color: Color.fromARGB(255, 38, 87, 151),
+                    ),
+                  ),
+                ),
+              const SizedBox(height: 10),
               Card(
                 child: ListTile(
-                  title: const Text('Tipo do exame'),
-                  subtitle: Text(exame.tipo),
+                  title: const Text('Tipo da Vacina'),
+                  subtitle: Text(vacina.tipo),
                   leading: const Icon(
-                    Icons.description,
+                    Icons.vaccines,
                     color: Color.fromARGB(255, 38, 87, 151),
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 10,
-              ),
-              Card(
-                child: ListTile(
-                  title: const Text('Laudo do exame'),
-                  subtitle: Text(
-                    exame.laudo,
-                  ),
-                  leading: const Icon(
-                    Icons.document_scanner_outlined,
-                    color: Color.fromARGB(255, 38, 87, 151),
+              const SizedBox(height: 10),
+              if (vacina.numeroLote != null)
+                Card(
+                  child: ListTile(
+                    title: const Text('Número/Lote de Sequência'),
+                    subtitle: Text(vacina.numeroLote!),
+                    leading: const Icon(
+                      Icons.confirmation_number,
+                      color: Color.fromARGB(255, 38, 87, 151),
+                    ),
                   ),
                 ),
-              ),
+              const SizedBox(height: 10),
+              if (vacina.efeitosColaterais != null)
+                Card(
+                  child: ListTile(
+                    title: const Text('Efeitos Colaterais'),
+                    subtitle: Text(vacina.efeitosColaterais!),
+                    leading: const Icon(
+                      Icons.warning,
+                      color: Color.fromARGB(255, 38, 87, 151),
+                    ),
+                  ),
+                ),
+              const SizedBox(height: 10),
               Card(
                 child: ListTile(
                   title: const Text('Dependente'),
-                  subtitle: Text(exame.dependentId ?? 'Não selecionado'),
+                  subtitle: Text(vacina.dependentId ?? 'Não selecionado'),
                   leading: const Icon(
-                    Icons.description,
+                    Icons.person,
                     color: Color.fromARGB(255, 38, 87, 151),
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 10,
-              ),
+              const SizedBox(height: 10),
               Card(
                 color: Colors.white,
                 surfaceTintColor: Colors.transparent,
@@ -105,8 +124,8 @@ class ExameDetalhesScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text('Preview do Arquivo:'),
-                      exame.arquivoUrl!.isNotEmpty
-                          ? Image.network(exame.arquivoUrl!)
+                      vacina.arquivoUrl != null && vacina.arquivoUrl!.isNotEmpty
+                          ? Image.network(vacina.arquivoUrl!)
                           : const Text('Nenhum arquivo enviado.'),
                       const SizedBox(height: 10),
                     ],
@@ -114,10 +133,12 @@ class ExameDetalhesScreen extends StatelessWidget {
                 ),
               ),
               ActionChip(
-                avatar: const Icon(Icons.delete,
-                    color: Color.fromARGB(255, 38, 87, 151)),
-                label: const Text('Deletar exame'),
-                onPressed: () => deleteExame(context),
+                avatar: const Icon(
+                  Icons.delete,
+                  color: Color.fromARGB(255, 38, 87, 151),
+                ),
+                label: const Text('Deletar vacina'),
+                onPressed: () => deleteVacina(context),
                 backgroundColor: Colors.white,
               ),
             ],
@@ -126,12 +147,11 @@ class ExameDetalhesScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // Navega para a tela de adicionar/editar exame com as informações do exame atual
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) =>
-                  AdicionarExameScreen(exameParaEditar: exame),
+                  AdicionarVacinaScreen(vacinaParaEditar: vacina),
             ),
           );
         },

@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../../services/DatabaseService.dart';
+import '../widgets/health_user_card.dart';
 import '../widgets/user_info_card.dart';
+import 'perfil_saude_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -157,146 +159,220 @@ class _ProfileScreenState extends State<ProfileScreen> {
             return const Center(child: Text("User data is not available"));
           }
 
-          return CustomScrollView(
-            slivers: <Widget>[
-              SliverToBoxAdapter(
-                child: Column(
-                  children: [
-                    const SizedBox(height: 20),
-                    Stack(
-                      children: [
-                        CircleAvatar(
-                          backgroundColor: Colors.white,
-                          radius: 64,
-                          backgroundImage: profileImageUrl != null
-                              ? NetworkImage(profileImageUrl!)
-                              : const AssetImage(
-                                      'lib/assets/images/DefaultProfile.png')
-                                  as ImageProvider,
-                        ),
-                        Positioned(
-                          bottom: -10,
-                          left: 80,
-                          child: IconButton(
-                            icon: const Icon(Icons.add_a_photo),
-                            onPressed: () => _updateProfilePicture(context),
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: CustomScrollView(
+              slivers: <Widget>[
+                SliverToBoxAdapter(
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 20),
+                      Stack(
+                        children: [
+                          CircleAvatar(
+                            backgroundColor: Colors.white,
+                            radius: 64,
+                            backgroundImage: profileImageUrl != null
+                                ? NetworkImage(profileImageUrl!)
+                                : const AssetImage(
+                                        'lib/assets/images/DefaultProfile.png')
+                                    as ImageProvider,
                           ),
-                        )
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                    Center(
-                      child: Text(
-                        userData['name'],
-                        style: const TextStyle(
-                            fontSize: 22, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: Colors.grey,
-                          width: 2,
-                        ),
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 4),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton<String>(
-                          value: selectedDependent,
-                          hint: const Text(
-                            "Selecione um dependente",
-                            style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w400,
+                          Positioned(
+                            bottom: -10,
+                            left: 80,
+                            child: IconButton(
+                              icon: const Icon(Icons.add_a_photo),
+                              onPressed: () => _updateProfilePicture(context),
                             ),
+                          )
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      Center(
+                        child: Text(
+                          userData['name'],
+                          style: const TextStyle(
+                              fontSize: 22, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: Colors.grey,
+                            width: 2,
                           ),
-                          items: [
-                            ...dependents.map((String dependent) {
-                              return DropdownMenuItem<String>(
-                                value: dependent,
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 4),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton<String>(
+                            value: selectedDependent,
+                            hint: const Text(
+                              "Selecione um dependente",
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            items: [
+                              ...dependents.map((String dependent) {
+                                return DropdownMenuItem<String>(
+                                  value: dependent,
+                                  child: Text(
+                                    dependent,
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                );
+                              }),
+                              const DropdownMenuItem<String>(
+                                value: "add_new",
                                 child: Text(
-                                  dependent,
-                                  style: const TextStyle(
+                                  "Adicionar novo dependente",
+                                  style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 16,
                                   ),
                                 ),
-                              );
-                            }),
-                            const DropdownMenuItem<String>(
-                              value: "add_new",
-                              child: Text(
-                                "Adicionar novo dependente",
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16,
+                              ),
+                            ],
+                            onChanged: (String? newValue) {
+                              if (newValue == "add_new") {
+                                _showAddDependentDialog();
+                              } else {
+                                databaseService
+                                    .updateSelectedDependent(newValue);
+                                setState(() {
+                                  selectedDependent = newValue;
+                                });
+                              }
+                            },
+                            dropdownColor: Colors.white,
+                            style: const TextStyle(
+                              color: Colors.blue,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                            icon: const Icon(
+                              Icons.arrow_drop_down,
+                              color: Color.fromARGB(255, 187, 187, 187),
+                            ),
+                            iconEnabledColor: Colors.blue,
+                            iconDisabledColor: Colors.grey,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                    ],
+                  ),
+                ),
+                SliverGrid(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                    childAspectRatio: 3 / 1.9,
+                  ),
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      List<String> keys = ['name', 'age', 'phone', 'email'];
+                      if (index >= keys.length) return null;
+                      String key = keys[index];
+                      dynamic rawValue = userData[key];
+                      String value = rawValue.toString();
+                      IconData icon = getIconForKey(key);
+                      Color backgroundColor =
+                          cardColors[key] ?? Colors.blue.shade100;
+
+                      return UserInfoCard(
+                        icon: icon,
+                        title: key.capitalize(),
+                        subtitle: value,
+                        color: backgroundColor,
+                      );
+                    },
+                    childCount: 4,
+                  ),
+                ),
+                // Adicionar seção de informações de saúde
+                SliverToBoxAdapter(
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            'Perfil de Saúde',
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                          TextButton(
+                            onPressed: () => Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => HealthProfileEditScreen(
+                                  userData: userData,
                                 ),
                               ),
                             ),
-                          ],
-                          onChanged: (String? newValue) {
-                            if (newValue == "add_new") {
-                              _showAddDependentDialog();
-                            } else {
-                              databaseService.updateSelectedDependent(newValue);
-                              setState(() {
-                                selectedDependent = newValue;
-                              });
-                            }
-                          },
-                          dropdownColor: Colors.white,
-                          style: const TextStyle(
-                            color: Colors.blue,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
+                            child: const Text(
+                              'Editar',
+                              style: TextStyle(
+                                  color: Colors.blue,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600),
+                            ),
                           ),
-                          icon: const Icon(
-                            Icons.arrow_drop_down,
-                            color: Color.fromARGB(255, 187, 187, 187),
-                          ),
-                          iconEnabledColor: Colors.blue,
-                          iconDisabledColor: Colors.grey,
-                        ),
+                        ],
                       ),
-                    ),
-                    const SizedBox(height: 10),
-                  ],
+                      HealthInfoCard(
+                        icon: Icons.bloodtype,
+                        label: 'Tipo sanguíneo',
+                        value: userData['bloodType'] ?? 'N/D',
+                      ),
+                      HealthInfoCard(
+                        icon: Icons.bloodtype,
+                        label: 'Doador de sangue',
+                        value: userData['bloodDonor'] ?? 'N/D',
+                      ),
+                      HealthInfoCard(
+                        icon: Icons.luggage,
+                        label: 'Doador de órgãos',
+                        value: userData['organDonor'] ?? 'N/D',
+                      ),
+                      HealthInfoCard(
+                        icon: Icons.monitor_weight,
+                        label: 'Peso',
+                        value: userData['weight'] ?? 'N/D',
+                      ),
+                      HealthInfoCard(
+                        icon: Icons.height,
+                        label: 'Altura',
+                        value: userData['height'] ?? 'N/D',
+                      ),
+                      HealthInfoCard(
+                        icon: Icons.calculate,
+                        label: 'Cálculo IMC',
+                        value: userData['bmi'] ?? 'N/D',
+                      ),
+                      HealthInfoCard(
+                        icon: Icons.fitness_center,
+                        label: 'Exercícios',
+                        value: userData['exercises'] ?? 'N/D',
+                      ),
+                      const SizedBox(height: 20),
+                    ],
+                  ),
                 ),
-              ),
-              SliverGrid(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                  childAspectRatio: 3 / 1.9,
-                ),
-                delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    List<String> keys = ['name', 'age', 'phone', 'email'];
-                    if (index >= keys.length) return null;
-                    String key = keys[index];
-                    dynamic rawValue = userData[key];
-                    String value = rawValue.toString();
-                    IconData icon = getIconForKey(key);
-                    Color backgroundColor =
-                        cardColors[key] ?? Colors.blue.shade100;
-
-                    return UserInfoCard(
-                      icon: icon,
-                      title: key.capitalize(),
-                      subtitle: value,
-                      color: backgroundColor,
-                    );
-                  },
-                  childCount: 4,
-                ),
-              ),
-            ],
+              ],
+            ),
           );
         },
       ),

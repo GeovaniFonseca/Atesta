@@ -58,6 +58,12 @@ class _AdicionarExameScreenState extends State<AdicionarExameScreen> {
     var dependentList = await databaseService.loadDependents();
     setState(() {
       dependents.addAll(dependentList);
+
+      // Verifica se selectedDependent está na lista de dependents
+      if (selectedDependent != null &&
+          !dependents.contains(selectedDependent)) {
+        dependents.add(selectedDependent!);
+      }
     });
   }
 
@@ -82,7 +88,7 @@ class _AdicionarExameScreenState extends State<AdicionarExameScreen> {
         child: ListView(
           children: <Widget>[
             Container(
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               child: const Text(
                 'Inserir as informações do exame médico',
                 style: TextStyle(
@@ -346,6 +352,10 @@ class _AdicionarExameScreenState extends State<AdicionarExameScreen> {
                             ),
                           );
                         }
+
+                        setState(() {
+                          isLoading = false;
+                        });
                       },
                 child: isLoading
                     ? const CircularProgressIndicator(

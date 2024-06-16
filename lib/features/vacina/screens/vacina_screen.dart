@@ -3,13 +3,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:hello_world/features/exames/screens/adicionar_exame_screen.dart';
-import 'package:hello_world/features/exames/widgets/exame.dart';
 
-import 'exame_detalhes_screen.dart';
+import '../widgets/vacina.dart';
+import 'adicionar_vacina_screen.dart';
+import 'vacina_detalhes_screen.dart';
 
-class ExameScreen extends StatelessWidget {
-  const ExameScreen({super.key});
+class VacinaScreen extends StatelessWidget {
+  const VacinaScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class ExameScreen extends StatelessWidget {
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
         title: const Text(
-          'Exames',
+          'Vacinas',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         backgroundColor:
@@ -32,7 +32,7 @@ class ExameScreen extends StatelessWidget {
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)))
           : StreamBuilder(
               stream: FirebaseFirestore.instance
-                  .collection('Exames')
+                  .collection('Vacinas')
                   .where('userId', isEqualTo: userId)
                   .snapshots(),
               builder: (BuildContext context,
@@ -47,38 +47,36 @@ class ExameScreen extends StatelessWidget {
                           CircularProgressIndicator()); // Indicador de carregamento
                 }
 
-                final exames = snapshot.data?.docs.map((DocumentSnapshot doc) {
-                      return Exame.fromMap(
+                final vacinas = snapshot.data?.docs.map((DocumentSnapshot doc) {
+                      return Vacina.fromMap(
                           doc.data() as Map<String, dynamic>, doc.id);
                     }).toList() ??
                     [];
+
                 return ListView.builder(
-                  itemCount: exames.length, // Define a quantidade de itens
+                  itemCount: vacinas.length,
                   itemBuilder: (context, index) {
-                    Exame exame = exames[index];
+                    Vacina vacina = vacinas[index];
                     return Card(
-                      elevation: 6,
-                      surfaceTintColor: Colors.white,
                       margin: const EdgeInsets.all(8.0),
+                      surfaceTintColor: Colors.white,
+                      elevation: 6,
                       child: ListTile(
-                        title: Text(
-                          exame.date,
-                          style: const TextStyle(
-                              color: Color.fromARGB(255, 38, 87, 151)),
-                        ),
+                        title: Text(vacina.dateAplicacao,
+                            style: const TextStyle(
+                                color: Color.fromARGB(255, 38, 87, 151))),
                         trailing: const Icon(Icons.arrow_forward_ios, size: 14),
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Exame de ${exame.tipo}', // Adiciona o tipo de exame
+                              'Vacina ${vacina.tipo}',
                             ),
-                            Text('Dependente: ${exame.dependentId}' ??
-                                'Sem dependente'),
+                            Text(vacina.dependentId ?? 'Sem dependente'),
                           ],
                         ),
                         leading: const Icon(
-                          Icons.edit_document,
+                          Icons.vaccines,
                           color: Color.fromARGB(255, 38, 87, 151),
                         ),
                         onTap: () {
@@ -86,7 +84,7 @@ class ExameScreen extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                               builder: (context) =>
-                                  ExameDetalhesScreen(exame: exames[index]),
+                                  VacinaDetalhesScreen(vacina: vacinas[index]),
                             ),
                           );
                         },
@@ -94,36 +92,6 @@ class ExameScreen extends StatelessWidget {
                     );
                   },
                 );
-
-                // return ListView.builder(
-                //   itemCount: exames.length, // Define a quantidade de itens
-                //   itemBuilder: (context, index) {
-                //     Exame exame = exames[index];
-                //     return Card(
-                //       // Uso de Card para cada item para melhor visualização
-                //       margin: const EdgeInsets.all(8.0),
-                //       child: ListTile(
-                //         title: Text(exame.date,
-                //             style: const TextStyle(
-                //                 color: Color.fromARGB(255, 38, 87, 151))),
-                //         subtitle: Text(exame.dependentId ?? 'Sem dependente'),
-                //         leading: const Icon(
-                //           Icons.edit_document,
-                //           color: Color.fromARGB(255, 38, 87, 151),
-                //         ),
-                //         onTap: () {
-                //           Navigator.push(
-                //             context,
-                //             MaterialPageRoute(
-                //               builder: (context) =>
-                //                   ExameDetalhesScreen(exame: exames[index]),
-                //             ),
-                //           );
-                //         },
-                //       ),
-                //     );
-                //   },
-                // );
               },
             ),
       floatingActionButton: FloatingActionButton(
@@ -131,7 +99,7 @@ class ExameScreen extends StatelessWidget {
           await Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => const AdicionarExameScreen()),
+                builder: (context) => const AdicionarVacinaScreen()),
           );
         },
         backgroundColor: const Color.fromARGB(255, 38, 87, 151), // Cor de fundo

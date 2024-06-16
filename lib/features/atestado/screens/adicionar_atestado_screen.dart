@@ -73,7 +73,7 @@ class _AdicionarAtestadoScreenState extends State<AdicionarAtestadoScreen> {
         child: ListView(
           children: <Widget>[
             Container(
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               child: const Text(
                 'Insira as informações do atestado',
                 style: TextStyle(

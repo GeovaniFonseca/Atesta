@@ -53,6 +53,8 @@ class AtestadoScreen extends StatelessWidget {
                   itemBuilder: (context, index) {
                     Atestado atestado = atestados[index];
                     return Card(
+                      surfaceTintColor: Colors.white,
+                      elevation: 6,
                       margin: const EdgeInsets.all(8.0),
                       child: ListTile(
                         title: Text(
@@ -61,7 +63,13 @@ class AtestadoScreen extends StatelessWidget {
                             color: Color.fromARGB(255, 38, 87, 151),
                           ),
                         ),
-                        subtitle: Text('Emitido em ${atestado.dataEmissao}'),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Qnt de dias: ${atestado.quantidadeDias}'),
+                            Text('Emitido em ${atestado.dataEmissao}'),
+                          ],
+                        ),
                         trailing: const Icon(Icons.arrow_forward_ios, size: 14),
                         leading: const Icon(
                           Icons.medical_services_outlined,
