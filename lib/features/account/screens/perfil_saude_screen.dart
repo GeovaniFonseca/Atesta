@@ -17,7 +17,7 @@ class _HealthProfileEditScreenState extends State<HealthProfileEditScreen> {
   String? bloodType;
   String? bloodDonor;
   String? organDonor;
-  String? physicalActivity;
+  String? exercises;
   TextEditingController weightController = TextEditingController();
   TextEditingController heightController = TextEditingController();
 
@@ -27,7 +27,7 @@ class _HealthProfileEditScreenState extends State<HealthProfileEditScreen> {
     bloodType = widget.userData['bloodType'];
     bloodDonor = widget.userData['bloodDonor'];
     organDonor = widget.userData['organDonor'];
-    physicalActivity = widget.userData['physicalActivity'];
+    exercises = widget.userData['exercises'];
     weightController.text = widget.userData['weight'] ?? '';
     heightController.text = widget.userData['height'] ?? '';
   }
@@ -49,7 +49,7 @@ class _HealthProfileEditScreenState extends State<HealthProfileEditScreen> {
                 'organDonor': organDonor,
                 'weight': weightController.text,
                 'height': heightController.text,
-                'physicalActivity': physicalActivity,
+                'exercises': exercises,
               });
               // ignore: use_build_context_synchronously
               Navigator.of(context).pop();
@@ -115,38 +115,16 @@ class _HealthProfileEditScreenState extends State<HealthProfileEditScreen> {
                     .toList(),
               ),
               const SizedBox(height: 20),
-              const Text('Cálculo do IMC'),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: weightController,
-                      decoration: const InputDecoration(labelText: 'Peso (kg)'),
-                      keyboardType: TextInputType.number,
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: TextField(
-                      controller: heightController,
-                      decoration:
-                          const InputDecoration(labelText: 'Altura (m)'),
-                      keyboardType: TextInputType.number,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
               const Text('Atividade física'),
               Wrap(
                 spacing: 10.0,
                 children: ['Intensa', 'Moderada', 'Sedentária']
                     .map((activity) => ChoiceChip(
                           label: Text(activity),
-                          selected: physicalActivity == activity,
+                          selected: exercises == activity,
                           onSelected: (selected) {
                             setState(() {
-                              physicalActivity = selected ? activity : null;
+                              exercises = selected ? activity : null;
                             });
                           },
                         ))

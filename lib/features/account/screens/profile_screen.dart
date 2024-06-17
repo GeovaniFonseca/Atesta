@@ -1,10 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import '../../../services/DatabaseService.dart';
+import 'package:hello_world/features/account/widgets/code_generator.dart';
 import '../widgets/health_user_card.dart';
 import '../widgets/user_info_card.dart';
 import 'perfil_saude_screen.dart';
+import '../../../services/DatabaseService.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -270,6 +271,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ),
                       const SizedBox(height: 10),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) => const CodeScreen()),
+                          );
+                        },
+                        child: const Text('Gerar Código'),
+                      ),
                     ],
                   ),
                 ),
@@ -301,7 +311,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     childCount: 4,
                   ),
                 ),
-                // Adicionar seção de informações de saúde
                 SliverToBoxAdapter(
                   child: Column(
                     children: [
@@ -356,11 +365,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         icon: Icons.height,
                         label: 'Altura',
                         value: userData['height'] ?? 'N/D',
-                      ),
-                      HealthInfoCard(
-                        icon: Icons.calculate,
-                        label: 'Cálculo IMC',
-                        value: userData['bmi'] ?? 'N/D',
                       ),
                       HealthInfoCard(
                         icon: Icons.fitness_center,
