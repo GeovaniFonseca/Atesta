@@ -18,7 +18,7 @@ class _StartState extends State<Start> {
   final List<Widget> _telas = [
     const HomeScreen(),
     const ProfileScreen(),
-    CalendarioScreen(),
+    const CalendarioScreen(),
   ];
 
   @override

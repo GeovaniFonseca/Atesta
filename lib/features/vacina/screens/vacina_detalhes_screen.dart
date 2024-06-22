@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../widgets/vacina.dart';
 import 'adicionar_vacina_screen.dart';
@@ -21,6 +22,13 @@ class VacinaDetalhesScreen extends StatelessWidget {
       // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Erro ao deletar vacina')));
+    }
+  }
+
+  Future<void> _launchURL(String url) async {
+    final Uri uri = Uri.parse(url);
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+      throw 'Could not launch $url';
     }
   }
 
@@ -125,7 +133,10 @@ class VacinaDetalhesScreen extends StatelessWidget {
                     children: [
                       const Text('Preview do Arquivo:'),
                       vacina.arquivoUrl != null && vacina.arquivoUrl!.isNotEmpty
-                          ? Image.network(vacina.arquivoUrl!)
+                          ? GestureDetector(
+                              onTap: () => _launchURL(vacina.arquivoUrl!),
+                              child: Image.network(vacina.arquivoUrl!),
+                            )
                           : const Text('Nenhum arquivo enviado.'),
                       const SizedBox(height: 10),
                     ],

@@ -4,9 +4,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:math';
 
 class CodeScreen extends StatefulWidget {
-  const CodeScreen({Key? key}) : super(key: key);
+  const CodeScreen({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _CodeScreenState createState() => _CodeScreenState();
 }
 
@@ -71,15 +72,83 @@ class _CodeScreenState extends State<CodeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Generated Code'),
+        title: const Text(
+          'Código de compartilhamento',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        backgroundColor:
+            const Color.fromARGB(255, 255, 255, 255), // Mudança de cor
+        foregroundColor: const Color.fromARGB(255, 38, 87, 151),
       ),
       body: Center(
-        child: _isLoading
-            ? const CircularProgressIndicator()
-            : Text(
-                'Seu código: $_generatedCode',
-                style: const TextStyle(fontSize: 24),
-              ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: _isLoading
+              ? const CircularProgressIndicator()
+              : Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.warning_amber_rounded,
+                      size: 40,
+                      color: Colors.redAccent,
+                    ),
+                    const SizedBox(height: 10),
+                    const Text(
+                      'Compartilho esse código apenas com o seu médico!',
+                      style: TextStyle(
+                        color: Colors.redAccent,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 30),
+                    Text(
+                      'Seu código:',
+                      style: TextStyle(
+                        fontSize: 22,
+                        color: Colors.grey.shade700,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 24, vertical: 12),
+                      decoration: BoxDecoration(
+                        color: Colors.blueAccent.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: Colors.blueAccent),
+                      ),
+                      child: Text(
+                        _generatedCode,
+                        style: const TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(255, 0, 0, 0),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    const Text(
+                      'O que fazer com este código:',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    const Text(
+                      '1. Acesse o site www.atesta.com.br\n'
+                      '2. Digite o código no campo "Mostrar Informações"',
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+        ),
       ),
     );
   }

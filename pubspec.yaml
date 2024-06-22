@@ -50,6 +50,8 @@ dependencies:
   open_file:
   url_launcher:
   flutter_svg: ^1.0.0
+  provider: ^5.0.0
+  get_it: ^7.0.0
   
 dev_dependencies:
   flutter_test:

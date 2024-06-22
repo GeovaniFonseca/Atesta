@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,7 +7,6 @@ import 'package:flutter/material.dart';
 
 import '../../../services/storage_service.dart';
 import '../widgets/atestado.dart';
-// Importe demais pacotes necessários aqui
 
 class AdicionarAtestadoScreen extends StatefulWidget {
   final Atestado? atestadoParaEditar;

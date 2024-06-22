@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:hello_world/features/atestado/screens/atestado_detalhes_screen.dart';
-import 'package:hello_world/features/atestado/widgets/atestado.dart';
 
+import '../widgets/atestado.dart';
 import 'adicionar_atestado_screen.dart';
+import 'atestado_detalhes_screen.dart';
 
 class AtestadoScreen extends StatelessWidget {
   const AtestadoScreen({super.key});

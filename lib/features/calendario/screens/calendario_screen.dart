@@ -1,8 +1,7 @@
-// ignore_for_file: use_key_in_widget_constructors, must_be_immutable
-
 import 'package:flutter/material.dart';
 
-class CalendarioScreen extends StatelessWidget{
+class CalendarioScreen extends StatelessWidget {
+  const CalendarioScreen({super.key});
 
   @override
   Widget build(Object context) {
@@ -12,5 +11,4 @@ class CalendarioScreen extends StatelessWidget{
       ),
     );
   }
-
 }

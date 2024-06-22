@@ -6,7 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:hello_world/features/exames/widgets/exame.dart';
+import 'package:hello_world/features/exams/widgets/exame.dart';
 import 'package:hello_world/services/DatabaseService.dart';
 
 import '../../../services/storage_service.dart';
@@ -236,7 +236,10 @@ class _AdicionarExameScreenState extends State<AdicionarExameScreen> {
                 ),
                 onPressed: () async {
                   FilePickerResult? result =
-                      await FilePicker.platform.pickFiles();
+                      await FilePicker.platform.pickFiles(
+                    type: FileType.custom,
+                    allowedExtensions: ['jpg', 'jpeg', 'png', 'pdf'],
+                  );
                   if (result != null) {
                     setState(() {
                       selectedFile = File(result.files.single.path!);

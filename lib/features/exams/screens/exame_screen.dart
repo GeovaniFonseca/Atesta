@@ -3,8 +3,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:hello_world/features/exames/screens/adicionar_exame_screen.dart';
-import 'package:hello_world/features/exames/widgets/exame.dart';
+import 'package:hello_world/features/exams/screens/adicionar_exame_screen.dart';
+import 'package:hello_world/features/exams/widgets/exame.dart';
 
 import 'exame_detalhes_screen.dart';
 
@@ -73,8 +73,7 @@ class ExameScreen extends StatelessWidget {
                             Text(
                               'Exame de ${exame.tipo}', // Adiciona o tipo de exame
                             ),
-                            Text('Dependente: ${exame.dependentId}' ??
-                                'Sem dependente'),
+                            Text('Dependente: ${exame.dependentId}'),
                           ],
                         ),
                         leading: const Icon(
@@ -94,36 +93,6 @@ class ExameScreen extends StatelessWidget {
                     );
                   },
                 );
-
-                // return ListView.builder(
-                //   itemCount: exames.length, // Define a quantidade de itens
-                //   itemBuilder: (context, index) {
-                //     Exame exame = exames[index];
-                //     return Card(
-                //       // Uso de Card para cada item para melhor visualização
-                //       margin: const EdgeInsets.all(8.0),
-                //       child: ListTile(
-                //         title: Text(exame.date,
-                //             style: const TextStyle(
-                //                 color: Color.fromARGB(255, 38, 87, 151))),
-                //         subtitle: Text(exame.dependentId ?? 'Sem dependente'),
-                //         leading: const Icon(
-                //           Icons.edit_document,
-                //           color: Color.fromARGB(255, 38, 87, 151),
-                //         ),
-                //         onTap: () {
-                //           Navigator.push(
-                //             context,
-                //             MaterialPageRoute(
-                //               builder: (context) =>
-                //                   ExameDetalhesScreen(exame: exames[index]),
-                //             ),
-                //           );
-                //         },
-                //       ),
-                //     );
-                //   },
-                // );
               },
             ),
       floatingActionButton: FloatingActionButton(

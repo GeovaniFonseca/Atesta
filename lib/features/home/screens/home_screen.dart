@@ -3,7 +3,7 @@ import 'package:hello_world/features/vacina/screens/vacina_screen.dart';
 
 import '../../atestado/screens/atestado_screen.dart';
 import '../../consultas/screens/consulta_screen.dart';
-import '../../exames/screens/exame_screen.dart';
+import '../../exams/screens/exame_screen.dart';
 import '../widgets/card_item.dart';
 
 class HomeScreen extends StatelessWidget {

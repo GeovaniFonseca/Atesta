@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:hello_world/features/account/screens/login_screen.dart';
-import 'package:hello_world/features/account/widgets/code_generator.dart';
-import 'package:hello_world/features/exames/screens/exame_screen.dart';
+import 'package:flutter/material.dart';
+
+import 'features/account/screens/login_screen.dart';
 import 'features/account/screens/profile_screen.dart';
+import 'features/exams/screens/exame_screen.dart';
 import 'firebase_options.dart'; // Certifique-se de que este arquivo existe e está configurado corretamente
 
 void main() async {

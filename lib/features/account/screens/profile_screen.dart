@@ -107,7 +107,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('PROFILE'),
+        title: const Text(
+          'Profile',
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: <Widget>[
@@ -171,7 +178,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Stack(
                         children: [
                           CircleAvatar(
-                            backgroundColor: Colors.white,
+                            backgroundColor: Colors.grey.shade300,
                             radius: 64,
                             backgroundImage: profileImageUrl != null
                                 ? NetworkImage(profileImageUrl!)
@@ -180,10 +187,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     as ImageProvider,
                           ),
                           Positioned(
-                            bottom: -10,
-                            left: 80,
+                            bottom: 0,
+                            right: 0,
                             child: IconButton(
-                              icon: const Icon(Icons.add_a_photo),
+                              icon: const Icon(
+                                Icons.add_a_photo,
+                                color: Colors.blue,
+                              ),
                               onPressed: () => _updateProfilePicture(context),
                             ),
                           )
@@ -272,14 +282,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       const SizedBox(height: 10),
                       ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          elevation: 10,
+                          surfaceTintColor: Colors.white,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 24, vertical: 12),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
                         onPressed: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
                                 builder: (context) => const CodeScreen()),
                           );
                         },
-                        child: const Text('Gerar Código'),
+                        child: const Text(
+                          'Gerar Código',
+                          style: TextStyle(
+                              color: Color.fromARGB(255, 38, 87, 151),
+                              fontWeight: FontWeight.bold),
+                        ),
                       ),
+                      const SizedBox(height: 10),
                     ],
                   ),
                 ),
@@ -334,42 +360,51 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             child: const Text(
                               'Editar',
                               style: TextStyle(
-                                  color: Colors.blue,
+                                  color: Color.fromARGB(255, 38, 87, 151),
                                   fontSize: 16,
                                   fontWeight: FontWeight.w600),
                             ),
                           ),
                         ],
                       ),
-                      HealthInfoCard(
-                        icon: Icons.bloodtype,
-                        label: 'Tipo sanguíneo',
-                        value: userData['bloodType'] ?? 'N/D',
-                      ),
-                      HealthInfoCard(
-                        icon: Icons.bloodtype,
-                        label: 'Doador de sangue',
-                        value: userData['bloodDonor'] ?? 'N/D',
-                      ),
-                      HealthInfoCard(
-                        icon: Icons.luggage,
-                        label: 'Doador de órgãos',
-                        value: userData['organDonor'] ?? 'N/D',
-                      ),
-                      HealthInfoCard(
-                        icon: Icons.monitor_weight,
-                        label: 'Peso',
-                        value: userData['weight'] ?? 'N/D',
-                      ),
-                      HealthInfoCard(
-                        icon: Icons.height,
-                        label: 'Altura',
-                        value: userData['height'] ?? 'N/D',
-                      ),
-                      HealthInfoCard(
-                        icon: Icons.fitness_center,
-                        label: 'Exercícios',
-                        value: userData['exercises'] ?? 'N/D',
+                      GridView.count(
+                        shrinkWrap: true,
+                        crossAxisCount: 3,
+                        crossAxisSpacing: 10,
+                        mainAxisSpacing: 10,
+                        childAspectRatio: 1,
+                        children: [
+                          HealthInfoCard(
+                            icon: Icons.bloodtype,
+                            label: 'Tipo sanguíneo',
+                            value: userData['bloodType'] ?? 'N/D',
+                          ),
+                          HealthInfoCard(
+                            icon: Icons.bloodtype,
+                            label: 'Doador de sangue',
+                            value: userData['bloodDonor'] ?? 'N/D',
+                          ),
+                          HealthInfoCard(
+                            icon: Icons.luggage,
+                            label: 'Doador de órgãos',
+                            value: userData['organDonor'] ?? 'N/D',
+                          ),
+                          HealthInfoCard(
+                            icon: Icons.monitor_weight,
+                            label: 'Peso',
+                            value: userData['weight'] ?? 'N/D',
+                          ),
+                          HealthInfoCard(
+                            icon: Icons.height,
+                            label: 'Altura',
+                            value: userData['height'] ?? 'N/D',
+                          ),
+                          HealthInfoCard(
+                            icon: Icons.fitness_center,
+                            label: 'Exercícios',
+                            value: userData['exercises'] ?? 'N/D',
+                          ),
+                        ],
                       ),
                       const SizedBox(height: 20),
                     ],
