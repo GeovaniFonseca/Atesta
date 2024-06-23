@@ -1,19 +1,18 @@
+// lib/features/atestado/views/adicionar_atestado_screen.dart
 import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-
+import '../model/atestado_model.dart';
+import '../viewmodels/atestado_viewmodel.dart';
 import '../../../services/storage_service.dart';
-import '../widgets/atestado.dart';
 
 class AdicionarAtestadoScreen extends StatefulWidget {
-  final Atestado? atestadoParaEditar;
+  final AtestadoModel? atestadoParaEditar;
   const AdicionarAtestadoScreen({super.key, this.atestadoParaEditar});
 
   @override
-  // ignore: library_private_types_in_public_api
   _AdicionarAtestadoScreenState createState() =>
       _AdicionarAtestadoScreenState();
 }
@@ -39,7 +38,6 @@ class _AdicionarAtestadoScreenState extends State<AdicionarAtestadoScreen> {
       _dataEmissaoController.text = widget.atestadoParaEditar!.dataEmissao;
       _quantidadeDiasController.text =
           widget.atestadoParaEditar!.quantidadeDias.toString();
-      // Para o arquivo, você precisará adaptar a lógica baseado em como quer lidar com arquivos previamente selecionados
     }
   }
 
@@ -66,8 +64,12 @@ class _AdicionarAtestadoScreenState extends State<AdicionarAtestadoScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isEditMode = widget.atestadoParaEditar != null;
+
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text(isEditMode ? 'Editar Atestado' : 'Adicionar Atestado'),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: ListView(
@@ -227,7 +229,7 @@ class _AdicionarAtestadoScreenState extends State<AdicionarAtestadoScreen> {
                         if (userId == null) {
                           isLoading = false;
                           errorMessage =
-                              "Você precisa estar logado para adicionar um exame.";
+                              "Você precisa estar logado para adicionar um atestado.";
                         } else if (_nomeMedicoController.text.isEmpty) {
                           isLoading = false;
                           errorMessage =
@@ -258,7 +260,7 @@ class _AdicionarAtestadoScreenState extends State<AdicionarAtestadoScreen> {
                             }
                           }
 
-                          final Atestado novoAtestado = Atestado(
+                          final AtestadoModel novoAtestado = AtestadoModel(
                             id: widget.atestadoParaEditar?.id ??
                                 '', // Usa o ID existente se estiver editando
                             nomeMedico: _nomeMedicoController.text,
@@ -272,34 +274,26 @@ class _AdicionarAtestadoScreenState extends State<AdicionarAtestadoScreen> {
 
                           if (widget.atestadoParaEditar == null) {
                             // Adicionando um novo atestado
-                            await FirebaseFirestore.instance
-                                .collection('Atestados')
-                                .add(novoAtestado.toMap());
+                            await Provider.of<AtestadoViewModel>(context,
+                                    listen: false)
+                                .addAtestado(novoAtestado);
                           } else {
                             // Atualizando um atestado existente
-                            await FirebaseFirestore.instance
-                                .collection('Atestados')
-                                .doc(widget.atestadoParaEditar!.id)
-                                .update(novoAtestado.toMap());
+                            await Provider.of<AtestadoViewModel>(context,
+                                    listen: false)
+                                .updateAtestado(novoAtestado);
                           }
 
-                          // ignore: use_build_context_synchronously
                           ScaffoldMessenger.of(context)
                               .showSnackBar(const SnackBar(
-                            content: Text('Exame adicionado com sucesso!'),
+                            content: Text('Atestado adicionado com sucesso!'),
                             backgroundColor: Colors.green,
                           ));
 
-                          // ignore: use_build_context_synchronously
-                          Navigator.popUntil(
-                              // ignore: use_build_context_synchronously
-                              context,
-                              (route) =>
-                                  route.isFirst); // Volta para a tela anterior
+                          Navigator.popUntil(context, (route) => route.isFirst);
                         }
 
                         if (errorMessage.isNotEmpty) {
-                          // ignore: use_build_context_synchronously
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(errorMessage),
@@ -307,13 +301,17 @@ class _AdicionarAtestadoScreenState extends State<AdicionarAtestadoScreen> {
                             ),
                           );
                         }
+
+                        setState(() {
+                          isLoading = false;
+                        });
                       },
                 child: isLoading
                     ? const CircularProgressIndicator(
                         valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                       )
                     : const Text(
-                        "Adicionar Exame",
+                        "Adicionar Atestado",
                         style: TextStyle(
                           color: Colors.white,
                           backgroundColor: Color.fromARGB(255, 38, 87, 151),
@@ -323,8 +321,6 @@ class _AdicionarAtestadoScreenState extends State<AdicionarAtestadoScreen> {
                       ),
               ),
             )
-
-            // Implemente a lógica de adicionar atestado aqui
           ],
         ),
       ),

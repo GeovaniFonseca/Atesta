@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:hello_world/features/vacina/screens/vacina_screen.dart';
+import 'package:hello_world/features/vacina/views/vacina_screen.dart';
 
-import '../../atestado/screens/atestado_screen.dart';
+import '../../atestado/views/atestado_screen.dart';
 import '../../consultas/screens/consulta_screen.dart';
-import '../../exams/screens/exame_screen.dart';
+import '../../exame/views/exame_screen.dart';
 import '../widgets/card_item.dart';
 
 class HomeScreen extends StatelessWidget {

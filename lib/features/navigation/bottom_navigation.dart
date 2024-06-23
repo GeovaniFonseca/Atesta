@@ -6,14 +6,14 @@ import '../account/views/profile_screen.dart';
 import '../calendario/screens/calendario_screen.dart';
 import '../home/screens/home_screen.dart';
 
-class Start extends StatefulWidget {
-  const Start({super.key});
+class BottomNavigation extends StatefulWidget {
+  const BottomNavigation({super.key});
 
   @override
   _StartState createState() => _StartState();
 }
 
-class _StartState extends State<Start> {
+class _StartState extends State<BottomNavigation> {
   int _indiceAtual = 0;
   final List<Widget> _telas = [
     const HomeScreen(),

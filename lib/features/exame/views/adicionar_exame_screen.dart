@@ -1,15 +1,14 @@
-// ignore_for_file: file_names, use_build_context_synchronously, library_private_types_in_public_api
-
-import 'dart:io';
+// views/adicionar_exame_screen.dart
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:hello_world/features/exams/widgets/exame.dart';
-import 'package:hello_world/services/database_service.dart';
-
+import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:file_picker/file_picker.dart';
+import 'dart:io';
 import '../../../services/storage_service.dart';
+import '../model/exame_model.dart';
+import '../viewmodels/exame_viewmodel.dart';
 
 class AdicionarExameScreen extends StatefulWidget {
   final Exame? exameParaEditar;
@@ -21,23 +20,19 @@ class AdicionarExameScreen extends StatefulWidget {
 }
 
 class _AdicionarExameScreenState extends State<AdicionarExameScreen> {
-  DatabaseService databaseService = DatabaseService();
-  bool isLoading = false;
-  TextEditingController dateController = TextEditingController();
-  TextEditingController laudoController = TextEditingController();
-  FocusNode dataFocusnode = FocusNode();
-  FocusNode laudoFocusnode = FocusNode();
-  FocusNode dateFocusnode = FocusNode();
+  final TextEditingController dateController = TextEditingController();
+  final TextEditingController laudoController = TextEditingController();
+  final FocusNode dateFocusNode = FocusNode();
+  final FocusNode laudoFocusNode = FocusNode();
+
   String? tipoExameSelecionado;
-  String? fileUrl;
-  File? selectedFile;
   String? selectedDependent;
-  List<String> dependents = ['Sem dependente'];
+  File? selectedFile;
+  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    laudoFocusnode.addListener(_handleFocusChange);
     if (widget.exameParaEditar != null) {
       dateController.text = widget.exameParaEditar!.date;
       tipoExameSelecionado = widget.exameParaEditar!.tipo;
@@ -48,39 +43,16 @@ class _AdicionarExameScreenState extends State<AdicionarExameScreen> {
     _loadDependents();
   }
 
-  void _handleFocusChange() {
-    if (laudoFocusnode.hasFocus || dataFocusnode.hasFocus) {
-      setState(() {});
-    }
-  }
-
   Future<void> _loadDependents() async {
-    var dependentList = await databaseService.loadDependents();
-    setState(() {
-      dependents.addAll(dependentList);
-
-      // Verifica se selectedDependent está na lista de dependents
-      if (selectedDependent != null &&
-          !dependents.contains(selectedDependent)) {
-        dependents.add(selectedDependent!);
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    laudoFocusnode.removeListener(_handleFocusChange);
-    super.dispose();
-  }
-
-  Color getIconColor(FocusNode focusNode) {
-    return focusNode.hasFocus
-        ? const Color.fromARGB(255, 38, 87, 151)
-        : Colors.grey;
+    final exameViewModel = context.read<ExameViewModel>();
+    await exameViewModel.loadDependents();
+    setState(() {}); // Atualiza a tela depois de carregar os dependentes
   }
 
   @override
   Widget build(BuildContext context) {
+    final exameViewModel = context.watch<ExameViewModel>();
+
     return Scaffold(
       appBar: AppBar(),
       body: Padding(
@@ -99,11 +71,11 @@ class _AdicionarExameScreenState extends State<AdicionarExameScreen> {
             ),
             TextField(
               controller: dateController,
-              focusNode: dateFocusnode,
+              focusNode: dateFocusNode,
               decoration: InputDecoration(
                 label: Text(
                   'Data',
-                  style: TextStyle(color: getIconColor(dateFocusnode)),
+                  style: TextStyle(color: getIconColor(dateFocusNode)),
                 ),
                 suffixIcon: const Icon(Icons.calendar_today),
                 border: const OutlineInputBorder(
@@ -175,7 +147,8 @@ class _AdicionarExameScreenState extends State<AdicionarExameScreen> {
                   selectedDependent = newValue;
                 });
               },
-              items: dependents.map<DropdownMenuItem<String>>((String value) {
+              items: exameViewModel.dependents
+                  .map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
                   child: Text(value),
@@ -199,11 +172,11 @@ class _AdicionarExameScreenState extends State<AdicionarExameScreen> {
             const Padding(padding: EdgeInsets.all(8)),
             TextFormField(
               controller: laudoController,
-              focusNode: laudoFocusnode,
+              focusNode: laudoFocusNode,
               decoration: InputDecoration(
                 label: Text(
                   'Laudo',
-                  style: TextStyle(color: getIconColor(laudoFocusnode)),
+                  style: TextStyle(color: getIconColor(laudoFocusNode)),
                 ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -379,5 +352,11 @@ class _AdicionarExameScreenState extends State<AdicionarExameScreen> {
         ),
       ),
     );
+  }
+
+  Color getIconColor(FocusNode focusNode) {
+    return focusNode.hasFocus
+        ? const Color.fromARGB(255, 38, 87, 151)
+        : Colors.grey;
   }
 }

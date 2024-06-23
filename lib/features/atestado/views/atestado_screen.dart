@@ -1,29 +1,27 @@
-// ignore_for_file: file_names
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+// lib/features/atestado/views/atestado_screen.dart
 import 'package:flutter/material.dart';
-import 'package:hello_world/features/exams/screens/adicionar_exame_screen.dart';
-import 'package:hello_world/features/exams/widgets/exame.dart';
+import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import '../model/atestado_model.dart';
+import 'adicionar_atestado_screen.dart';
+import 'atestado_detalhes_screen.dart';
+import '../viewmodels/atestado_viewmodel.dart';
 
-import 'exame_detalhes_screen.dart';
-
-class ExameScreen extends StatelessWidget {
-  const ExameScreen({super.key});
+class AtestadoScreen extends StatelessWidget {
+  const AtestadoScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final String? userId = FirebaseAuth.instance.currentUser?.uid;
 
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
         title: const Text(
-          'Exames',
+          'Atestados',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        backgroundColor:
-            const Color.fromARGB(255, 255, 255, 255), // Mudança de cor
+        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
         foregroundColor: const Color.fromARGB(255, 38, 87, 151),
       ),
       body: userId == null
@@ -32,52 +30,50 @@ class ExameScreen extends StatelessWidget {
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)))
           : StreamBuilder(
               stream: FirebaseFirestore.instance
-                  .collection('Exames')
+                  .collection('Atestados')
                   .where('userId', isEqualTo: userId)
                   .snapshots(),
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (snapshot.hasError) {
-                  return const Text('Algo deu errado',
-                      style: TextStyle(color: Colors.red));
+                  return const Center(
+                      child: Text('Algo deu errado',
+                          style: TextStyle(color: Colors.red)));
                 }
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                      child:
-                          CircularProgressIndicator()); // Indicador de carregamento
+                  return const Center(child: CircularProgressIndicator());
                 }
 
-                final exames = snapshot.data?.docs.map((DocumentSnapshot doc) {
-                      return Exame.fromMap(
-                          doc.data() as Map<String, dynamic>, doc.id);
-                    }).toList() ??
-                    [];
+                final atestados =
+                    snapshot.data?.docs.map((DocumentSnapshot doc) {
+                          return AtestadoModel.fromMap(
+                              doc.data() as Map<String, dynamic>, doc.id);
+                        }).toList() ??
+                        [];
                 return ListView.builder(
-                  itemCount: exames.length, // Define a quantidade de itens
+                  itemCount: atestados.length,
                   itemBuilder: (context, index) {
-                    Exame exame = exames[index];
+                    AtestadoModel atestado = atestados[index];
                     return Card(
-                      elevation: 6,
                       surfaceTintColor: Colors.white,
+                      elevation: 6,
                       margin: const EdgeInsets.all(8.0),
                       child: ListTile(
                         title: Text(
-                          exame.date,
+                          atestado.nomeMedico,
                           style: const TextStyle(
-                              color: Color.fromARGB(255, 38, 87, 151)),
+                            color: Color.fromARGB(255, 38, 87, 151),
+                          ),
                         ),
-                        trailing: const Icon(Icons.arrow_forward_ios, size: 14),
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              'Exame de ${exame.tipo}', // Adiciona o tipo de exame
-                            ),
-                            Text('Dependente: ${exame.dependentId}'),
+                            Text('Qnt de dias: ${atestado.quantidadeDias}'),
+                            Text('Emitido em ${atestado.dataEmissao}'),
                           ],
                         ),
                         leading: const Icon(
-                          Icons.edit_document,
+                          Icons.medical_services_outlined,
                           color: Color.fromARGB(255, 38, 87, 151),
                         ),
                         onTap: () {
@@ -85,7 +81,7 @@ class ExameScreen extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                               builder: (context) =>
-                                  ExameDetalhesScreen(exame: exames[index]),
+                                  AtestadoDetalheScreen(atestado: atestado),
                             ),
                           );
                         },
@@ -100,11 +96,12 @@ class ExameScreen extends StatelessWidget {
           await Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => const AdicionarExameScreen()),
+                builder: (context) => ChangeNotifierProvider.value(
+                    value: context.read<AtestadoViewModel>(),
+                    child: const AdicionarAtestadoScreen())),
           );
         },
-        backgroundColor: const Color.fromARGB(255, 38, 87, 151), // Cor de fundo
-        foregroundColor: const Color.fromARGB(255, 255, 255, 255),
+        backgroundColor: const Color.fromARGB(255, 38, 87, 151),
         child: const Icon(Icons.add),
       ),
     );

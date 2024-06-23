@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'signup_screen.dart';
 import '../viewmodels/login_viewmodel.dart';
-import '../../core/start_screen.dart';
+import '../../navigation/bottom_navigation.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -135,7 +135,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => Start(),
+                                    builder: (context) => BottomNavigation(),
                                   ),
                                 );
                               } else {

@@ -17,33 +17,34 @@ class UserInfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: color, // Usa a cor passada como argumento
+      color: color,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(9), // Borda mais arredondada
+        borderRadius: BorderRadius.circular(9),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 9.0), // Padding simétrico
-        child: Row( 
+        padding: const EdgeInsets.symmetric(horizontal: 9.0),
+        child: Row(
           children: [
-            Icon(icon, size: 30, color: const Color.fromARGB(179, 124, 124, 124)), // Ícone com cor mais suave
-            const SizedBox(width: 5), // Espaço entre o ícone e o texto
-            Expanded( // Para evitar overflow de texto
+            Icon(icon,
+                size: 30, color: const Color.fromARGB(179, 124, 124, 124)),
+            const SizedBox(width: 5),
+            Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min, // Para alinhamento vertical adequado
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
                     title,
                     style: const TextStyle(
-                      color: Color.fromARGB(179, 0, 0, 0), // Texto com cor mais suave
+                      color: Color.fromARGB(179, 0, 0, 0),
                       fontWeight: FontWeight.bold,
-                      fontSize: 16, // Ajuste no tamanho do texto
+                      fontSize: 16,
                     ),
                   ),
                   Text(
                     subtitle,
                     style: const TextStyle(
-                      color: Color.fromARGB(255, 39, 39, 39), // Texto com cor mais suave
+                      color: Color.fromARGB(255, 39, 39, 39),
                     ),
                   ),
                 ],

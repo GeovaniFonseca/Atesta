@@ -1,12 +1,13 @@
+// lib/views/atestado_detalhes_screen.dart
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../widgets/atestado.dart';
+import '../model/atestado_model.dart';
 import 'adicionar_atestado_screen.dart';
 
 class AtestadoDetalheScreen extends StatelessWidget {
-  final Atestado atestado;
+  final AtestadoModel atestado;
 
   const AtestadoDetalheScreen({super.key, required this.atestado});
 
@@ -16,10 +17,8 @@ class AtestadoDetalheScreen extends StatelessWidget {
           .collection('Atestados')
           .doc(atestado.id)
           .delete();
-      // ignore: use_build_context_synchronously
       Navigator.pop(context);
     } catch (e) {
-      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Erro ao deletar atestado')));
     }
@@ -40,8 +39,7 @@ class AtestadoDetalheScreen extends StatelessWidget {
           'Detalhes do atestado',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        backgroundColor:
-            const Color.fromARGB(255, 255, 255, 255), // Mudança de cor
+        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
         foregroundColor: const Color.fromARGB(255, 38, 87, 151),
       ),
       body: SingleChildScrollView(

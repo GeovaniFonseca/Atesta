@@ -202,7 +202,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 horizontal: 12, vertical: 4),
                             child: DropdownButtonHideUnderline(
                               child: DropdownButton<String>(
-                                value: viewModel.selectedDependent,
+                                value: viewModel.dependents
+                                        .contains(viewModel.selectedDependent)
+                                    ? viewModel.selectedDependent
+                                    : null,
                                 hint: const Text(
                                   "Selecione um dependente",
                                   style: TextStyle(

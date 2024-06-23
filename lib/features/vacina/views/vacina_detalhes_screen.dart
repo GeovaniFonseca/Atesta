@@ -1,29 +1,17 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+// views/vacina_detalhes_screen.dart
 
-import '../widgets/vacina.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../model/vacina.dart';
+import '../viewmodels/vacina_viewmodel.dart';
 import 'adicionar_vacina_screen.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class VacinaDetalhesScreen extends StatelessWidget {
   final Vacina vacina;
 
   const VacinaDetalhesScreen({super.key, required this.vacina});
-
-  Future<void> deleteVacina(BuildContext context) async {
-    try {
-      await FirebaseFirestore.instance
-          .collection('Vacinas')
-          .doc(vacina.id)
-          .delete();
-      // ignore: use_build_context_synchronously
-      Navigator.pop(context);
-    } catch (e) {
-      // ignore: use_build_context_synchronously
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Erro ao deletar vacina')));
-    }
-  }
 
   Future<void> _launchURL(String url) async {
     final Uri uri = Uri.parse(url);
@@ -34,14 +22,15 @@ class VacinaDetalhesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final vacinaViewModel = context.read<VacinaViewModel>();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
           'Detalhes da vacina',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        backgroundColor:
-            const Color.fromARGB(255, 255, 255, 255), // Mudança de cor
+        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
         foregroundColor: const Color.fromARGB(255, 38, 87, 151),
       ),
       body: SingleChildScrollView(
@@ -149,7 +138,10 @@ class VacinaDetalhesScreen extends StatelessWidget {
                   color: Color.fromARGB(255, 38, 87, 151),
                 ),
                 label: const Text('Deletar vacina'),
-                onPressed: () => deleteVacina(context),
+                onPressed: () {
+                  vacinaViewModel.deleteVacina(vacina.id);
+                  Navigator.pop(context);
+                },
                 backgroundColor: Colors.white,
               ),
             ],

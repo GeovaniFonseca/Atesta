@@ -12,6 +12,8 @@ import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
 import '../features/account/models/user_model.dart';
+import '../features/atestado/model/atestado_model.dart';
+import '../features/vacina/model/vacina.dart';
 import '../firebase_options.dart';
 
 class DatabaseService {
@@ -189,6 +191,59 @@ class DatabaseService {
         .collection('Users')
         .doc(auth.currentUser?.uid)
         .update(healthData);
+  }
+
+  // atestado
+
+  Future<List<AtestadoModel>> getAtestadosByUser(String userId) async {
+    final snapshot = await firestore
+        .collection('Atestados')
+        .where('userId', isEqualTo: userId)
+        .get();
+
+    return snapshot.docs
+        .map((doc) => AtestadoModel.fromMap(doc.data(), doc.id))
+        .toList();
+  }
+
+  Future<void> addAtestado(AtestadoModel atestado) async {
+    await firestore.collection('Atestados').add(atestado.toMap());
+  }
+
+  Future<void> updateAtestado(AtestadoModel atestado) async {
+    await firestore
+        .collection('Atestados')
+        .doc(atestado.id)
+        .update(atestado.toMap());
+  }
+
+  Future<void> deleteAtestado(String atestadoId) async {
+    await firestore.collection('Atestados').doc(atestadoId).delete();
+  }
+
+  // vacina
+
+  Future<List<Vacina>> getVacinasByUser(String userId) async {
+    final snapshot = await firestore
+        .collection('Vacinas')
+        .where('userId', isEqualTo: userId)
+        .get();
+
+    return snapshot.docs
+        .map((doc) => Vacina.fromMap(doc.data(), doc.id))
+        .toList();
+  }
+
+  Future<void> addVacina(Vacina vacina) async {
+    await firestore.collection('Vacinas').add(vacina.toMap());
+  }
+
+  Future<void> updateVacina(Vacina vacina) async {
+    await firestore.collection('Vacinas').doc(vacina.id).update(vacina.toMap());
+  }
+
+  Future<void> deleteVacina(String vacinaId) async {
+    await firestore.collection('Vacinas').doc(vacinaId).delete();
   }
 }
 
