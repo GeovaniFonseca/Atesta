@@ -7,7 +7,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hello_world/features/vacina/widgets/vacina.dart';
-import 'package:hello_world/services/DatabaseService.dart';
+import 'package:hello_world/services/database_service.dart';
 
 import '../../../services/storage_service.dart';
 

@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 
-import '../account/screens/profile_screen.dart';
+import '../account/views/profile_screen.dart';
 import '../calendario/screens/calendario_screen.dart';
 import '../home/screens/home_screen.dart';
 

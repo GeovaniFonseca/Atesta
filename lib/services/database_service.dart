@@ -11,43 +11,15 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
+import '../features/account/models/user_model.dart';
 import '../firebase_options.dart';
 
 class DatabaseService {
   final String _baseUrl =
       'https://projetinho-c043f-default-rtdb.firebaseio.com/users.json';
 
-  Future<void> addUser(Map<String, dynamic> userData) async {
-    final response =
-        await http.post(Uri.parse(_baseUrl), body: json.encode(userData));
-    if (response.statusCode != 200) {
-      // Trata a resposta não bem-sucedida aqui.
-    } else {
-      // Usuário adicionado com sucesso.
-    }
-  }
-
   final FirebaseAuth auth = FirebaseAuth.instance;
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
-
-  Future<String?> uploadProfileImage(File image) async {
-    try {
-      final ref = FirebaseStorage.instance
-          .ref('profile_pictures/${auth.currentUser?.uid}.jpg');
-
-      await ref.putFile(image);
-      final imageUrl = await ref.getDownloadURL();
-
-      await firestore.collection('Users').doc(auth.currentUser?.uid).update({
-        'profile_picture': imageUrl,
-      });
-
-      return imageUrl;
-    } catch (e) {
-      print(e);
-      return null;
-    }
-  }
 
   Future<String?> getProfileImageUrl() async {
     var userDoc =
@@ -138,24 +110,85 @@ class DatabaseService {
       'selectedDependent': selectedDependent,
     };
   }
-}
 
-// Acessar a aplicação
-login(email, password) async {
-  await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform); //busca configs de token
-  FirebaseAuth auth = FirebaseAuth.instance; //inicia firebase
-  try {
-    await auth.signInWithEmailAndPassword(email: email, password: password);
-    if (auth.currentUser != null) {
-      print('login deu boa');
-      return true;
-    } else {
-      print('Deu ruim');
+  Future<void> addUser(UserModel user) async {
+    final response =
+        await http.post(Uri.parse(_baseUrl), body: json.encode(user.toMap()));
+    if (response.statusCode != 200) {
+      throw Exception('Failed to add user');
+    }
+  }
+
+  Future<String?> uploadProfileImage(File image) async {
+    try {
+      final ref = FirebaseStorage.instance
+          .ref('profile_pictures/${auth.currentUser?.uid}.jpg');
+
+      await ref.putFile(image);
+      final imageUrl = await ref.getDownloadURL();
+
+      await firestore.collection('Users').doc(auth.currentUser?.uid).update({
+        'profile_picture': imageUrl,
+      });
+
+      return imageUrl;
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  Future<UserModel?> getUserData() async {
+    var userDoc =
+        await firestore.collection('Users').doc(auth.currentUser?.uid).get();
+    var userData = userDoc.data();
+    if (userData != null) {
+      return UserModel.fromMap(userData, userDoc.id);
+    }
+    return null;
+  }
+
+  Future<bool> login(String email, String password) async {
+    await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform);
+    try {
+      await auth.signInWithEmailAndPassword(email: email, password: password);
+      return auth.currentUser != null;
+    } catch (e) {
       return false;
     }
-  } catch (e) {
-    return false;
+  }
+
+  Future<void> logout() async {
+    await auth.signOut();
+  }
+
+  Future<void> register(
+      String email, String password, String name, String phone, int age) async {
+    await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform);
+    UserCredential userCredential = await auth.createUserWithEmailAndPassword(
+        email: email, password: password);
+    if (userCredential.user != null) {
+      await registerInfo(userCredential.user!.uid, name, email, phone, age);
+    }
+  }
+
+  Future<void> registerInfo(
+      String uid, String name, String email, String phone, int age) async {
+    await firestore.collection('Users').doc(uid).set({
+      'name': name,
+      'email': email,
+      'phone': phone,
+      'age': age,
+    });
+  }
+
+  Future<void> updateUserHealthProfile(Map<String, dynamic> healthData) async {
+    await firestore
+        .collection('Users')
+        .doc(auth.currentUser?.uid)
+        .update(healthData);
   }
 }
 

@@ -1,34 +1,45 @@
+// lib/main.dart
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-
-import 'features/account/screens/login_screen.dart';
-import 'features/account/screens/profile_screen.dart';
+import 'package:provider/provider.dart';
+import 'features/account/viewmodels/login_viewmodel.dart';
+import 'features/account/viewmodels/profile_viewmodel.dart';
+import 'features/account/viewmodels/signup_viewmodel.dart';
+import 'features/account/views/login_screen.dart';
+import 'features/account/views/profile_screen.dart';
 import 'features/exams/screens/exame_screen.dart';
-import 'firebase_options.dart'; // Certifique-se de que este arquivo existe e está configurado corretamente
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'arroz',
-      // A rota inicial quando o aplicativo é iniciado.
-      initialRoute: '/login',
-      // O mapeamento das rotas nomeadas para os widgets de tela.
-      routes: {
-        '/login': (context) => LoginScreen(),
-        '/profile': (context) => const ProfileScreen(),
-        '/exameScreen': (context) => const ExameScreen(),
-      },
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => LoginViewModel()),
+        ChangeNotifierProvider(create: (_) => SignupViewModel()),
+        ChangeNotifierProvider(create: (_) => ProfileViewModel()),
+      ],
+      child: MaterialApp(
+        title: '',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: LoginScreen(),
+        initialRoute: '/login',
+        routes: {
+          '/login': (context) => LoginScreen(),
+          '/profile': (context) => const ProfileScreen(),
+          '/exameScreen': (context) => const ExameScreen(),
+        },
+      ),
     );
   }
 }
