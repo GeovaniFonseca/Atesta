@@ -24,8 +24,10 @@
 > ### Prerequisites
 > Before you begin, ensure you have met the following requirements:
 > - Flutter installed on your machine. Follow the [official Flutter installation guide](https://flutter.dev/docs/get-started/install) if you haven't already.
-> - Firebase CLI installed. You can install it by following the [Firebase CLI setup guide](https://firebase.google.com/docs/cli#setup).
-> 
+> - Firebase CLI installed. You can install it by following the [Firebase CLI setup guide](https://firebase.google.com/docs/flutter/setup?platform=ios).
+> - Android Studio (https://developer.android.com/studio)
+>
+>
 > ### Installation
 > To get started with Atesta, follow these steps:
 > 
