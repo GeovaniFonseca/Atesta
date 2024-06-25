@@ -1,6 +1,8 @@
 // lib/main.dart
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:hello_world/features/consultas/viewmodels/consulta_viewmodel.dart';
+import 'package:hello_world/features/consultas/views/consulta_screen.dart';
 import 'package:hello_world/features/vacina/viewmodels/vacina_viewmodel.dart';
 import 'package:hello_world/features/vacina/views/vacina_screen.dart';
 import 'package:provider/provider.dart';
@@ -37,6 +39,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AtestadoViewModel()),
         ChangeNotifierProvider(create: (_) => ExameViewModel()),
         ChangeNotifierProvider(create: (_) => VacinaViewModel()),
+        ChangeNotifierProvider(create: (_) => ConsultaViewModel()),
       ],
       child: MaterialApp(
         title: '',
@@ -50,7 +53,8 @@ class MyApp extends StatelessWidget {
           '/profile': (context) => const ProfileScreen(),
           '/exameScreen': (context) => const ExameScreen(),
           '/atestadoScreen': (context) => const AtestadoScreen(),
-          'vacinaScreen': (context) => const VacinaScreen(),
+          '/vacinaScreen': (context) => const VacinaScreen(),
+          '/consultaScreen': (context) => const ConsultaScreen(),
         },
       ),
     );
