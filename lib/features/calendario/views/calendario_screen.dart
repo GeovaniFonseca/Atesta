@@ -9,15 +9,15 @@ import '../../atestado/views/atestado_detalhes_screen.dart';
 import '../../consultas/model/consulta_model.dart';
 import '../../exame/model/exame_model.dart';
 import '../../exame/views/exame_detalhes_screen.dart';
-import '../../navigation/bottom_navigation.dart';
 import '../../vacina/model/vacina.dart';
 import '../../vacina/views/vacina_detalhes_screen.dart';
 import '../viewmodels/calendario_viewmodel.dart';
 
 class CalendarioScreen extends StatefulWidget {
-  const CalendarioScreen({Key? key}) : super(key: key);
+  const CalendarioScreen({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _CalendarScreenState createState() => _CalendarScreenState();
 }
 
@@ -75,8 +75,8 @@ class _CalendarScreenState extends State<CalendarioScreen> {
             },
             eventLoader: _getEventsForDay,
             calendarStyle: CalendarStyle(
-              selectedDecoration: BoxDecoration(
-                color: const Color.fromARGB(255, 38, 87, 151),
+              selectedDecoration: const BoxDecoration(
+                color: Color.fromARGB(255, 38, 87, 151),
                 shape: BoxShape.circle,
               ),
               todayDecoration: BoxDecoration(
@@ -105,46 +105,92 @@ class _CalendarScreenState extends State<CalendarioScreen> {
       itemCount: events.length,
       itemBuilder: (context, index) {
         final event = events[index];
-        return ListTile(
-          title: Text(event is AtestadoModel
-              ? 'Atestado'
-              : event is ConsultaModel
-                  ? 'Consulta'
-                  : event is Exame
-                      ? 'Exame'
-                      : 'Vacina'),
-          subtitle: Text(event is AtestadoModel
-              ? event.nomeMedico
-              : event is ConsultaModel
-                  ? event.descricao
-                  : event is Exame
-                      ? event.laudo
-                      : event.tipo),
-          onTap: () {
-            if (event is AtestadoModel) {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => AtestadoDetalheScreen(atestado: event),
-                ),
-              );
-            } else if (event is ConsultaModel) {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => ConsultaDetalheScreen(consulta: event),
-                ),
-              );
-            } else if (event is Exame) {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => ExameDetalhesScreen(exame: event),
-              ));
-            } else if (event is Vacina) {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => VacinaDetalhesScreen(vacina: event),
-                ),
-              );
-            }
-          },
+        IconData icon;
+        String title;
+        String subtitle;
+
+        if (event is AtestadoModel) {
+          icon = Icons.assignment;
+          title = 'Atestado';
+          subtitle = "Médico: ${event.nomeMedico}";
+        } else if (event is ConsultaModel) {
+          icon = Icons.medical_services;
+          title = 'Consulta';
+          subtitle = "Descrição: ${event.descricao}";
+        } else if (event is Exame) {
+          icon = Icons.description;
+          title = 'Exame';
+          subtitle = "Tipo: ${event.tipo}";
+        } else if (event is Vacina) {
+          icon = Icons.local_hospital;
+          title = 'Vacina';
+          subtitle = "Tipo: ${event.tipo}";
+        } else {
+          icon = Icons.event;
+          title = 'Evento';
+          subtitle = 'Descrição do evento';
+        }
+
+        return Card(
+          surfaceTintColor: Colors.white,
+          margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+          elevation: 4,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: ListTile(
+            leading: CircleAvatar(
+              backgroundColor: const Color.fromARGB(255, 38, 87, 151),
+              child: Icon(icon, color: Colors.white),
+            ),
+            title: Text(
+              title,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Color.fromARGB(255, 38, 87, 151),
+              ),
+            ),
+            subtitle: Text(
+              subtitle,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+            trailing: const Icon(Icons.arrow_forward_ios,
+                color: Color.fromARGB(255, 38, 87, 151)),
+            onTap: () {
+              if (event is AtestadoModel) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        AtestadoDetalheScreen(atestado: event),
+                  ),
+                );
+              } else if (event is ConsultaModel) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        ConsultaDetalheScreen(consulta: event),
+                  ),
+                );
+              } else if (event is Exame) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ExameDetalhesScreen(exame: event),
+                  ),
+                );
+              } else if (event is Vacina) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => VacinaDetalhesScreen(vacina: event),
+                  ),
+                );
+              }
+            },
+          ),
         );
       },
     );

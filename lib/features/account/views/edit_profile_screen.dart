@@ -89,7 +89,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: BackButton(),
+        leading: const BackButton(),
         title: const Text(
           "Editar Perfil",
           style: TextStyle(fontWeight: FontWeight.bold),

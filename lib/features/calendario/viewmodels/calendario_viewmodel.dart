@@ -33,16 +33,16 @@ class CalendarioViewModel extends ChangeNotifier {
         .get();
 
     final atestados = atestadosSnapshot.docs.map((doc) {
-      return AtestadoModel.fromMap(doc.data() as Map<String, dynamic>, doc.id);
+      return AtestadoModel.fromMap(doc.data(), doc.id);
     }).toList();
     final consultas = consultasSnapshot.docs.map((doc) {
-      return ConsultaModel.fromMap(doc.data() as Map<String, dynamic>, doc.id);
+      return ConsultaModel.fromMap(doc.data(), doc.id);
     }).toList();
     final exames = examesSnapshot.docs.map((doc) {
-      return Exame.fromMap(doc.data() as Map<String, dynamic>, doc.id);
+      return Exame.fromMap(doc.data(), doc.id);
     }).toList();
     final vacinas = vacinasSnapshot.docs.map((doc) {
-      return Vacina.fromMap(doc.data() as Map<String, dynamic>, doc.id);
+      return Vacina.fromMap(doc.data(), doc.id);
     }).toList();
 
     final allEvents = [...atestados, ...consultas, ...exames, ...vacinas];
