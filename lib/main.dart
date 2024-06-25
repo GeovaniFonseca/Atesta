@@ -14,6 +14,7 @@ import 'features/account/views/login_screen.dart';
 import 'features/account/views/profile_screen.dart';
 import 'features/atestado/viewmodels/atestado_viewmodel.dart';
 import 'features/atestado/views/atestado_screen.dart';
+import 'features/calendario/viewmodels/calendario_viewmodel.dart';
 import 'features/exame/viewmodels/exame_viewmodel.dart';
 import 'features/exame/views/exame_screen.dart';
 import 'firebase_options.dart';
@@ -40,6 +41,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ExameViewModel()),
         ChangeNotifierProvider(create: (_) => VacinaViewModel()),
         ChangeNotifierProvider(create: (_) => ConsultaViewModel()),
+        ChangeNotifierProvider(create: (_) => CalendarioViewModel()),
       ],
       child: MaterialApp(
         title: '',

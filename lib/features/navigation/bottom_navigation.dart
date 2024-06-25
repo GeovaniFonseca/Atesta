@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 
 import '../account/views/profile_screen.dart';
-import '../calendario/screens/calendario_screen.dart';
+import '../calendario/views/calendario_screen.dart';
 import '../home/screens/home_screen.dart';
 
 class BottomNavigation extends StatefulWidget {

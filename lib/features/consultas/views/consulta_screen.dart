@@ -151,7 +151,13 @@ class _ConsultaScreenState extends State<ConsultaScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text('Área Médica: ${consulta.areaMedica}'),
-                                  Text('Descrição: ${consulta.descricao}'),
+                                  Text(
+                                    'Descrição: ${consulta.descricao}',
+                                    maxLines:
+                                        1, // Limite de linhas para a descrição
+                                    overflow: TextOverflow
+                                        .ellipsis, // Indica que há mais texto
+                                  ),
                                 ],
                               ),
                               leading: const Icon(
@@ -187,6 +193,7 @@ class _ConsultaScreenState extends State<ConsultaScreen> {
           );
         },
         backgroundColor: const Color.fromARGB(255, 38, 87, 151),
+        foregroundColor: const Color.fromARGB(255, 255, 255, 255),
         child: const Icon(Icons.add),
       ),
     );

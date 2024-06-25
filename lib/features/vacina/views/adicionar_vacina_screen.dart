@@ -370,11 +370,6 @@ class _AdicionarVacinaScreenState extends State<AdicionarVacinaScreen> {
                           isLoading = false;
                           errorMessage =
                               'Por favor, selecione o tipo de vacina.';
-                        } else if (selectedFile == null &&
-                            widget.vacinaParaEditar?.arquivoUrl == null) {
-                          isLoading = false;
-                          errorMessage =
-                              'Por favor, selecione um arquivo para a vacina.';
                         } else {
                           String? uploadedFileUrl =
                               widget.vacinaParaEditar?.arquivoUrl;
