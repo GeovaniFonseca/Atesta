@@ -48,8 +48,10 @@
 >         ```bash
 >         firebase init
 >         ```
->     - Follow the prompts to set up Firebase for your project.
-> 5. Run the application:
+>     - Follow the prompts to set up Firebase for your project
+> 5. Run your android emulator
+> 
+> 6. Run the application:
 >     ```bash
 >     flutter run
 >     ```
