@@ -12,6 +12,7 @@ import '../widgets/health_user_card.dart';
 import '../widgets/user_info_card.dart';
 import '../viewmodels/profile_viewmodel.dart';
 
+/// Classe que define a tela de perfil como um StatefulWidget.
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
@@ -19,15 +20,19 @@ class ProfileScreen extends StatefulWidget {
   _ProfileScreenState createState() => _ProfileScreenState();
 }
 
+/// Classe de estado para ProfileScreen que mantém o estado dos campos de texto e carrega os dados do perfil.
 class _ProfileScreenState extends State<ProfileScreen> {
+  // Controlador para o campo de texto do dependente.
   TextEditingController dependentController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+    // Carrega os dados do perfil ao inicializar a tela.
     Provider.of<ProfileViewModel>(context, listen: false).loadProfileData();
   }
 
+  /// Mostra um diálogo para adicionar um novo dependente.
   void _showAddDependentDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -62,6 +67,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  /// Retorna o ícone apropriado com base na chave fornecida.
   IconData getIconForKey(String key) {
     switch (key) {
       case 'name':
@@ -77,6 +83,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
+  // Mapa de cores para os cartões de informações do usuário.
   Map<String, Color> cardColors = {
     'name': const Color.fromARGB(255, 217, 242, 255),
     'age': const Color.fromARGB(255, 217, 230, 255),
@@ -98,6 +105,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         centerTitle: true,
         elevation: 0,
         actions: <Widget>[
+          // Botão para sair da aplicação.
           TextButton(
             onPressed: () async {
               await FirebaseAuth.instance.signOut();
@@ -156,6 +164,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: Column(
                         children: [
                           const SizedBox(height: 20),
+                          // Exibe a imagem do perfil do usuário.
                           Stack(
                             children: [
                               CircleAvatar(
@@ -183,6 +192,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ],
                           ),
                           const SizedBox(height: 10),
+                          // Exibe o nome do usuário.
                           Center(
                             child: Text(
                               userData['name'],
@@ -191,6 +201,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                           ),
                           const SizedBox(height: 20),
+                          // Dropdown para selecionar dependentes.
                           Container(
                             decoration: BoxDecoration(
                               color: Colors.white,
@@ -264,6 +275,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                           ),
                           const SizedBox(height: 10),
+                          // Botão para editar o perfil.
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               elevation: 10,
@@ -292,6 +304,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                           ),
                           const SizedBox(height: 10),
+                          // Botão para exibir o código de compartilhamento.
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               elevation: 10,
@@ -332,6 +345,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       delegate: SliverChildBuilderDelegate(
                         (BuildContext context, int index) {
+                          // Chaves para os dados do usuário.
                           List<String> keys = ['name', 'age', 'phone', 'email'];
                           if (index >= keys.length) return null;
                           String key = keys[index];
@@ -341,6 +355,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           Color backgroundColor =
                               cardColors[key] ?? Colors.blue.shade100;
 
+                          // Retorna um cartão de informação do usuário.
                           return UserInfoCard(
                             icon: icon,
                             title: key.capitalize(),
@@ -355,6 +370,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: Column(
                         children: [
                           const SizedBox(height: 20),
+                          // Seção de perfil de saúde.
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -389,6 +405,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             mainAxisSpacing: 10,
                             childAspectRatio: 1,
                             children: [
+                              // Cartões de informação de saúde do usuário.
                               HealthInfoCard(
                                 icon: Icons.bloodtype,
                                 label: 'Tipo sanguíneo',
@@ -436,6 +453,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 }
 
+/// Extensão para capitalizar a primeira letra de uma string.
 extension StringExtension on String {
   String capitalize() {
     if (isEmpty) return "";

@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../viewmodels/signup_viewmodel.dart';
 import 'login_screen.dart';
 
+/// Classe que define a tela de cadastro como um StatefulWidget.
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
 
@@ -13,7 +14,9 @@ class SignupScreen extends StatefulWidget {
   State<SignupScreen> createState() => _SignupScreenState();
 }
 
+/// Classe de estado para SignupScreen que mantém o estado dos campos de texto e nós de foco.
 class _SignupScreenState extends State<SignupScreen> {
+  // Controladores para os campos de texto.
   TextEditingController name = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController phone = TextEditingController();
@@ -21,17 +24,21 @@ class _SignupScreenState extends State<SignupScreen> {
   TextEditingController password = TextEditingController();
   TextEditingController confirmpassword = TextEditingController();
 
+  // Nós de foco para os campos de texto.
   FocusNode nameFocusNode = FocusNode();
   FocusNode emailFocusNode = FocusNode();
   FocusNode phoneFocusNode = FocusNode();
   FocusNode ageFocusNode = FocusNode();
   FocusNode passwordFocusNode = FocusNode();
   FocusNode confirmPasswordFocusNode = FocusNode();
+
+  // Variável para indicar o estado de carregamento.
   bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
+    // Adiciona listeners para mudanças no foco dos campos de texto.
     nameFocusNode.addListener(_onFocusChange);
     emailFocusNode.addListener(_onFocusChange);
     phoneFocusNode.addListener(_onFocusChange);
@@ -42,6 +49,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
   @override
   void dispose() {
+    // Remove listeners e descarta os nós de foco ao finalizar.
     nameFocusNode.dispose();
     emailFocusNode.dispose();
     phoneFocusNode.dispose();
@@ -51,10 +59,12 @@ class _SignupScreenState extends State<SignupScreen> {
     super.dispose();
   }
 
+  /// Função para lidar com mudanças de foco nos campos de texto.
   void _onFocusChange() {
     setState(() {});
   }
 
+  /// Função para obter a cor do ícone com base no foco do campo.
   Color getIconColor(FocusNode focusNode) {
     return focusNode.hasFocus
         ? const Color.fromARGB(255, 38, 87, 151)
@@ -64,6 +74,7 @@ class _SignupScreenState extends State<SignupScreen> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
+      // Cria uma instância de SignupViewModel.
       create: (context) => SignupViewModel(),
       child: Scaffold(
         appBar: AppBar(
@@ -76,9 +87,11 @@ class _SignupScreenState extends State<SignupScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                // Logo da aplicação.
                 SizedBox(
                   child: Image.asset('lib/assets/images/logo2.png', width: 90),
                 ),
+                // Campo de texto para o nome.
                 Container(
                   margin: const EdgeInsets.symmetric(vertical: 8),
                   child: TextFormField(
@@ -104,6 +117,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     keyboardType: TextInputType.text,
                   ),
                 ),
+                // Campo de texto para o email.
                 Container(
                   margin: const EdgeInsets.symmetric(vertical: 8),
                   child: TextFormField(
@@ -129,6 +143,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     keyboardType: TextInputType.emailAddress,
                   ),
                 ),
+                // Campo de texto para o contato.
                 Container(
                   margin: const EdgeInsets.symmetric(vertical: 8),
                   child: TextFormField(
@@ -152,6 +167,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     keyboardType: TextInputType.phone,
                   ),
                 ),
+                // Campo de texto para a idade.
                 Container(
                   margin: const EdgeInsets.symmetric(vertical: 8),
                   child: TextFormField(
@@ -175,6 +191,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     keyboardType: TextInputType.number,
                   ),
                 ),
+                // Campo de texto para a senha.
                 Container(
                   margin: const EdgeInsets.symmetric(vertical: 8),
                   child: TextFormField(
@@ -200,6 +217,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     keyboardType: TextInputType.text,
                   ),
                 ),
+                // Campo de texto para confirmar a senha.
                 Container(
                   margin: const EdgeInsets.symmetric(vertical: 8),
                   child: TextFormField(
@@ -225,6 +243,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     keyboardType: TextInputType.text,
                   ),
                 ),
+                // Botão de cadastro com comportamento condicionado ao estado de carregamento.
                 Consumer<SignupViewModel>(
                   builder: (context, viewModel, child) {
                     return Container(
@@ -247,6 +266,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         onPressed: viewModel.isLoading
                             ? null
                             : () async {
+                                // Verifica se as senhas coincidem.
                                 if (password.text != confirmpassword.text) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
@@ -261,6 +281,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                   isLoading = true;
                                 });
 
+                                // Tenta realizar o cadastro com os dados fornecidos.
                                 bool success = await viewModel.register(
                                   email.text,
                                   password.text,
@@ -273,6 +294,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                   isLoading = false;
                                 });
 
+                                // Verifica se o cadastro foi bem-sucedido.
                                 if (success) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
@@ -282,6 +304,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                     ),
                                   );
 
+                                  // Navega para a tela de login em caso de sucesso.
                                   Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(

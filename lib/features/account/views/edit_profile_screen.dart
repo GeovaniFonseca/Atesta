@@ -5,7 +5,9 @@ import 'package:provider/provider.dart';
 import '../../navigation/bottom_navigation.dart';
 import '../viewmodels/profile_viewmodel.dart';
 
+/// Classe que define a tela de edição do perfil como um StatefulWidget.
 class EditProfileScreen extends StatefulWidget {
+  // Dados do usuário passados para a tela.
   final Map<String, dynamic> userData;
 
   const EditProfileScreen({super.key, required this.userData});
@@ -15,13 +17,16 @@ class EditProfileScreen extends StatefulWidget {
   _EditProfileScreenState createState() => _EditProfileScreenState();
 }
 
+/// Classe de estado para EditProfileScreen que mantém o estado dos campos de texto e nós de foco.
 class _EditProfileScreenState extends State<EditProfileScreen> {
+  // Mapas para os controladores de texto e nós de foco.
   final Map<String, TextEditingController> _controllers = {};
   final Map<String, FocusNode> _focusNodes = {};
 
   @override
   void initState() {
     super.initState();
+    // Inicializa os controladores de texto com os dados do usuário.
     _controllers['name'] = TextEditingController(text: widget.userData['name']);
     _controllers['age'] =
         TextEditingController(text: widget.userData['age']?.toString());
@@ -32,6 +37,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     _controllers['password'] = TextEditingController();
     _controllers['confirmPassword'] = TextEditingController();
 
+    // Inicializa os nós de foco para cada campo.
     _focusNodes['name'] = FocusNode();
     _focusNodes['age'] = FocusNode();
     _focusNodes['phone'] = FocusNode();
@@ -39,6 +45,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     _focusNodes['password'] = FocusNode();
     _focusNodes['confirmPassword'] = FocusNode();
 
+    // Adiciona listeners aos nós de foco para atualizar a UI quando o foco mudar.
     _focusNodes.forEach((key, node) {
       node.addListener(() {
         setState(() {});
@@ -48,17 +55,20 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   void dispose() {
+    // Descarta os controladores de texto e nós de foco ao finalizar.
     _controllers.forEach((_, controller) => controller.dispose());
     _focusNodes.forEach((_, focusNode) => focusNode.dispose());
     super.dispose();
   }
 
+  /// Retorna a cor do rótulo com base no foco do campo.
   Color getLabelColor(FocusNode focusNode) {
     return focusNode.hasFocus
         ? const Color.fromARGB(255, 38, 87, 151)
         : Colors.grey;
   }
 
+  /// Constrói um campo de texto com as propriedades fornecidas.
   Widget buildTextField(String key, String label,
       {bool readOnly = false, bool obscureText = false}) {
     return TextFormField(
@@ -141,6 +151,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   padding: MaterialStateProperty.all(const EdgeInsets.all(15)),
                 ),
                 onPressed: () async {
+                  // Verifica se as senhas inseridas coincidem
                   if (_controllers['password']!.text !=
                       _controllers['confirmPassword']!.text) {
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -152,6 +163,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     return;
                   }
 
+                  // Atualiza o perfil do usuário com os novos dados
                   await Provider.of<ProfileViewModel>(context, listen: false)
                       .updateProfile(
                     name: _controllers['name']!.text,
@@ -161,6 +173,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         ? _controllers['password']!.text
                         : null,
                   );
+                  // Navega de volta para a tela principal após a atualização
                   // ignore: use_build_context_synchronously
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(

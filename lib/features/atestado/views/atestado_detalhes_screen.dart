@@ -9,24 +9,35 @@ import 'package:url_launcher/url_launcher.dart';
 import '../model/atestado_model.dart';
 import 'adicionar_atestado_screen.dart';
 
+/// Tela para exibir os detalhes de um atestado específico.
 class AtestadoDetalheScreen extends StatelessWidget {
+  // Modelo de atestado a ser exibido.
   final AtestadoModel atestado;
 
   const AtestadoDetalheScreen({super.key, required this.atestado});
 
+  /// Método para deletar o atestado atual.
+  ///
+  /// [context] Contexto da aplicação.
   Future<void> deleteAtestado(BuildContext context) async {
     try {
+      // Deleta o atestado do Firestore.
       await FirebaseFirestore.instance
           .collection('Atestados')
           .doc(atestado.id)
           .delete();
+      // Navega de volta para a tela anterior.
       Navigator.pop(context);
     } catch (e) {
+      // Exibe uma mensagem de erro se a exclusão falhar.
       ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Erro ao deletar atestado')));
     }
   }
 
+  /// Método para abrir uma URL no navegador.
+  ///
+  /// [url] URL a ser aberta.
   Future<void> _launchURL(String url) async {
     final Uri uri = Uri.parse(url);
     if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
@@ -51,6 +62,7 @@ class AtestadoDetalheScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Exibe o nome do médico.
               Card(
                 child: ListTile(
                   title: const Text('Nome do médico'),
@@ -64,6 +76,7 @@ class AtestadoDetalheScreen extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
+              // Exibe a data de emissão do atestado.
               Card(
                 child: ListTile(
                   title: const Text('Data emissão'),
@@ -77,6 +90,7 @@ class AtestadoDetalheScreen extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
+              // Exibe a quantidade de dias do atestado.
               Card(
                 child: ListTile(
                   title: const Text('Quantidade de dias'),
@@ -89,6 +103,7 @@ class AtestadoDetalheScreen extends StatelessWidget {
                   ),
                 ),
               ),
+              // Exibe o dependente do atestado.
               Card(
                 child: ListTile(
                   title: const Text('Dependente'),
@@ -107,6 +122,7 @@ class AtestadoDetalheScreen extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               const Text('Preview do Arquivo:'),
+              // Exibe a pré-visualização do arquivo do atestado, se disponível.
               atestado.arquivoUrl!.isNotEmpty
                   ? GestureDetector(
                       onTap: () => _launchURL(atestado.arquivoUrl!),
@@ -114,6 +130,7 @@ class AtestadoDetalheScreen extends StatelessWidget {
                     )
                   : const Text('Nenhum arquivo enviado.'),
               const SizedBox(height: 20),
+              // Botão para deletar o atestado.
               ActionChip(
                 avatar: const Icon(Icons.delete,
                     color: Color.fromARGB(255, 255, 255, 255)),
@@ -125,6 +142,7 @@ class AtestadoDetalheScreen extends StatelessWidget {
           ),
         ),
       ),
+      // Botão flutuante para editar o atestado.
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(

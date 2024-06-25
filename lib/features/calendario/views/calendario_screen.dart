@@ -13,26 +13,31 @@ import '../../vacina/model/vacina.dart';
 import '../../vacina/views/vacina_detalhes_screen.dart';
 import '../viewmodels/calendario_viewmodel.dart';
 
+/// Tela para exibir o calendário com eventos do usuário.
 class CalendarioScreen extends StatefulWidget {
   const CalendarioScreen({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _CalendarScreenState createState() => _CalendarScreenState();
 }
 
 class _CalendarScreenState extends State<CalendarioScreen> {
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
+
+  // Mapa de eventos do calendário, agrupados por data.
   Map<DateTime, List<dynamic>> _events = {};
 
   @override
   void initState() {
     super.initState();
+    // Define o dia selecionado como o dia focado inicialmente.
     _selectedDay = _focusedDay;
+    // Carrega os eventos do calendário.
     _loadEvents();
   }
 
+  /// Carrega todos os eventos do usuário.
   Future<void> _loadEvents() async {
     final calendarViewModel =
         Provider.of<CalendarioViewModel>(context, listen: false);
@@ -42,6 +47,7 @@ class _CalendarScreenState extends State<CalendarioScreen> {
     });
   }
 
+  /// Obtém os eventos para um dia específico.
   List<dynamic> _getEventsForDay(DateTime day) {
     return _events[DateTime(day.year, day.month, day.day)] ?? [];
   }
@@ -60,6 +66,7 @@ class _CalendarScreenState extends State<CalendarioScreen> {
       ),
       body: Column(
         children: [
+          // Calendário para seleção de datas e exibição de eventos.
           TableCalendar(
             firstDay: DateTime.utc(2000, 1, 1),
             lastDay: DateTime.utc(2100, 12, 31),
@@ -86,6 +93,7 @@ class _CalendarScreenState extends State<CalendarioScreen> {
             ),
           ),
           const SizedBox(height: 8),
+          // Lista de eventos para o dia selecionado.
           Expanded(
             child: _buildEventList(),
           ),
@@ -94,6 +102,7 @@ class _CalendarScreenState extends State<CalendarioScreen> {
     );
   }
 
+  /// Constrói a lista de eventos para o dia selecionado.
   Widget _buildEventList() {
     final events = _getEventsForDay(_selectedDay!);
     if (events.isEmpty) {
@@ -109,6 +118,7 @@ class _CalendarScreenState extends State<CalendarioScreen> {
         String title;
         String subtitle;
 
+        // Determina o ícone, título e subtítulo com base no tipo de evento.
         if (event is AtestadoModel) {
           icon = Icons.assignment;
           title = 'Atestado';
@@ -131,6 +141,7 @@ class _CalendarScreenState extends State<CalendarioScreen> {
           subtitle = 'Descrição do evento';
         }
 
+        // Constrói o cartão para exibir o evento.
         return Card(
           surfaceTintColor: Colors.white,
           margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
@@ -157,6 +168,7 @@ class _CalendarScreenState extends State<CalendarioScreen> {
             ),
             trailing: const Icon(Icons.arrow_forward_ios,
                 color: Color.fromARGB(255, 38, 87, 151)),
+            // Navega para a tela de detalhes ao clicar no evento.
             onTap: () {
               if (event is AtestadoModel) {
                 Navigator.push(

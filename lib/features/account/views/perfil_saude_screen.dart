@@ -6,7 +6,9 @@ import 'package:provider/provider.dart';
 
 import '../viewmodels/heath_profile_informations_viewmodel.dart';
 
+/// Classe que define a tela de edição do perfil de saúde como um StatelessWidget.
 class HealthProfileEditScreen extends StatelessWidget {
+  // Dados do usuário passados para a tela.
   final Map<String, dynamic> userData;
 
   const HealthProfileEditScreen({super.key, required this.userData});
@@ -14,11 +16,13 @@ class HealthProfileEditScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
+      // Cria uma instância de HealthProfileEditViewModel e inicializa com os dados do usuário.
       create: (context) => HealthProfileEditViewModel()..initialize(userData),
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Editar Perfil de Saúde'),
           actions: [
+            // Botão para salvar as alterações do perfil de saúde.
             Consumer<HealthProfileEditViewModel>(
               builder: (context, viewModel, child) {
                 return TextButton(
@@ -124,6 +128,7 @@ class HealthProfileEditScreen extends StatelessWidget {
                           .toList(),
                     ),
                     const SizedBox(height: 20),
+                    // Campo de texto para o peso.
                     TextField(
                       controller: viewModel.weightController,
                       decoration: InputDecoration(
@@ -134,6 +139,7 @@ class HealthProfileEditScreen extends StatelessWidget {
                       onChanged: (value) => viewModel.validateWeight(),
                     ),
                     const SizedBox(height: 20),
+                    // Campo de texto para a altura.
                     TextField(
                       controller: viewModel.heightController,
                       decoration: InputDecoration(

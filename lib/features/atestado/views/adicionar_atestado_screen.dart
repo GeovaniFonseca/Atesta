@@ -14,7 +14,9 @@ import '../../navigation/bottom_navigation.dart';
 import '../model/atestado_model.dart';
 import '../viewmodels/atestado_viewmodel.dart';
 
+/// Tela para adicionar ou editar um atestado.
 class AdicionarAtestadoScreen extends StatefulWidget {
+  // Modelo de atestado para edição (opcional).
   final AtestadoModel? atestadoParaEditar;
   const AdicionarAtestadoScreen({super.key, this.atestadoParaEditar});
 
@@ -25,19 +27,24 @@ class AdicionarAtestadoScreen extends StatefulWidget {
 
 class _AdicionarAtestadoScreenState extends State<AdicionarAtestadoScreen> {
   bool isLoading = false;
+  // Controladores de texto para os campos de entrada.
   final TextEditingController _nomeMedicoController = TextEditingController();
   final TextEditingController _dataEmissaoController = TextEditingController();
   final TextEditingController _quantidadeDiasController =
       TextEditingController();
+  // Nós de foco para os campos de entrada.
   FocusNode nomeMedicoFocusNode = FocusNode();
   FocusNode dateFocusNode = FocusNode();
   FocusNode quantDiasFocusNode = FocusNode();
+  // Arquivo selecionado pelo usuário.
   File? _selectedFile;
+  // Dependente selecionado.
   String? selectedDependent;
 
   @override
   void initState() {
     super.initState();
+    // Preenche os controladores de texto com os dados do atestado para edição, se disponível.
     if (widget.atestadoParaEditar != null) {
       _nomeMedicoController.text = widget.atestadoParaEditar!.nomeMedico;
       _dataEmissaoController.text = widget.atestadoParaEditar!.dataEmissao;
@@ -48,6 +55,7 @@ class _AdicionarAtestadoScreenState extends State<AdicionarAtestadoScreen> {
     }
     _loadDependents();
 
+    // Adiciona listeners para os nós de foco.
     nomeMedicoFocusNode.addListener(_onFocusChange);
     dateFocusNode.addListener(_onFocusChange);
     quantDiasFocusNode.addListener(_onFocusChange);
@@ -55,26 +63,31 @@ class _AdicionarAtestadoScreenState extends State<AdicionarAtestadoScreen> {
 
   @override
   void dispose() {
+    // Remove os listeners dos nós de foco.
     nomeMedicoFocusNode.removeListener(_onFocusChange);
     dateFocusNode.removeListener(_onFocusChange);
     quantDiasFocusNode.removeListener(_onFocusChange);
 
+    // Descarta os nós de foco.
     nomeMedicoFocusNode.dispose();
     dateFocusNode.dispose();
     quantDiasFocusNode.dispose();
     super.dispose();
   }
 
+  /// Método chamado quando o foco muda em qualquer campo de entrada.
   void _onFocusChange() {
     setState(() {});
   }
 
+  /// Carrega a lista de dependentes do usuário.
   Future<void> _loadDependents() async {
     final atestadoViewModel = context.read<AtestadoViewModel>();
     await atestadoViewModel.loadDependents();
     setState(() {});
   }
 
+  /// Retorna a cor do ícone com base no foco do campo.
   Color getIconColor(FocusNode focusNode) {
     return focusNode.hasFocus
         ? const Color.fromARGB(255, 38, 87, 151)
@@ -99,6 +112,7 @@ class _AdicionarAtestadoScreenState extends State<AdicionarAtestadoScreen> {
         padding: const EdgeInsets.all(16),
         child: ListView(
           children: <Widget>[
+            // Título da tela.
             Container(
               padding: const EdgeInsets.all(10),
               child: const Text(
@@ -109,6 +123,7 @@ class _AdicionarAtestadoScreenState extends State<AdicionarAtestadoScreen> {
                     fontWeight: FontWeight.bold),
               ),
             ),
+            // Campo de entrada para o nome do médico.
             TextFormField(
               controller: _nomeMedicoController,
               focusNode: nomeMedicoFocusNode,
@@ -132,6 +147,7 @@ class _AdicionarAtestadoScreenState extends State<AdicionarAtestadoScreen> {
               maxLines: null,
             ),
             const Padding(padding: EdgeInsets.all(10)),
+            // Campo de entrada para a data de emissão.
             TextField(
               controller: _dataEmissaoController,
               focusNode: dateFocusNode,
@@ -153,6 +169,7 @@ class _AdicionarAtestadoScreenState extends State<AdicionarAtestadoScreen> {
                 ),
               ),
               onTap: () async {
+                // Abre um seletor de data.
                 DateTime? date = await showDatePicker(
                   context: context,
                   initialDate: DateTime.now(),
@@ -166,6 +183,7 @@ class _AdicionarAtestadoScreenState extends State<AdicionarAtestadoScreen> {
               },
             ),
             const Padding(padding: EdgeInsets.all(9)),
+            // Campo de entrada para a quantidade de dias.
             TextField(
               controller: _quantidadeDiasController,
               focusNode: quantDiasFocusNode,
@@ -188,6 +206,7 @@ class _AdicionarAtestadoScreenState extends State<AdicionarAtestadoScreen> {
               keyboardType: TextInputType.number,
             ),
             const Padding(padding: EdgeInsets.all(9)),
+            // Dropdown para selecionar o dependente (opcional).
             DropdownButtonFormField<String>(
               value: selectedDependent,
               hint: const Text('Selecione o dependente (opcional)'),
@@ -219,6 +238,7 @@ class _AdicionarAtestadoScreenState extends State<AdicionarAtestadoScreen> {
               ),
             ),
             const Padding(padding: EdgeInsets.all(9)),
+            // Botão para selecionar um arquivo.
             Container(
               margin: const EdgeInsets.symmetric(vertical: 8),
               height: 50,
@@ -234,14 +254,13 @@ class _AdicionarAtestadoScreenState extends State<AdicionarAtestadoScreen> {
                   padding: MaterialStateProperty.all(const EdgeInsets.all(15)),
                 ),
                 onPressed: () async {
+                  // Abre o seletor de arquivos.
                   FilePickerResult? result =
                       await FilePicker.platform.pickFiles();
                   if (result != null) {
                     setState(() {
                       _selectedFile = File(result.files.single.path!);
                     });
-                  } else {
-                    // Optionally handle the case when the user doesn't select a file
                   }
                 },
                 child: const Text(
@@ -255,6 +274,7 @@ class _AdicionarAtestadoScreenState extends State<AdicionarAtestadoScreen> {
                 ),
               ),
             ),
+            // Botão para adicionar ou editar o atestado.
             SizedBox(
               width: 150,
               height: 50,
@@ -278,6 +298,7 @@ class _AdicionarAtestadoScreenState extends State<AdicionarAtestadoScreen> {
                         String? userId = FirebaseAuth.instance.currentUser?.uid;
                         String errorMessage = '';
 
+                        // Verificações de validação para os campos obrigatórios.
                         if (userId == null) {
                           isLoading = false;
                           errorMessage =
@@ -293,7 +314,7 @@ class _AdicionarAtestadoScreenState extends State<AdicionarAtestadoScreen> {
                         } else if (_quantidadeDiasController.text.isEmpty) {
                           isLoading = false;
                           errorMessage =
-                              "Por facor, preencha a quantidade de dias do atestado";
+                              "Por favor, preencha a quantidade de dias do atestado";
                         } else if (_selectedFile == null) {
                           isLoading = false;
                           errorMessage =
@@ -304,6 +325,7 @@ class _AdicionarAtestadoScreenState extends State<AdicionarAtestadoScreen> {
                           String? uploadedFileUrl =
                               widget.atestadoParaEditar?.arquivoUrl;
 
+                          // Realiza o upload do arquivo, se um novo arquivo foi selecionado.
                           if (_selectedFile != null) {
                             uploadedFileUrl = await StorageService()
                                 .uploadFile(_selectedFile!);
@@ -326,6 +348,7 @@ class _AdicionarAtestadoScreenState extends State<AdicionarAtestadoScreen> {
                                 : selectedDependent,
                           );
 
+                          // Adiciona ou atualiza o atestado, dependendo do modo de edição.
                           if (widget.atestadoParaEditar == null) {
                             await Provider.of<AtestadoViewModel>(context,
                                     listen: false)
@@ -346,6 +369,7 @@ class _AdicionarAtestadoScreenState extends State<AdicionarAtestadoScreen> {
                               builder: (context) => const BottomNavigation()));
                         }
 
+                        // Exibe uma mensagem de erro, se necessário.
                         if (errorMessage.isNotEmpty) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(

@@ -10,6 +10,7 @@ import '../viewmodels/consulta_viewmodel.dart';
 import 'adicionar_consulta_screen.dart';
 import 'consulta_detalhes_screen.dart';
 
+/// Tela para exibir a lista de consultas do usuário.
 class ConsultaScreen extends StatefulWidget {
   const ConsultaScreen({super.key});
 
@@ -18,8 +19,10 @@ class ConsultaScreen extends StatefulWidget {
 }
 
 class _ConsultaScreenState extends State<ConsultaScreen> {
+  // Área médica selecionada pelo usuário.
   String? _selectedAreaMedica;
 
+  // Lista de áreas médicas disponíveis para filtragem.
   final List<Map<String, dynamic>> _areasMedicas = [
     {'label': 'Ortopedia', 'icon': Icons.accessibility_new},
     {'label': 'Dermatologia', 'icon': Icons.color_lens},
@@ -45,6 +48,7 @@ class _ConsultaScreenState extends State<ConsultaScreen> {
       ),
       body: Column(
         children: [
+          // Exibe a lista de áreas médicas para filtragem.
           SizedBox(
             height: 120,
             child: ListView.builder(
@@ -100,12 +104,15 @@ class _ConsultaScreenState extends State<ConsultaScreen> {
               },
             ),
           ),
+          // Exibe a lista de consultas filtradas ou todas as consultas.
           Expanded(
             child: userId == null
+                // Exibe uma mensagem se o usuário não estiver logado.
                 ? const Center(
                     child: Text('Não está logado!',
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold)))
+                // Constrói um StreamBuilder para obter a lista de consultas do Firestore.
                 : StreamBuilder(
                     stream: FirebaseFirestore.instance
                         .collection('Consultas')
@@ -122,6 +129,7 @@ class _ConsultaScreenState extends State<ConsultaScreen> {
                         return const Center(child: CircularProgressIndicator());
                       }
 
+                      // Converte os documentos do Firestore em objetos ConsultaModel e aplica o filtro de área médica.
                       final consultas = snapshot.data?.docs
                               .map((DocumentSnapshot doc) {
                                 return ConsultaModel.fromMap(
@@ -132,6 +140,7 @@ class _ConsultaScreenState extends State<ConsultaScreen> {
                                   consulta.areaMedica == _selectedAreaMedica)
                               .toList() ??
                           [];
+                      // Constrói a lista de cartões para exibir cada consulta.
                       return ListView.builder(
                         itemCount: consultas.length,
                         itemBuilder: (context, index) {
@@ -153,10 +162,8 @@ class _ConsultaScreenState extends State<ConsultaScreen> {
                                   Text('Área Médica: ${consulta.areaMedica}'),
                                   Text(
                                     'Descrição: ${consulta.descricao}',
-                                    maxLines:
-                                        1, // Limite de linhas para a descrição
-                                    overflow: TextOverflow
-                                        .ellipsis, // Indica que há mais texto
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ],
                               ),
@@ -182,6 +189,7 @@ class _ConsultaScreenState extends State<ConsultaScreen> {
           ),
         ],
       ),
+      // Botão flutuante para adicionar uma nova consulta.
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           await Navigator.push(

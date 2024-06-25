@@ -7,23 +7,30 @@ import 'signup_screen.dart';
 import '../viewmodels/login_viewmodel.dart';
 import '../../navigation/bottom_navigation.dart';
 
+/// Classe que define a tela de login como um StatefulWidget.
 class LoginScreen extends StatefulWidget {
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
 
+/// Classe de estado para LoginScreen que mantém o estado dos campos de texto e nós de foco.
 class _LoginScreenState extends State<LoginScreen> {
+  // Controladores para os campos de texto de email e senha.
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
+
+  // Nós de foco para os campos de email e senha.
   FocusNode emailFocusNode = FocusNode();
   FocusNode passwordFocusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
+    // Adiciona listener para mudanças no foco do campo de email.
     emailFocusNode.addListener(_handleFocusChange);
   }
 
+  /// Função para lidar com mudanças de foco nos campos de email e senha.
   void _handleFocusChange() {
     if (emailFocusNode.hasFocus || passwordFocusNode.hasFocus) {
       setState(() {});
@@ -32,10 +39,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void dispose() {
+    // Remove o listener do foco do campo de email ao descartar.
     emailFocusNode.removeListener(_handleFocusChange);
     super.dispose();
   }
 
+  /// Função para obter a cor do ícone com base no foco do campo.
   Color getIconColor(FocusNode focusNode) {
     return focusNode.hasFocus
         ? const Color.fromARGB(255, 38, 87, 151)
@@ -52,9 +61,11 @@ class _LoginScreenState extends State<LoginScreen> {
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                // Logo da aplicação.
                 SizedBox(
                   child: Image.asset('lib/assets/images/logo2.png', width: 100),
                 ),
+                // Campo de texto para email.
                 Container(
                   padding: const EdgeInsets.all(10),
                   child: TextFormField(
@@ -86,6 +97,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                   ),
                 ),
+                // Campo de texto para senha.
                 Container(
                   padding: const EdgeInsets.all(10),
                   child: TextFormField(
@@ -118,6 +130,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                   ),
                 ),
+                // Botão de login.
                 Container(
                   margin: const EdgeInsets.symmetric(vertical: 8),
                   width: 200,
@@ -127,6 +140,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ? null
                         : () async {
                             try {
+                              // Tenta realizar o login com as credenciais fornecidas.
                               bool success = await viewModel.login(
                                   email.text, password.text);
                               if (success) {
@@ -136,6 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     backgroundColor: Colors.green,
                                   ),
                                 );
+                                // Navega para a tela principal da aplicação em caso de sucesso.
                                 Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
@@ -187,6 +202,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                   ),
                 ),
+                // Botão para navegar para a tela de cadastro.
                 TextButton(
                   onPressed: () {
                     Navigator.push(
