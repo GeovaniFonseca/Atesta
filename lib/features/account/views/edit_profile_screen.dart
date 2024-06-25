@@ -1,14 +1,17 @@
 // lib/views/edit_profile_screen.dart
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../navigation/bottom_navigation.dart';
 import '../viewmodels/profile_viewmodel.dart';
 
 class EditProfileScreen extends StatefulWidget {
   final Map<String, dynamic> userData;
 
-  const EditProfileScreen({Key? key, required this.userData}) : super(key: key);
+  const EditProfileScreen({super.key, required this.userData});
 
   @override
+  // ignore: library_private_types_in_public_api
   _EditProfileScreenState createState() => _EditProfileScreenState();
 }
 
@@ -86,9 +89,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        leading: BackButton(),
+        title: const Text(
           "Editar Perfil",
-          style: const TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(fontWeight: FontWeight.bold),
         ),
         backgroundColor: const Color.fromARGB(255, 255, 255, 255),
         foregroundColor: const Color.fromARGB(255, 38, 87, 151),
@@ -99,12 +103,23 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           children: [
             buildTextField('name', 'Nome'),
             const SizedBox(height: 10),
+            buildTextField('email', 'Email', readOnly: true),
+            const SizedBox(height: 10),
             buildTextField('age', 'Idade'),
             const SizedBox(height: 10),
             buildTextField('phone', 'Telefone'),
             const SizedBox(height: 10),
-            buildTextField('email', 'Email', readOnly: true),
-            const SizedBox(height: 10),
+            const Row(
+              children: [
+                Padding(padding: EdgeInsets.all(4)),
+                Text(
+                  "Redefinir senha",
+                  textAlign: TextAlign.left,
+                  style: TextStyle(fontSize: 17),
+                )
+              ],
+            ),
+            const SizedBox(height: 5),
             buildTextField('password', 'Senha', obscureText: true),
             const SizedBox(height: 10),
             buildTextField('confirmPassword', 'Confirmar Senha',
@@ -146,7 +161,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         ? _controllers['password']!.text
                         : null,
                   );
-                  Navigator.of(context).pop();
+                  // ignore: use_build_context_synchronously
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                        builder: (context) => const BottomNavigation()),
+                  );
                 },
                 child: const Text(
                   'Salvar',

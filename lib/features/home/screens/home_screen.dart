@@ -79,7 +79,7 @@ class HomeScreen extends StatelessWidget {
                   imagePath: 'lib/assets/icons/syringe-solid.svg',
                   title: 'Vacinas',
                   subtitle: 'Consulte as suas vacinas',
-                  iconColor: Colors.green,
+                  iconColor: Color.fromARGB(255, 126, 5, 71),
                   imageHeight: 40,
                   imageWidth: 40,
                 ),

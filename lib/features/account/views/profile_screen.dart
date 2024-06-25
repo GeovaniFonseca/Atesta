@@ -88,9 +88,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           "Perfil",
-          style: const TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(fontWeight: FontWeight.bold),
         ),
         backgroundColor: const Color.fromARGB(255, 255, 255, 255),
         foregroundColor: const Color.fromARGB(255, 38, 87, 151),
@@ -268,6 +268,36 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               elevation: 10,
                               surfaceTintColor: Colors.white,
                               foregroundColor: Colors.white,
+                              backgroundColor:
+                                  const Color.fromARGB(255, 38, 87, 151),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 24, vertical: 12),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        EditProfileScreen(userData: userData)),
+                              );
+                            },
+                            child: const Text(
+                              'Editar Perfil',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              elevation: 10,
+                              surfaceTintColor: Colors.white,
+                              foregroundColor: Colors.white,
+                              backgroundColor:
+                                  const Color.fromARGB(255, 38, 87, 151),
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 24, vertical: 12),
                               shape: RoundedRectangleBorder(
@@ -281,23 +311,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               );
                             },
                             child: const Text(
-                              'Gerar Código',
+                              'Código de compartilhamento',
                               style: TextStyle(
-                                  color: Color.fromARGB(255, 38, 87, 151),
+                                  color: Colors.white,
                                   fontWeight: FontWeight.bold),
                             ),
                           ),
                           const SizedBox(height: 10),
-                          ElevatedButton(
-                            onPressed: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        EditProfileScreen(userData: userData)),
-                              );
-                            },
-                            child: const Text('Editar Perfil'),
-                          ),
                         ],
                       ),
                     ),
