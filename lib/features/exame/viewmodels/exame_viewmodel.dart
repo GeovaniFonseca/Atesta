@@ -1,15 +1,13 @@
 // viewmodels/exame_viewmodel.dart
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../../services/database_service.dart';
 import '../model/exame_model.dart';
 
 class ExameViewModel extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final DatabaseService _databaseService = DatabaseService();
 
   List<Exame> _exames = [];
@@ -34,17 +32,10 @@ class ExameViewModel extends ChangeNotifier {
     try {
       final userId = _auth.currentUser?.uid;
       if (userId != null) {
-        final snapshot = await _firestore
-            .collection('Exames')
-            .where('userId', isEqualTo: userId)
-            .get();
-        _exames = snapshot.docs
-            .map((doc) =>
-                Exame.fromMap(doc.data() as Map<String, dynamic>, doc.id))
-            .toList();
+        _exames = await _databaseService.fetchExames(userId);
       }
     } catch (e) {
-      _errorMessage = 'Algo deu errado';
+      _errorMessage = 'Algo deu errado ao buscar exames';
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -69,7 +60,7 @@ class ExameViewModel extends ChangeNotifier {
 
   Future<void> deleteExame(String id) async {
     try {
-      await _firestore.collection('Exames').doc(id).delete();
+      await _databaseService.deleteExame(id);
       _exames.removeWhere((exame) => exame.id == id);
       notifyListeners();
     } catch (e) {

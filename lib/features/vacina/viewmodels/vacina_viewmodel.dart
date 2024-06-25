@@ -1,7 +1,6 @@
 // viewmodels/vacina_viewmodel.dart
 
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../../services/database_service.dart';
 import '../model/vacina.dart';
@@ -18,11 +17,27 @@ class VacinaViewModel extends ChangeNotifier {
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
 
+  List<String> _dependents = ['Sem dependente'];
+  List<String> get dependents => _dependents;
+
+  Future<void> loadDependents() async {
+    try {
+      _dependents = ['Sem dependente'];
+      _dependents.addAll(await _databaseService.loadDependents());
+      notifyListeners();
+    } catch (e) {
+      _errorMessage = 'Erro ao carregar dependentes';
+      notifyListeners();
+    }
+  }
+
   Future<void> fetchVacinas() async {
     await _executeSafely(() async {
       final userId = FirebaseAuth.instance.currentUser?.uid;
+      // Log para verificar userId
       if (userId != null) {
         _vacinas = await _databaseService.getVacinasByUser(userId);
+        // Log para verificar as vacinas carregadas
       }
     });
   }

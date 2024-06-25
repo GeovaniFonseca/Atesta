@@ -1,5 +1,7 @@
 // views/adicionar_exame_screen.dart
 
+// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -7,6 +9,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:file_picker/file_picker.dart';
 import 'dart:io';
 import '../../../services/storage_service.dart';
+import '../../navigation/bottom_navigation.dart';
 import '../model/exame_model.dart';
 import '../viewmodels/exame_viewmodel.dart';
 
@@ -41,20 +44,51 @@ class _AdicionarExameScreenState extends State<AdicionarExameScreen> {
           widget.exameParaEditar!.dependentId ?? 'Sem dependente';
     }
     _loadDependents();
+
+    dateFocusNode.addListener(_onFocusChange);
+    laudoFocusNode.addListener(_onFocusChange);
+  }
+
+  @override
+  void dispose() {
+    dateFocusNode.removeListener(_onFocusChange);
+    laudoFocusNode.removeListener(_onFocusChange);
+
+    dateFocusNode.dispose();
+    laudoFocusNode.dispose();
+    super.dispose();
+  }
+
+  void _onFocusChange() {
+    setState(() {});
   }
 
   Future<void> _loadDependents() async {
     final exameViewModel = context.read<ExameViewModel>();
     await exameViewModel.loadDependents();
-    setState(() {}); // Atualiza a tela depois de carregar os dependentes
+    setState(() {});
+  }
+
+  Color getIconColor(FocusNode focusNode) {
+    return focusNode.hasFocus
+        ? const Color.fromARGB(255, 38, 87, 151)
+        : Colors.grey;
   }
 
   @override
   Widget build(BuildContext context) {
     final exameViewModel = context.watch<ExameViewModel>();
+    final isEditMode = widget.exameParaEditar != null;
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text(
+          isEditMode ? 'Editar Exame' : 'Adicionar Exame',
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+        foregroundColor: const Color.fromARGB(255, 38, 87, 151),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ListView(
@@ -315,8 +349,9 @@ class _AdicionarExameScreenState extends State<AdicionarExameScreen> {
                               backgroundColor: Colors.green,
                             ));
 
-                            Navigator.popUntil(
-                                context, (route) => route.isFirst);
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) =>
+                                    const BottomNavigation()));
                           }
                         }
 
@@ -352,11 +387,5 @@ class _AdicionarExameScreenState extends State<AdicionarExameScreen> {
         ),
       ),
     );
-  }
-
-  Color getIconColor(FocusNode focusNode) {
-    return focusNode.hasFocus
-        ? const Color.fromARGB(255, 38, 87, 151)
-        : Colors.grey;
   }
 }

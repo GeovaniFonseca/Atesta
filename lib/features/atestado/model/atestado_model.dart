@@ -6,6 +6,7 @@ class AtestadoModel {
   int quantidadeDias;
   String dataEmissao;
   String? arquivoUrl;
+  String? dependentId;
 
   AtestadoModel({
     required this.id,
@@ -14,6 +15,7 @@ class AtestadoModel {
     required this.quantidadeDias,
     required this.dataEmissao,
     this.arquivoUrl,
+    this.dependentId,
   });
 
   factory AtestadoModel.fromMap(Map<String, dynamic> data, String documentId) {
@@ -24,6 +26,7 @@ class AtestadoModel {
       quantidadeDias: data['quantidadeDias'],
       dataEmissao: data['dataEmissao'],
       arquivoUrl: data['arquivoUrl'],
+      dependentId: data['dependentId'],
     );
   }
 
@@ -34,6 +37,7 @@ class AtestadoModel {
       'quantidadeDias': quantidadeDias,
       'dataEmissao': dataEmissao,
       'arquivoUrl': arquivoUrl,
+      'dependentId': dependentId,
     };
   }
 }

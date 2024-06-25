@@ -1,4 +1,6 @@
 // lib/views/login_screen.dart
+// ignore_for_file: use_key_in_widget_constructors, library_private_types_in_public_api, use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'signup_screen.dart';
@@ -35,7 +37,9 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Color getIconColor(FocusNode focusNode) {
-    return focusNode.hasFocus ? Color.fromARGB(255, 38, 87, 151) : Colors.grey;
+    return focusNode.hasFocus
+        ? const Color.fromARGB(255, 38, 87, 151)
+        : Colors.grey;
   }
 
   @override
@@ -52,7 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Image.asset('lib/assets/images/logo2.png', width: 100),
                 ),
                 Container(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   child: TextFormField(
                     controller: email,
                     focusNode: emailFocusNode,
@@ -83,7 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   child: TextFormField(
                     controller: password,
                     focusNode: passwordFocusNode,
@@ -115,7 +119,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.symmetric(vertical: 8),
+                  margin: const EdgeInsets.symmetric(vertical: 8),
                   width: 200,
                   height: 50,
                   child: ElevatedButton(
@@ -127,7 +131,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   email.text, password.text);
                               if (success) {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
+                                  const SnackBar(
                                     content: Text('Login efetuado com sucesso'),
                                     backgroundColor: Colors.green,
                                   ),
@@ -135,12 +139,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                 Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => BottomNavigation(),
+                                    builder: (context) =>
+                                        const BottomNavigation(),
                                   ),
                                 );
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
+                                  const SnackBar(
                                     content: Text('Email ou senha incorretos.'),
                                     backgroundColor: Colors.red,
                                   ),
@@ -148,7 +153,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               }
                             } catch (e) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
+                                const SnackBar(
                                   content:
                                       Text('Ocorreu um erro. Tente novamente.'),
                                   backgroundColor: Colors.red,
@@ -158,20 +163,21 @@ class _LoginScreenState extends State<LoginScreen> {
                           },
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(
-                          Color.fromARGB(255, 38, 87, 151)),
+                          const Color.fromARGB(255, 38, 87, 151)),
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(25.0),
                         ),
                       ),
-                      padding: MaterialStateProperty.all(EdgeInsets.all(15)),
+                      padding:
+                          MaterialStateProperty.all(const EdgeInsets.all(15)),
                     ),
                     child: viewModel.isLoading
-                        ? CircularProgressIndicator(
+                        ? const CircularProgressIndicator(
                             valueColor:
                                 AlwaysStoppedAnimation<Color>(Colors.white),
                           )
-                        : Text(
+                        : const Text(
                             'Login',
                             style: TextStyle(
                               color: Colors.white,
@@ -186,11 +192,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => SignupScreen(),
+                        builder: (context) => const SignupScreen(),
                       ),
                     );
                   },
-                  child: Text(
+                  child: const Text(
                     'Cadastre-se',
                     style: TextStyle(color: Color.fromARGB(255, 38, 87, 151)),
                   ),

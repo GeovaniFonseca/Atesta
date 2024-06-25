@@ -1,4 +1,7 @@
-// lib/views/atestado_detalhes_screen.dart
+// lib/features/atestado/views/atestado_detalhes_screen.dart
+
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -82,6 +85,16 @@ class AtestadoDetalheScreen extends StatelessWidget {
                   ),
                   leading: const Icon(
                     Icons.calendar_today,
+                    color: Color.fromARGB(255, 38, 87, 151),
+                  ),
+                ),
+              ),
+              Card(
+                child: ListTile(
+                  title: const Text('Dependente'),
+                  subtitle: Text(atestado.dependentId ?? 'Não selecionado'),
+                  leading: const Icon(
+                    Icons.description,
                     color: Color.fromARGB(255, 38, 87, 151),
                   ),
                 ),

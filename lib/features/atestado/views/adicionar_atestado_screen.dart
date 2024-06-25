@@ -1,12 +1,18 @@
 // lib/features/atestado/views/adicionar_atestado_screen.dart
+
+// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
+
 import 'dart:io';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../../services/storage_service.dart';
+import '../../navigation/bottom_navigation.dart';
 import '../model/atestado_model.dart';
 import '../viewmodels/atestado_viewmodel.dart';
-import '../../../services/storage_service.dart';
 
 class AdicionarAtestadoScreen extends StatefulWidget {
   final AtestadoModel? atestadoParaEditar;
@@ -23,37 +29,50 @@ class _AdicionarAtestadoScreenState extends State<AdicionarAtestadoScreen> {
   final TextEditingController _dataEmissaoController = TextEditingController();
   final TextEditingController _quantidadeDiasController =
       TextEditingController();
-  FocusNode dateFocusnode = FocusNode();
-  FocusNode nomeMedicoFocusnode = FocusNode();
-  FocusNode quantDiasFocusnode = FocusNode();
+  FocusNode nomeMedicoFocusNode = FocusNode();
+  FocusNode dateFocusNode = FocusNode();
+  FocusNode quantDiasFocusNode = FocusNode();
   File? _selectedFile;
+  String? selectedDependent;
 
   @override
   void initState() {
     super.initState();
-    nomeMedicoFocusnode.addListener(_handleFocusChange);
     if (widget.atestadoParaEditar != null) {
-      // Preenche os campos com os dados do atestado para editar
       _nomeMedicoController.text = widget.atestadoParaEditar!.nomeMedico;
       _dataEmissaoController.text = widget.atestadoParaEditar!.dataEmissao;
       _quantidadeDiasController.text =
           widget.atestadoParaEditar!.quantidadeDias.toString();
+      selectedDependent =
+          widget.atestadoParaEditar!.dependentId ?? 'Sem dependente';
     }
-  }
+    _loadDependents();
 
-  void _handleFocusChange() {
-    if (nomeMedicoFocusnode.hasFocus ||
-        dateFocusnode.hasFocus ||
-        quantDiasFocusnode.hasFocus) {
-      // Se algum campo tem foco, atualiza o estado para refletir a cor nova
-      setState(() {});
-    }
+    nomeMedicoFocusNode.addListener(_onFocusChange);
+    dateFocusNode.addListener(_onFocusChange);
+    quantDiasFocusNode.addListener(_onFocusChange);
   }
 
   @override
   void dispose() {
-    nomeMedicoFocusnode.removeListener(_handleFocusChange);
+    nomeMedicoFocusNode.removeListener(_onFocusChange);
+    dateFocusNode.removeListener(_onFocusChange);
+    quantDiasFocusNode.removeListener(_onFocusChange);
+
+    nomeMedicoFocusNode.dispose();
+    dateFocusNode.dispose();
+    quantDiasFocusNode.dispose();
     super.dispose();
+  }
+
+  void _onFocusChange() {
+    setState(() {});
+  }
+
+  Future<void> _loadDependents() async {
+    final atestadoViewModel = context.read<AtestadoViewModel>();
+    await atestadoViewModel.loadDependents();
+    setState(() {});
   }
 
   Color getIconColor(FocusNode focusNode) {
@@ -65,10 +84,16 @@ class _AdicionarAtestadoScreenState extends State<AdicionarAtestadoScreen> {
   @override
   Widget build(BuildContext context) {
     final isEditMode = widget.atestadoParaEditar != null;
+    final atestadoViewModel = context.watch<AtestadoViewModel>();
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(isEditMode ? 'Editar Atestado' : 'Adicionar Atestado'),
+        title: Text(
+          isEditMode ? 'Editar Atestado' : 'Adicionar Atestado',
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+        foregroundColor: const Color.fromARGB(255, 38, 87, 151),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -86,11 +111,11 @@ class _AdicionarAtestadoScreenState extends State<AdicionarAtestadoScreen> {
             ),
             TextFormField(
               controller: _nomeMedicoController,
-              focusNode: nomeMedicoFocusnode,
+              focusNode: nomeMedicoFocusNode,
               decoration: InputDecoration(
                 label: Text(
                   'Nome do médico',
-                  style: TextStyle(color: getIconColor(nomeMedicoFocusnode)),
+                  style: TextStyle(color: getIconColor(nomeMedicoFocusNode)),
                 ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -109,11 +134,11 @@ class _AdicionarAtestadoScreenState extends State<AdicionarAtestadoScreen> {
             const Padding(padding: EdgeInsets.all(10)),
             TextField(
               controller: _dataEmissaoController,
-              focusNode: dateFocusnode,
+              focusNode: dateFocusNode,
               decoration: InputDecoration(
                 label: Text(
                   'Data de emissão',
-                  style: TextStyle(color: getIconColor(dateFocusnode)),
+                  style: TextStyle(color: getIconColor(dateFocusNode)),
                 ),
                 suffixIcon: const Icon(Icons.calendar_today),
                 border: const OutlineInputBorder(
@@ -143,11 +168,11 @@ class _AdicionarAtestadoScreenState extends State<AdicionarAtestadoScreen> {
             const Padding(padding: EdgeInsets.all(9)),
             TextField(
               controller: _quantidadeDiasController,
-              focusNode: quantDiasFocusnode,
+              focusNode: quantDiasFocusNode,
               decoration: InputDecoration(
                 label: Text(
                   'Quantidade de Dias',
-                  style: TextStyle(color: getIconColor(quantDiasFocusnode)),
+                  style: TextStyle(color: getIconColor(quantDiasFocusNode)),
                 ),
                 border: const OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(8)),
@@ -163,18 +188,47 @@ class _AdicionarAtestadoScreenState extends State<AdicionarAtestadoScreen> {
               keyboardType: TextInputType.number,
             ),
             const Padding(padding: EdgeInsets.all(9)),
+            DropdownButtonFormField<String>(
+              value: selectedDependent,
+              hint: const Text('Selecione o dependente (opcional)'),
+              onChanged: (String? newValue) {
+                setState(() {
+                  selectedDependent = newValue;
+                });
+              },
+              items: atestadoViewModel.dependents
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+              decoration: InputDecoration(
+                fillColor: Colors.white,
+                filled: true,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                    color: Color.fromARGB(255, 38, 87, 151),
+                    width: 2,
+                  ),
+                  borderRadius: BorderRadius.circular(15),
+                ),
+              ),
+            ),
+            const Padding(padding: EdgeInsets.all(9)),
             Container(
               margin: const EdgeInsets.symmetric(vertical: 8),
               height: 50,
               child: ElevatedButton(
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(
-                      const Color.fromARGB(
-                          255, 38, 87, 151)), // Cor de fundo do botão
+                      const Color.fromARGB(255, 38, 87, 151)),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                          25.0), // Raio do canto arredondado
+                      borderRadius: BorderRadius.circular(25.0),
                     ),
                   ),
                   padding: MaterialStateProperty.all(const EdgeInsets.all(15)),
@@ -194,9 +248,9 @@ class _AdicionarAtestadoScreenState extends State<AdicionarAtestadoScreen> {
                   'Selecionar Imagem/Documento',
                   style: TextStyle(
                     backgroundColor: Color.fromARGB(255, 38, 87, 151),
-                    color: Color.fromARGB(255, 255, 255, 255), // Cor do texto
-                    fontWeight: FontWeight.bold, // Negrito
-                    fontSize: 16, // Tamanho do texto
+                    color: Color.fromARGB(255, 255, 255, 255),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
                   ),
                 ),
               ),
@@ -207,12 +261,10 @@ class _AdicionarAtestadoScreenState extends State<AdicionarAtestadoScreen> {
               child: ElevatedButton(
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(
-                      const Color.fromARGB(
-                          255, 38, 87, 151)), // Cor de fundo do botão
+                      const Color.fromARGB(255, 38, 87, 151)),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                          25.0), // Raio do canto arredondado
+                      borderRadius: BorderRadius.circular(25.0),
                     ),
                   ),
                   padding: MaterialStateProperty.all(const EdgeInsets.all(15)),
@@ -261,8 +313,7 @@ class _AdicionarAtestadoScreenState extends State<AdicionarAtestadoScreen> {
                           }
 
                           final AtestadoModel novoAtestado = AtestadoModel(
-                            id: widget.atestadoParaEditar?.id ??
-                                '', // Usa o ID existente se estiver editando
+                            id: widget.atestadoParaEditar?.id ?? '',
                             nomeMedico: _nomeMedicoController.text,
                             dataEmissao: _dataEmissaoController.text,
                             quantidadeDias:
@@ -270,15 +321,16 @@ class _AdicionarAtestadoScreenState extends State<AdicionarAtestadoScreen> {
                                     0,
                             arquivoUrl: uploadedFileUrl ?? '',
                             userId: userId!,
+                            dependentId: selectedDependent == 'Sem dependente'
+                                ? null
+                                : selectedDependent,
                           );
 
                           if (widget.atestadoParaEditar == null) {
-                            // Adicionando um novo atestado
                             await Provider.of<AtestadoViewModel>(context,
                                     listen: false)
                                 .addAtestado(novoAtestado);
                           } else {
-                            // Atualizando um atestado existente
                             await Provider.of<AtestadoViewModel>(context,
                                     listen: false)
                                 .updateAtestado(novoAtestado);
@@ -290,7 +342,8 @@ class _AdicionarAtestadoScreenState extends State<AdicionarAtestadoScreen> {
                             backgroundColor: Colors.green,
                           ));
 
-                          Navigator.popUntil(context, (route) => route.isFirst);
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => const BottomNavigation()));
                         }
 
                         if (errorMessage.isNotEmpty) {

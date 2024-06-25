@@ -1,4 +1,5 @@
 // lib/viewmodels/atestado_viewmodel.dart
+
 import 'package:flutter/material.dart';
 
 import '../../../services/database_service.dart';
@@ -7,16 +8,16 @@ import '../model/atestado_model.dart';
 class AtestadoViewModel extends ChangeNotifier {
   final DatabaseService _databaseService = DatabaseService();
   List<AtestadoModel> atestados = [];
+  List<String> _dependents = ['Sem dependente'];
+  List<String> get dependents => _dependents;
 
-  Future<void> loadAtestados(String userId) async {
+  Future<void> loadDependents() async {
     try {
-      print('Carregando atestados para o usuário: $userId');
-      atestados = await _databaseService.getAtestadosByUser(userId);
-      print('Atestados carregados: ${atestados.length}');
+      _dependents = ['Sem dependente'];
+      _dependents.addAll(await _databaseService.loadDependents());
       notifyListeners();
-    } catch (e) {
-      print('Erro ao carregar atestados: $e');
-    }
+      // ignore: empty_catches
+    } catch (e) {}
   }
 
   Future<void> addAtestado(AtestadoModel atestado) async {

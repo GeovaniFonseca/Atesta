@@ -21,10 +21,12 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -48,7 +50,7 @@ class MyApp extends StatelessWidget {
           '/profile': (context) => const ProfileScreen(),
           '/exameScreen': (context) => const ExameScreen(),
           '/atestadoScreen': (context) => const AtestadoScreen(),
-          'vacinaScreen': (context) => VacinaScreen(),
+          'vacinaScreen': (context) => const VacinaScreen(),
         },
       ),
     );

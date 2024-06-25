@@ -1,4 +1,6 @@
 // lib/views/signup_screen.dart
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../viewmodels/signup_viewmodel.dart';
@@ -54,7 +56,9 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 
   Color getIconColor(FocusNode focusNode) {
-    return focusNode.hasFocus ? Color.fromARGB(255, 38, 87, 151) : Colors.grey;
+    return focusNode.hasFocus
+        ? const Color.fromARGB(255, 38, 87, 151)
+        : Colors.grey;
   }
 
   @override
@@ -63,7 +67,7 @@ class _SignupScreenState extends State<SignupScreen> {
       create: (context) => SignupViewModel(),
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Cadastre-se'),
+          title: const Text('Cadastre-se'),
         ),
         body: Padding(
           padding: const EdgeInsets.all(12.0),
@@ -76,7 +80,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   child: Image.asset('lib/assets/images/logo2.png', width: 90),
                 ),
                 Container(
-                  margin: EdgeInsets.symmetric(vertical: 8),
+                  margin: const EdgeInsets.symmetric(vertical: 8),
                   child: TextFormField(
                     controller: name,
                     focusNode: nameFocusNode,
@@ -101,7 +105,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.symmetric(vertical: 8),
+                  margin: const EdgeInsets.symmetric(vertical: 8),
                   child: TextFormField(
                     controller: email,
                     focusNode: emailFocusNode,
@@ -126,7 +130,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.symmetric(vertical: 8),
+                  margin: const EdgeInsets.symmetric(vertical: 8),
                   child: TextFormField(
                     controller: phone,
                     focusNode: phoneFocusNode,
@@ -149,7 +153,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.symmetric(vertical: 8),
+                  margin: const EdgeInsets.symmetric(vertical: 8),
                   child: TextFormField(
                     controller: age,
                     focusNode: ageFocusNode,
@@ -172,7 +176,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.symmetric(vertical: 8),
+                  margin: const EdgeInsets.symmetric(vertical: 8),
                   child: TextFormField(
                     controller: password,
                     focusNode: passwordFocusNode,
@@ -197,7 +201,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.symmetric(vertical: 8),
+                  margin: const EdgeInsets.symmetric(vertical: 8),
                   child: TextFormField(
                     controller: confirmpassword,
                     obscureText: true,
@@ -224,7 +228,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 Consumer<SignupViewModel>(
                   builder: (context, viewModel, child) {
                     return Container(
-                      margin: EdgeInsets.only(top: 8),
+                      margin: const EdgeInsets.only(top: 8),
                       width: 150,
                       height: 50,
                       child: ElevatedButton(
@@ -245,7 +249,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             : () async {
                                 if (password.text != confirmpassword.text) {
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
+                                    const SnackBar(
                                       content: Text('As senhas não coincidem'),
                                       backgroundColor: Colors.red,
                                     ),
@@ -271,7 +275,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
                                 if (success) {
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
+                                    const SnackBar(
                                       content: Text(
                                           'Usuário cadastrado com sucesso'),
                                       backgroundColor: Colors.green,
@@ -286,7 +290,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                   );
                                 } else {
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
+                                    const SnackBar(
                                       content: Text(
                                           'Por favor, preencha os campos corretamente'),
                                       backgroundColor: Colors.red,
@@ -295,11 +299,11 @@ class _SignupScreenState extends State<SignupScreen> {
                                 }
                               },
                         child: viewModel.isLoading
-                            ? CircularProgressIndicator(
+                            ? const CircularProgressIndicator(
                                 valueColor:
                                     AlwaysStoppedAnimation<Color>(Colors.white),
                               )
-                            : Text(
+                            : const Text(
                                 'Cadastrar',
                                 style: TextStyle(
                                   color: Colors.white,

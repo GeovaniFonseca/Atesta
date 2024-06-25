@@ -1,9 +1,12 @@
 // lib/views/profile_screen.dart
+// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hello_world/features/account/widgets/code_generator.dart';
+import 'edit_profile_screen.dart';
 import 'perfil_saude_screen.dart';
 import '../widgets/health_user_card.dart';
 import '../widgets/user_info_card.dart';
@@ -85,15 +88,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Profile',
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-          ),
+        title: Text(
+          "Perfil",
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
+        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+        foregroundColor: const Color.fromARGB(255, 38, 87, 151),
         centerTitle: true,
-        backgroundColor: Colors.transparent,
         elevation: 0,
         actions: <Widget>[
           TextButton(
@@ -172,7 +173,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 child: IconButton(
                                   icon: const Icon(
                                     Icons.add_a_photo,
-                                    color: Colors.blue,
+                                    color: Color.fromARGB(255, 0, 0, 0),
                                   ),
                                   onPressed: () =>
                                       viewModel.updateProfilePicture(context),
@@ -287,6 +288,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                           ),
                           const SizedBox(height: 10),
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        EditProfileScreen(userData: userData)),
+                              );
+                            },
+                            child: const Text('Editar Perfil'),
+                          ),
                         ],
                       ),
                     ),

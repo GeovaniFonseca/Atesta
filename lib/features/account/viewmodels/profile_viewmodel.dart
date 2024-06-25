@@ -39,4 +39,11 @@ class ProfileViewModel extends ChangeNotifier {
     _selectedDependent = dependent;
     notifyListeners();
   }
+
+  Future<void> updateProfile(
+      {String? name, int? age, String? phone, String? password}) async {
+    await _databaseService.updateProfile(
+        name: name, age: age, phone: phone, password: password);
+    await loadProfileData();
+  }
 }

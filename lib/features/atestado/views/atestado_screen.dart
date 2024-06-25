@@ -1,12 +1,14 @@
 // lib/features/atestado/views/atestado_screen.dart
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../model/atestado_model.dart';
+import '../viewmodels/atestado_viewmodel.dart';
 import 'adicionar_atestado_screen.dart';
 import 'atestado_detalhes_screen.dart';
-import '../viewmodels/atestado_viewmodel.dart';
 
 class AtestadoScreen extends StatelessWidget {
   const AtestadoScreen({super.key});
@@ -60,7 +62,7 @@ class AtestadoScreen extends StatelessWidget {
                       margin: const EdgeInsets.all(8.0),
                       child: ListTile(
                         title: Text(
-                          atestado.nomeMedico,
+                          'Emitido em ${atestado.dataEmissao}',
                           style: const TextStyle(
                             color: Color.fromARGB(255, 38, 87, 151),
                           ),
@@ -69,7 +71,9 @@ class AtestadoScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text('Qnt de dias: ${atestado.quantidadeDias}'),
-                            Text('Emitido em ${atestado.dataEmissao}'),
+                            Text('Médico: ${atestado.nomeMedico}'),
+                            Text(
+                                'Dependente: ${atestado.dependentId ?? 'Sem dependente'}'),
                           ],
                         ),
                         leading: const Icon(

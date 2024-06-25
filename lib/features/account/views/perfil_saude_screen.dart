@@ -1,4 +1,6 @@
 // lib/views/health_profile_edit_screen.dart
+// ignore_for_file: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member, use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -62,6 +64,7 @@ class HealthProfileEditScreen extends StatelessWidget {
                                 onSelected: (selected) {
                                   viewModel.healthProfile.bloodType =
                                       selected ? type : null;
+
                                   viewModel.notifyListeners();
                                 },
                               ))
@@ -79,6 +82,7 @@ class HealthProfileEditScreen extends StatelessWidget {
                                 onSelected: (selected) {
                                   viewModel.healthProfile.bloodDonor =
                                       selected ? choice : null;
+
                                   viewModel.notifyListeners();
                                 },
                               ))
@@ -96,6 +100,7 @@ class HealthProfileEditScreen extends StatelessWidget {
                                 onSelected: (selected) {
                                   viewModel.healthProfile.organDonor =
                                       selected ? choice : null;
+
                                   viewModel.notifyListeners();
                                 },
                               ))
