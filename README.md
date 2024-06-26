@@ -3,14 +3,14 @@
 > A Atesta é uma aplicação Flutter que centraliza todos os seus documentos médicos num único local.
 > 
 > ### Índice
-> 1. [Introduction](#introduction)
+> 1. [Introdução](#introdução)
 > 2. [Features](#features)
 > 3. [Instalação](#instalação)
 > 4. [Utilização](#utilização)
 > 5. [License](#license)
-> 6. [Contact](#contact)
+> 6. [Contato](#contato)
 > 
-> ### Introduction
+> ### Introdução
 > O Atesta foi concebido para ajudar as pessoas a gerir eficazmente os seus documentos médicos. Quer se trate de receitas médicas, resultados de exames ou atestados médicos, Atesta garante que todos os seus documentos são facilmente acessíveis e organizados.
 > 
 > ### Features
@@ -68,6 +68,6 @@
 > ### License
 > This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
 > 
-> ### Contact
+> ### Contato
 > For any inquiries or issues, please contact:
 > - Geovani Fonseca: [GitHub](https://github.com/GeovaniFonseca)
