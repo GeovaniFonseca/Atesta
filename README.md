@@ -46,14 +46,14 @@
 >         ```bash
 >         flutterfire configure
 >         ```
->     - Serviços do Firebase utilizados: Authentication, Firestore Database e Storage.
->     - **Aviso:** Criar em **modo de teste**
+>     - Serviços do Firebase utilizados: **Realtime Database, Authentication, Firestore Database e Storage**.
+>     - Criar em **modo de teste**.
 >
 > 5. Adicione um dispositivo virtual android (Android Virtual Device)
 >     - Dispositivo utilizado para o desenvolvimento do projeto  
->       ![alt text](image-2.png)
+>       <img src="lib\assets\images\image1.png" alt="Texto Alternativo">
 >     - Abra o emulador
->       ![alt text](image-3.png) 
+>       <img src="lib\assets\images\image2.png" alt="Texto Alternativo">
 > 
 > 6. Executar a aplicação:
 >     ```bash
@@ -61,29 +61,11 @@
 >     ```
 > 
 > ### Utilização
-> 1. Abra a aplicação no seu navegador Web ou num dispositivo ligado.
-> 2. Create an account or log in if you already have one.
-> 3. Start uploading your medical documents by clicking on the 'Upload' button.
-> 4. Organize and categorize your documents for easy retrieval.
-> 5. Use the search functionality to find any document quickly.
+> 1. Abra a aplicação no seu emulador Android.
+> 2. Crie uma conta ou inicie sessão se já tiver uma.
+> 3. Comece a enviar seus documentos médicos.
+> 4. Organize e categorizar seus documentos para fácil recuperação.
 > 
-> ### Contributing
-> We welcome contributions to improve Atesta. To contribute:
-> 
-> 1. Fork the repository.
-> 2. Create a new branch:
->     ```bash
->     git checkout -b feature/your-feature-name
->     ```
-> 3. Make your changes and commit them:
->     ```bash
->     git commit -m "Add your message"
->     ```
-> 4. Push to the branch:
->     ```bash
->     git push origin feature/your-feature-name
->     ```
-> 5. Open a pull request.
 > 
 > ### License
 > This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
