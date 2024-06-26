@@ -5,12 +5,10 @@
 > ### Índice
 > 1. [Introduction](#introduction)
 > 2. [Features](#features)
-> 3. [Ambiente](#ambiente)
-> 4. [Instalação](#instalação)
-> 5. [Utilização](#utilização)
-> 6. [Contributing](#contributing)
-> 7. [License](#license)
-> 8. [Contact](#contact)
+> 3. [Instalação](#instalação)
+> 4. [Utilização](#utilização)
+> 5. [License](#license)
+> 6. [Contact](#contact)
 > 
 > ### Introduction
 > O Atesta foi concebido para ajudar as pessoas a gerir eficazmente os seus documentos médicos. Quer se trate de receitas médicas, resultados de exames ou atestados médicos, Atesta garante que todos os seus documentos são facilmente acessíveis e organizados.
