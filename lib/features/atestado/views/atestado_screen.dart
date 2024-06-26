@@ -118,6 +118,7 @@ class AtestadoScreen extends StatelessWidget {
           );
         },
         backgroundColor: const Color.fromARGB(255, 38, 87, 151),
+        foregroundColor: const Color.fromARGB(255, 255, 255, 255),
         child: const Icon(Icons.add),
       ),
     );

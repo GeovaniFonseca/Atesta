@@ -114,21 +114,31 @@ class AtestadoDetalheScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 20,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
               const SizedBox(height: 20),
-              const Text('Preview do Arquivo:'),
-              // Exibe a pré-visualização do arquivo do atestado, se disponível.
-              atestado.arquivoUrl!.isNotEmpty
-                  ? GestureDetector(
-                      onTap: () => _launchURL(atestado.arquivoUrl!),
-                      child: Image.network(atestado.arquivoUrl!),
-                    )
-                  : const Text('Nenhum arquivo enviado.'),
+              Card(
+                color: Colors.white,
+                surfaceTintColor: Colors.transparent,
+                elevation: 5,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text('Preview do Arquivo:'),
+                      atestado.arquivoUrl!.isNotEmpty
+                          ? GestureDetector(
+                              onTap: () => _launchURL(atestado.arquivoUrl!),
+                              child: Image.network(atestado.arquivoUrl!),
+                            )
+                          : const Text('Nenhum arquivo enviado.'),
+                      const SizedBox(height: 10),
+                    ],
+                  ),
+                ),
+              ),
               const SizedBox(height: 20),
               // Botão para deletar o atestado.
               ActionChip(

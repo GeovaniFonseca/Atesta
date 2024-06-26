@@ -77,10 +77,10 @@ class ConsultaDetalheScreen extends StatelessWidget {
               const SizedBox(height: 20),
               ActionChip(
                 avatar: const Icon(Icons.delete,
-                    color: Color.fromARGB(255, 255, 255, 255)),
+                    color: Color.fromARGB(255, 38, 87, 151)),
                 label: const Text('Deletar consulta'),
                 onPressed: () => deleteConsulta(context),
-                backgroundColor: const Color.fromARGB(255, 38, 87, 151),
+                backgroundColor: Colors.white,
               ),
             ],
           ),
