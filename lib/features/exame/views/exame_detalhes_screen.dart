@@ -64,18 +64,6 @@ class ExameDetalhesScreen extends StatelessWidget {
               ),
               Card(
                 child: ListTile(
-                  title: const Text('Laudo do exame'),
-                  subtitle: Text(
-                    exame.laudo,
-                  ),
-                  leading: const Icon(
-                    Icons.document_scanner_outlined,
-                    color: Color.fromARGB(255, 38, 87, 151),
-                  ),
-                ),
-              ),
-              Card(
-                child: ListTile(
                   title: const Text('Dependente'),
                   subtitle: Text(exame.dependentId ?? 'Não selecionado'),
                   leading: const Icon(

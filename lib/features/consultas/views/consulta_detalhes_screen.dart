@@ -1,7 +1,5 @@
 // lib/features/consulta/views/consulta_detalhes_screen.dart
 
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../model/consulta_model.dart';
@@ -70,6 +68,17 @@ class ConsultaDetalheScreen extends StatelessWidget {
                   subtitle: Text(consulta.descricao),
                   leading: const Icon(
                     Icons.description,
+                    color: Color.fromARGB(255, 38, 87, 151),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              Card(
+                child: ListTile(
+                  title: const Text('Dependente'),
+                  subtitle: Text(consulta.dependentId ?? 'Não selecionado'),
+                  leading: const Icon(
+                    Icons.person,
                     color: Color.fromARGB(255, 38, 87, 151),
                   ),
                 ),

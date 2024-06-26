@@ -183,7 +183,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 child: IconButton(
                                   icon: const Icon(
                                     Icons.add_a_photo,
-                                    color: Color.fromARGB(255, 0, 0, 0),
+                                    color:
+                                        const Color.fromARGB(255, 38, 87, 151),
                                   ),
                                   onPressed: () =>
                                       viewModel.updateProfilePicture(context),

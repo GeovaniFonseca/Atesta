@@ -1,7 +1,5 @@
 // lib/features/consulta/views/adicionar_consulta_screen.dart
 
-// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -25,6 +23,7 @@ class _AdicionarConsultaScreenState extends State<AdicionarConsultaScreen> {
   final FocusNode dateFocusNode = FocusNode();
   final FocusNode descricaoFocusNode = FocusNode();
   String? areaMedicaSelecionada;
+  String? selectedDependent;
   bool isLoading = false;
 
   @override
@@ -34,7 +33,10 @@ class _AdicionarConsultaScreenState extends State<AdicionarConsultaScreen> {
       dateController.text = widget.consultaParaEditar!.date;
       areaMedicaSelecionada = widget.consultaParaEditar!.areaMedica;
       descricaoController.text = widget.consultaParaEditar!.descricao;
+      selectedDependent =
+          widget.consultaParaEditar!.dependentId ?? 'Sem dependente';
     }
+    _loadDependents();
 
     dateFocusNode.addListener(_onFocusChange);
     descricaoFocusNode.addListener(_onFocusChange);
@@ -51,6 +53,12 @@ class _AdicionarConsultaScreenState extends State<AdicionarConsultaScreen> {
   }
 
   void _onFocusChange() {
+    setState(() {});
+  }
+
+  Future<void> _loadDependents() async {
+    final consultaViewModel = context.read<ConsultaViewModel>();
+    await consultaViewModel.loadDependents();
     setState(() {});
   }
 
@@ -160,13 +168,44 @@ class _AdicionarConsultaScreenState extends State<AdicionarConsultaScreen> {
                 ),
               ),
             ),
+            const Padding(padding: EdgeInsets.all(8)),
+            DropdownButtonFormField<String>(
+              value: selectedDependent,
+              hint: const Text('Selecione o dependente (opcional)'),
+              onChanged: (String? newValue) {
+                setState(() {
+                  selectedDependent = newValue;
+                });
+              },
+              items: consultaViewModel.dependents
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+              decoration: InputDecoration(
+                fillColor: Colors.white,
+                filled: true,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                    color: Color.fromARGB(255, 38, 87, 151),
+                    width: 2,
+                  ),
+                  borderRadius: BorderRadius.circular(15),
+                ),
+              ),
+            ),
             const SizedBox(height: 16),
             TextFormField(
               controller: descricaoController,
               focusNode: descricaoFocusNode,
               decoration: InputDecoration(
                 label: Text(
-                  'Descrição da Consulta',
+                  'Descrição da Consulta (opcional)',
                   style: TextStyle(color: getIconColor(descricaoFocusNode)),
                 ),
                 border: OutlineInputBorder(
@@ -218,10 +257,6 @@ class _AdicionarConsultaScreenState extends State<AdicionarConsultaScreen> {
                         } else if (areaMedicaSelecionada == null) {
                           isLoading = false;
                           errorMessage = 'Por favor, selecione a área médica.';
-                        } else if (descricaoController.text.isEmpty) {
-                          isLoading = false;
-                          errorMessage =
-                              'Por favor, preencha a descrição da consulta.';
                         }
 
                         if (errorMessage.isEmpty) {
@@ -231,6 +266,9 @@ class _AdicionarConsultaScreenState extends State<AdicionarConsultaScreen> {
                             areaMedica: areaMedicaSelecionada!,
                             descricao: descricaoController.text,
                             userId: userId!,
+                            dependentId: selectedDependent == 'Sem dependente'
+                                ? null
+                                : selectedDependent,
                           );
 
                           if (widget.consultaParaEditar == null) {

@@ -277,7 +277,7 @@ class _AdicionarVacinaScreenState extends State<AdicionarVacinaScreen> {
               focusNode: efeitosColateraisFocusNode,
               decoration: InputDecoration(
                 label: Text(
-                  'Efeitos Colaterais',
+                  'Efeitos Colaterais (opcional)',
                   style: TextStyle(
                       color: getIconColor(efeitosColateraisFocusNode)),
                 ),
@@ -370,6 +370,10 @@ class _AdicionarVacinaScreenState extends State<AdicionarVacinaScreen> {
                           isLoading = false;
                           errorMessage =
                               'Por favor, selecione o tipo de vacina.';
+                        } else if (numeroLoteController.text.isEmpty) {
+                          isLoading = false;
+                          errorMessage =
+                              'Por favor, preencha o número/lote da vacina';
                         } else {
                           String? uploadedFileUrl =
                               widget.vacinaParaEditar?.arquivoUrl;

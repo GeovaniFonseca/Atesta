@@ -6,6 +6,7 @@ class ConsultaModel {
   final String areaMedica;
   final String descricao;
   final String userId;
+  final String? dependentId;
 
   ConsultaModel({
     required this.id,
@@ -13,6 +14,7 @@ class ConsultaModel {
     required this.areaMedica,
     required this.descricao,
     required this.userId,
+    this.dependentId,
   });
 
   Map<String, dynamic> toMap() {
@@ -22,6 +24,7 @@ class ConsultaModel {
       'areaMedica': areaMedica,
       'descricao': descricao,
       'userId': userId,
+      'dependentId': dependentId,
     };
   }
 
@@ -32,6 +35,7 @@ class ConsultaModel {
       areaMedica: map['areaMedica'],
       descricao: map['descricao'],
       userId: map['userId'],
+      dependentId: map['dependentId'],
     );
   }
 }

@@ -113,7 +113,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           children: [
             buildTextField('name', 'Nome'),
             const SizedBox(height: 10),
-            buildTextField('email', 'Email', readOnly: true),
+            buildTextField('email', 'Email'),
             const SizedBox(height: 10),
             buildTextField('age', 'Idade'),
             const SizedBox(height: 10),

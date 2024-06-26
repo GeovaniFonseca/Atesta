@@ -24,9 +24,7 @@ class AdicionarExameScreen extends StatefulWidget {
 
 class _AdicionarExameScreenState extends State<AdicionarExameScreen> {
   final TextEditingController dateController = TextEditingController();
-  final TextEditingController laudoController = TextEditingController();
   final FocusNode dateFocusNode = FocusNode();
-  final FocusNode laudoFocusNode = FocusNode();
 
   String? tipoExameSelecionado;
   String? selectedDependent;
@@ -39,23 +37,19 @@ class _AdicionarExameScreenState extends State<AdicionarExameScreen> {
     if (widget.exameParaEditar != null) {
       dateController.text = widget.exameParaEditar!.date;
       tipoExameSelecionado = widget.exameParaEditar!.tipo;
-      laudoController.text = widget.exameParaEditar!.laudo;
       selectedDependent =
           widget.exameParaEditar!.dependentId ?? 'Sem dependente';
     }
     _loadDependents();
 
     dateFocusNode.addListener(_onFocusChange);
-    laudoFocusNode.addListener(_onFocusChange);
   }
 
   @override
   void dispose() {
     dateFocusNode.removeListener(_onFocusChange);
-    laudoFocusNode.removeListener(_onFocusChange);
 
     dateFocusNode.dispose();
-    laudoFocusNode.dispose();
     super.dispose();
   }
 
@@ -203,29 +197,6 @@ class _AdicionarExameScreenState extends State<AdicionarExameScreen> {
                 ),
               ),
             ),
-            const Padding(padding: EdgeInsets.all(8)),
-            TextFormField(
-              controller: laudoController,
-              focusNode: laudoFocusNode,
-              decoration: InputDecoration(
-                label: Text(
-                  'Laudo',
-                  style: TextStyle(color: getIconColor(laudoFocusNode)),
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(
-                    color: Color.fromARGB(255, 38, 87, 151),
-                    width: 2,
-                  ),
-                  borderRadius: BorderRadius.circular(15),
-                ),
-              ),
-              keyboardType: TextInputType.multiline,
-              maxLines: null,
-            ),
             const Padding(padding: EdgeInsets.all(9)),
             Container(
               margin: const EdgeInsets.symmetric(vertical: 8),
@@ -323,7 +294,6 @@ class _AdicionarExameScreenState extends State<AdicionarExameScreen> {
                               id: widget.exameParaEditar?.id ?? '',
                               date: dateController.text,
                               tipo: tipoExameSelecionado!,
-                              laudo: laudoController.text,
                               arquivoUrl: uploadedFileUrl ?? '',
                               userId: userId,
                               dependentId: selectedDependent == 'Sem dependente'
