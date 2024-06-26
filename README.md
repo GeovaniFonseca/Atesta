@@ -24,7 +24,7 @@
 > Antes de começar, certifique-se de que preenche os seguintes requisitos:
 > - Flutter instalado no seu computador. Siga as instruções [official Flutter installation guide](https://flutter.dev/docs/get-started/install).
 > - Firebase CLI instalado. Você pode instalá-lo seguindo as instruções [Firebase CLI setup guide](https://firebase.google.com/docs/flutter/setup?platform=android).
-> - Android Studio instalado. Você pode instalá-li aqui [Android Studio](https://developer.android.com/studio)
+> - Android Studio instalado. Você pode instalá-lo aqui [Android Studio](https://developer.android.com/studio)
 >
 >
 > ### Instalação
