@@ -1,63 +1,67 @@
 > ## Atesta
 > 
-> Atesta is a Flutter application that centralizes all your medical documents in one place.
+> A Atesta é uma aplicação Flutter que centraliza todos os seus documentos médicos num único local.
 > 
-> ### Table of Contents
+> ### Índice
 > 1. [Introduction](#introduction)
 > 2. [Features](#features)
-> 3. [Prerequisites](#prerequisites)
-> 4. [Installation](#installation)
-> 5. [Usage](#usage)
+> 3. [Ambiente](#ambiente)
+> 4. [Instalação](#instalação)
+> 5. [Utilização](#utilização)
 > 6. [Contributing](#contributing)
 > 7. [License](#license)
 > 8. [Contact](#contact)
 > 
 > ### Introduction
-> Atesta is designed to help users manage their medical documents efficiently. Whether it's prescriptions, test results, or medical certificates, Atesta ensures that all your documents are easily accessible and organized.
+> O Atesta foi concebido para ajudar as pessoas a gerir eficazmente os seus documentos médicos. Quer se trate de receitas médicas, resultados de exames ou atestados médicos, Atesta garante que todos os seus documentos são facilmente acessíveis e organizados.
 > 
 > ### Features
-> - **Document Centralization:** Store all your medical documents in one secure location.
-> - **Easy Access:** Quickly retrieve any document with a simple search.
-> - **User-Friendly Interface:** Intuitive design for easy navigation and use.
-> - **Secure Storage:** Ensures that all your sensitive information is stored securely.
+> - **Centralização de documentos:** Guarde todos os seus documentos médicos em um único local.
+> - **Acesso fácil:** Recupere rapidamente qualquer documento com alguns toques.
+> - **Interface de fácil utilização:** Design intuitivo para uma navegação e utilização fáceis.
+> - **Compartilhamento de dados:** Compartilhe seus documentos com o seu médico de uma maneira facil e rapida
 > 
-> ### Prerequisites
-> Before you begin, ensure you have met the following requirements:
-> - Flutter installed on your machine. Follow the [official Flutter installation guide](https://flutter.dev/docs/get-started/install) if you haven't already.
-> - Firebase CLI installed. You can install it by following the [Firebase CLI setup guide](https://firebase.google.com/docs/flutter/setup?platform=ios).
-> - Android Studio (https://developer.android.com/studio)
+> ### Pré-requisitos
+> Antes de começar, certifique-se de que preenche os seguintes requisitos:
+> - Flutter instalado no seu computador. Siga as instruções [official Flutter installation guide](https://flutter.dev/docs/get-started/install).
+> - Firebase CLI instalado. Você pode instalá-lo seguindo as instruções [Firebase CLI setup guide](https://firebase.google.com/docs/flutter/setup?platform=android).
+> - Android Studio instalado. Você pode instalá-li aqui [Android Studio](https://developer.android.com/studio)
 >
 >
-> ### Installation
-> To get started with Atesta, follow these steps:
+> ### Instalação
+> Para começar a utilizar o Atesta, siga estes passos:
 > 
-> 1. Clone the repository:
+> 1. Clonar o repositório:
 >     ```bash
 >     git clone https://github.com/GeovaniFonseca/Atesta.git
 >     ```
-> 2. Navigate to the project directory:
->     ```bash
->     cd Atesta
->     ```
-> 3. Install the necessary dependencies:
+>
+> 2. Instalar as dependências necessárias:
+>     - Certifique-se de estar no diretório do projeto
 >     ```bash
 >     flutter pub get
 >     ```
-> 4. Configure Firebase:
->     - Initialize Firebase in your project directory:
+> 4. Configurar o Firebase:
+>     - 1. Acesse [Firebase](https://firebase.google.com/?authuser=2)
+>     - Inicialize o Firebase no diretório do seu projeto:
 >         ```bash
->         firebase init
+>         flutterfire configure
 >         ```
->     - Follow the prompts to set up Firebase for your project
-> 5. Run your android emulator
+>     - Siga as instruções para configurar o Firebase para o seu projeto
+>
+> 5. Adicione um dispositivo virtual android (Android Virtual Device)
+>     - Dispositivo utilizado para o desenvolvimento do projeto  
+>       ![alt text](image-2.png)
+>     - Abra o emulador
+>       ![alt text](image-3.png) 
 > 
-> 6. Run the application:
+> 6. Executar a aplicação:
 >     ```bash
 >     flutter run
 >     ```
 > 
-> ### Usage
-> 1. Open the application in your web browser or on a connected device.
+> ### Utilização
+> 1. Abra a aplicação no seu navegador Web ou num dispositivo ligado.
 > 2. Create an account or log in if you already have one.
 > 3. Start uploading your medical documents by clicking on the 'Upload' button.
 > 4. Organize and categorize your documents for easy retrieval.
