@@ -64,10 +64,6 @@
 > 3. Comece a enviar seus documentos médicos.
 > 4. Organize e categorizar seus documentos para fácil recuperação.
 > 
-> 
-> ### License
-> This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
-> 
 > ### Contato
 > For any inquiries or issues, please contact:
 > - Geovani Fonseca: [GitHub](https://github.com/GeovaniFonseca)
