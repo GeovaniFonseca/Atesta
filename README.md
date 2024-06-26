@@ -7,8 +7,9 @@
 > 2. [Features](#features)
 > 3. [Instalação](#instalação)
 > 4. [Utilização](#utilização)
-> 5. [License](#license)
-> 6. [Contato](#contato)
+> 5. [Estrutura](#estrutura)
+> 6. [License](#license)
+> 7. [Contato](#contato)
 > 
 > ### Introdução
 > O Atesta foi concebido para ajudar as pessoas a gerir eficazmente os seus documentos médicos. Quer se trate de receitas médicas, resultados de exames ou atestados médicos, Atesta garante que todos os seus documentos são facilmente acessíveis e organizados.
@@ -63,6 +64,10 @@
 > 2. Crie uma conta ou inicie sessão se já tiver uma.
 > 3. Comece a enviar seus documentos médicos.
 > 4. Organize e categorizar seus documentos para fácil recuperação.
+>
+> ### Estrutura
+>
+> - [Como o projeto está estruturado](STRUCTURE.md).
 > 
 > ### Contato
 > For any inquiries or issues, please contact:
