@@ -27,7 +27,7 @@
 > - Android Studio instalado. Você pode instalá-lo aqui [Android Studio](https://developer.android.com/studio)
 >
 >
-> ### Instalação
+> ### **Instalação**
 > Para começar a utilizar o Atesta, siga estes passos:
 > 
 > 1. Clonar o repositório:
