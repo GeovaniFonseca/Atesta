@@ -45,7 +45,7 @@
 >         flutterfire configure
 >         ```
 >     - Serviços do Firebase utilizados: **Realtime Database, Authentication, Firestore Database e Storage**.
->     - Criar em **modo de teste**.
+>     - É preciso ir em cada serviço e criar em **modo de teste**.
 >
 > 5. Adicione um dispositivo virtual android (Android Virtual Device)
 >     - Dispositivo utilizado para o desenvolvimento do projeto  
