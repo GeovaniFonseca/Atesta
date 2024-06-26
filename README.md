@@ -37,17 +37,17 @@
 >     ```
 >
 > 2. Instalar as dependências necessárias:
->     - Certifique-se de estar no diretório do projeto
+>     - Certifique-se de estar no diretório do projeto.
 >     ```bash
 >     flutter pub get
 >     ```
 > 4. Configurar o Firebase:
->     - 1. Acesse [Firebase](https://firebase.google.com/?authuser=2)
 >     - Inicialize o Firebase no diretório do seu projeto:
 >         ```bash
 >         flutterfire configure
 >         ```
->     - Siga as instruções para configurar o Firebase para o seu projeto
+>     - Serviços do Firebase utilizados: Authentication, Firestore Database e Storage.
+>     - **Aviso:** Criar em **modo de teste**
 >
 > 5. Adicione um dispositivo virtual android (Android Virtual Device)
 >     - Dispositivo utilizado para o desenvolvimento do projeto  

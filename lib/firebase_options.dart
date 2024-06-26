@@ -41,20 +41,22 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCkUldRq3rk-Ac_Fno_dtCL5P24W6VCmbQ',
-    appId: '1:581039158937:web:27aabdb75c638250122a08',
-    messagingSenderId: '581039158937',
-    projectId: 'projetoaplicado-2f74d',
-    authDomain: 'projetoaplicado-2f74d.firebaseapp.com',
-    storageBucket: 'projetoaplicado-2f74d.appspot.com',
+    apiKey: 'AIzaSyDjdX7FFyKzHYzjtRer-ni6amjW_ZBj81g',
+    appId: '1:308355020175:web:59cae7f1531e5a958947fa',
+    messagingSenderId: '308355020175',
+    projectId: 'caterddd',
+    authDomain: 'caterddd.firebaseapp.com',
+    databaseURL: 'https://caterddd-default-rtdb.firebaseio.com',
+    storageBucket: 'caterddd.appspot.com',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyD3o1f21MnnDjlza5l__izhr68Ur5LYbys',
-    appId: '1:581039158937:android:6e9527f12625e2e6122a08',
-    messagingSenderId: '581039158937',
-    projectId: 'projetoaplicado-2f74d',
-    storageBucket: 'projetoaplicado-2f74d.appspot.com',
+    apiKey: 'AIzaSyCBD4fGXFU9py9wRg8l-fNlpVBax35bZtQ',
+    appId: '1:308355020175:android:a533be6c16337f138947fa',
+    messagingSenderId: '308355020175',
+    projectId: 'caterddd',
+    databaseURL: 'https://caterddd-default-rtdb.firebaseio.com',
+    storageBucket: 'caterddd.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
@@ -76,11 +78,13 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyCkUldRq3rk-Ac_Fno_dtCL5P24W6VCmbQ',
-    appId: '1:581039158937:web:0111db30f3a3b86a122a08',
-    messagingSenderId: '581039158937',
-    projectId: 'projetoaplicado-2f74d',
-    authDomain: 'projetoaplicado-2f74d.firebaseapp.com',
-    storageBucket: 'projetoaplicado-2f74d.appspot.com',
+    apiKey: 'AIzaSyDjdX7FFyKzHYzjtRer-ni6amjW_ZBj81g',
+    appId: '1:308355020175:web:bea6d9cb97e8e0198947fa',
+    messagingSenderId: '308355020175',
+    projectId: 'caterddd',
+    authDomain: 'caterddd.firebaseapp.com',
+    databaseURL: 'https://caterddd-default-rtdb.firebaseio.com',
+    storageBucket: 'caterddd.appspot.com',
   );
+
 }
